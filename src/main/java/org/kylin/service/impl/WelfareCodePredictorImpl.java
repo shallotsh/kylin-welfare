@@ -223,7 +223,9 @@ public class WelfareCodePredictorImpl implements WelfareCodePredictor {
             return null;
         }
 
-        if(StringUtils.isBlank(p3Param.getAbSeq()) && StringUtils.isBlank(p3Param.getBcSeq())){
+        if(StringUtils.isBlank(p3Param.getAbSeq())
+                && StringUtils.isBlank(p3Param.getBcSeq())
+                && StringUtils.isBlank(p3Param.getAcSeq())){
             return p3Param.getWelfareCode();
         }
 
@@ -252,6 +254,16 @@ public class WelfareCodePredictorImpl implements WelfareCodePredictor {
             if(!CollectionUtils.isEmpty(pairs)){
                 ret = ret.stream()
                         .filter(w3DCode -> !bitSeq(w3DCode, pairs, BitConstant.DECADE, BitConstant.UNIT))
+                        .collect(Collectors.toList());
+            }
+        }
+
+        if(!StringUtils.isBlank(p3Param.getAcSeq())){
+            List<Pair<Integer,Integer>> pairs = TransferUtil.parsePairCodeList(p3Param.getAcSeq());
+
+            if(!CollectionUtils.isEmpty(pairs)){
+                ret = ret.stream()
+                        .filter(w3DCode -> !bitSeq(w3DCode, pairs, BitConstant.HUNDRED, BitConstant.UNIT))
                         .collect(Collectors.toList());
             }
         }

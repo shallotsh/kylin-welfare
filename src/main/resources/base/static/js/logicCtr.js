@@ -361,10 +361,11 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
         var data = {
             welfareCode: deepCopy($rootScope.welfareCode),
             abSeq: $scope.wyf_ab_filter,
-            bcSeq: $scope.wyf_bc_filter
+            bcSeq: $scope.wyf_bc_filter,
+            acSeq: $scope.wyf_ac_filter
         };
 
-        console.log("param:" + JSON.stringify(data), null, 2);
+        // console.log("param:" + JSON.stringify(data), null, 2);
         $http({
             method:"POST",
             url:"/api/welfare/codes/bit/seq/filter",
@@ -482,7 +483,12 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
         // console.log("resp:" + JSON.stringify($rootScope.welfareCode, null, 2));
         $rootScope.wyfCodes = $rootScope.welfareCode.codes;
         // console.log("wyfCodesx:" + JSON.stringify($rootScope.wyfCodes, null, 2));
+        $rootScope.codeBeKilled = $rootScope.codesCount - $rootScope.wyfCodes.length;
+        if($rootScope.codeBeKilled < 0){
+            $rootScope.codeBeKilled = 0;
+        }
         $rootScope.codesCount = $rootScope.wyfCodes.length;
+
         $rootScope.wyfMessage = "请求返回成功";
         $rootScope.isPredict = true;
         if($rootScope.welfareCode.codeTypeEnum == "DIRECT"){
@@ -510,6 +516,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
         $rootScope.isPredict = false;
         $rootScope.wyfMessage = "欢迎使用我要发预测系统！！";
         $rootScope.codesCount = 0;
+        $rootScope.codeBeKilled = 0;
         $rootScope.quibinary_first = 3;
         $rootScope.direct = true;
         $rootScope.group = true;
@@ -526,6 +533,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
         $rootScope.wyf_random_kill_count = 0;
         $rootScope.wyf_ab_filter = undefined;
         $rootScope.wyf_bc_filter = undefined;
+        $rootScope.wyf_ac_filter = undefined;
     }
 
     function deepCopy(source) {
