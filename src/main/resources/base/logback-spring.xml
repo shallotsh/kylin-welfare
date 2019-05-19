@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <contextName>kylin</contextName>
+    <property name="log.path" value="/var/attachment/logs/kylin/kylin.log"/>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level [%file:%line] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="commonLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>kylin.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <MaxHistory>365</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level [%file:%line] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <springProfile name="dev">
+        <root level="info">
+            <appender-ref ref="console"/>
+        </root>
+    </springProfile>
+
+
+    <springProfile name="prod">
+        <root level="info">
+            <appender-ref ref="console"/>
+            <appender-ref ref="commonLog"/>
+        </root>
+    </springProfile>
+</configuration>
