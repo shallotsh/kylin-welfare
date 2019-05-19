@@ -2,7 +2,7 @@
 
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
     <contextName>kylin</contextName>
-    <property name="log.path" value="/var/attachment/logs/kylin/kylin.log"/>
+    <property name="log.path" value="/var/attachment/logs/kylin.log"/>
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
