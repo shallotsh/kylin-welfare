@@ -180,7 +180,7 @@
                         <input type="checkbox" id="inlineCheckbox13" value="option13" ng-model="wyf_bca"> bca
                     </label>
                     <label class="checkbox-inline">
-                    <input type="checkbox" id="inlineCheckbox14" value="option14" ng-model="wyf_cab"> cab
+                        <input type="checkbox" id="inlineCheckbox14" value="option14" ng-model="wyf_cab"> cab
                     </label>
                     <label class="checkbox-inline">
                         <input type="checkbox" id="inlineCheckbox15" value="option15" ng-model="wyf_cba"> cba
@@ -316,18 +316,22 @@
                 <div class="row">
                     <div class="col-sm-3 col-md-3">
                         <input type="text" class="form-control" ng-model="wyf_ab_filter" id="ab_filter"
-                               placeholder="AB">
-                    </div>
-                    <div class="col-sm-3 col-md-3">
-                        <button type="button" class="btn btn-primary" ng-click="bitsFilter()"> ab筛选</button>
+                               placeholder="ab筛选">
                     </div>
 
                     <div class="col-sm-3 col-md-3">
                         <input type="text" class="form-control" ng-model="wyf_bc_filter" id="bc_filter"
                                placeholder="bc筛选">
                     </div>
+
                     <div class="col-sm-3 col-md-3">
-                        <button type="button" class="btn btn-primary" ng-click="bitsFilter()" >bc筛选</button>
+                        <input type="text" class="form-control" ng-model="wyf_ac_filter" id="ac_filter"
+                               placeholder="ac筛选">
+                    </div>
+
+
+                    <div class="col-sm-3 col-md-3">
+                        <button type="button" class="btn btn-primary" ng-click="bitsFilter()" >一键筛选</button>
                     </div>
                 </div>
 
@@ -335,8 +339,8 @@
                 <hr/>
                 <div class="row">
                     <div class="col-sm-3 col-md-3">
-                            <input type="number" class="form-control" ng-model="wyf_random_kill_count" id="wyf_random_kill"
-                                   placeholder="随机杀注数">
+                        <input type="number" class="form-control" ng-model="wyf_random_kill_count" id="wyf_random_kill"
+                               placeholder="随机杀注数">
                     </div>
                     <div class="col-sm-3 col-md-3">
                         <button type="button" class="btn btn-primary" ng-click="killCode(14)" ng-model="do_random_kill">随机杀码</button>
@@ -389,7 +393,7 @@
                 <div class="wyf-output-title">
                     <h3>预测3D码序列: {{codesCount}} 注</h3>
                     <hr/>
-                    <span ng-show="wyf_statistics" ng-model="wyf_statistics">对子: {{pairCount}}注 非对子: {{nonPairCount}}注</span>
+                    <span ng-show="wyf_statistics" ng-model="wyf_statistics">对子: {{pairCount}}注 非对子: {{nonPairCount}}注, 杀码: {{codeBeKilled}} 注</span>
                 </div>
                 <hr/>
                 <div class="wyf-codes">
@@ -417,7 +421,7 @@
 <script src="js/custom-scripts.js"></script>
 
 <script src="js/app.js"></script>
-<script src="js/logicCtr.js?v=7"></script>
+<script src="js/logicCtr.js?v=1"></script>
 <script src="js/dataCtr.js"></script>
 
 

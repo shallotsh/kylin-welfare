@@ -9,4 +9,5 @@ public class P3Param {
 
     private String abSeq;
     private String bcSeq;
+    private String acSeq;
 }
