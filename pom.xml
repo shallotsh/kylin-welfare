@@ -134,6 +134,7 @@
     </profiles>
 
     <build>
+        <finalName>kylin-welfare</finalName>
         <!--maven多环境资源打包-->
         <resources>
             <resource>
