@@ -4,13 +4,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.kylin.util.CommonUtils;
 import org.slf4j.MDC;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 
 @Slf4j
+@Component
+@WebFilter(urlPatterns = "/*", filterName = "logTraceFilter")
 public class LogTraceFilter implements Filter {
 
     @Override
