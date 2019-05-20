@@ -83,7 +83,7 @@ public class CommonUtils {
         String agent = request.getHeader("user-agent");
         log.info("user-agent={}", agent);
 
-        return StringUtils.isBlank(agent)? Optional.empty() : Optional.of(agent);
+        return Optional.ofNullable(agent);
     }
 
     public static boolean isGoogleBrowser(HttpServletRequest request){
