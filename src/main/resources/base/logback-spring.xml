@@ -5,8 +5,8 @@
     <property name="log.path" value="/var/attachment/logs/kylin.log"/>
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level [%file:%line] - %msg%n</pattern>
+        <encoder charset="UTF-8">
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level [%file:%line t:%X{requestId}] - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -17,8 +17,8 @@
             <fileNamePattern>kylin.%d{yyyy-MM-dd}.log</fileNamePattern>
             <MaxHistory>365</MaxHistory>
         </rollingPolicy>
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level [%file:%line] - %msg%n</pattern>
+        <encoder charset="UTF-8">
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level [%file:%line t:%X{requestId}] - %msg%n</pattern>
         </encoder>
     </appender>
 
