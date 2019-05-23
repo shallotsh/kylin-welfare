@@ -5,6 +5,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.kylin.util.CommonUtils;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -24,6 +25,9 @@ public class LogTraceFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        StopWatch watch = new StopWatch();
+        watch.start();
+
         if(request instanceof HttpServletRequest) {
             String requestId = String.valueOf(System.currentTimeMillis() / 1000 + RandomStringUtils.randomNumeric(4));
             MDC.put("requestId", requestId);
@@ -31,6 +35,9 @@ public class LogTraceFilter implements Filter {
         }
 
         chain.doFilter(request, response);
+
+        watch.stop();
+        log.info("请求耗时:{}", watch.getTotalTimeMillis());
     }
 
     private void recordDetailLog(ServletRequest request) {

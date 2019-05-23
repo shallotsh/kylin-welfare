@@ -48,7 +48,7 @@ public class OkHttpUtils {
         String url = MessageFormat.format(DRAW_NOTICE_URL_TPL, name, issueCount);
         Optional<String> retOpt = OkHttpUtils.doGet(url);
         if(!retOpt.isPresent()){
-            Optional.empty();
+            return Optional.empty();
         }
         try {
             SdDrawNoticeResult result = JSON.parseObject(retOpt.get(), SdDrawNoticeResult.class);
