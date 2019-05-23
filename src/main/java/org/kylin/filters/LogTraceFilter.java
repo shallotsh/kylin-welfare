@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.kylin.util.CommonUtils;
 import org.slf4j.MDC;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
@@ -16,6 +17,7 @@ import java.io.IOException;
 @Slf4j
 @Component
 @WebFilter(urlPatterns = "/*", filterName = "logTraceFilter")
+@Order(0)
 public class LogTraceFilter implements Filter {
 
     @Override

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.kylin.constant.Constants;
 import org.kylin.util.CommonUtils;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Slf4j
 @Component
 @WebFilter(urlPatterns = "/*")
+@Order(1)
 public class AuthFilter implements Filter {
 
     private static final Set<String> nofilterPrefixPath = new HashSet<>();

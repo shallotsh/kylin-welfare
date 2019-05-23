@@ -1,14 +1,13 @@
 package org.kylin.wrapper.trace;
 
-import org.kylin.constant.Constants;
-import org.slf4j.MDC;
+import org.kylin.util.TraceContext;
 
 import java.util.*;
 import java.util.concurrent.Callable;
 
 public class TraceCallable<V> implements Callable<V> {
 
-    private final String traceId = MDC.get(Constants.LOG_TRACE_ID);
+    private final Object trace = TraceContext.getTraceContext();
 
     private Callable<V> callable;
 
@@ -22,13 +21,13 @@ public class TraceCallable<V> implements Callable<V> {
 
     @Override
     public V call() throws Exception {
-        String backTrace = MDC.get(Constants.LOG_TRACE_ID);
-        MDC.put(Constants.LOG_TRACE_ID, traceId);
+
+        Object backup = TraceContext.backupAndSet(trace);
 
         try {
             return callable.call();
         } finally {
-            MDC.put(Constants.LOG_TRACE_ID, backTrace);
+            TraceContext.restoreBackup(backup);
         }
     }
 
