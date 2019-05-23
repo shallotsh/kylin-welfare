@@ -1,13 +1,12 @@
 package org.kylin.wrapper.trace;
 
-import org.kylin.constant.Constants;
-import org.slf4j.MDC;
+import org.kylin.util.TraceContext;
 
 import java.util.*;
 
 public class TraceRunnable implements Runnable{
 
-    private final String traceId = MDC.get(Constants.LOG_TRACE_ID);
+    private final Object trace = TraceContext.getTraceContext();
     private Runnable runnable;
 
     public TraceRunnable(Runnable runnable) {
@@ -20,13 +19,11 @@ public class TraceRunnable implements Runnable{
 
     @Override
     public void run() {
-        String backTrace = MDC.get(Constants.LOG_TRACE_ID);
-        MDC.put(Constants.LOG_TRACE_ID, traceId);
-
+        Object backup = TraceContext.backupAndSet(trace);
         try {
             runnable.run();
         } finally {
-            MDC.put(Constants.LOG_TRACE_ID, backTrace);
+            TraceContext.restoreBackup(backup);
         }
 
     }
