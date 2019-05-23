@@ -8,4 +8,6 @@ public interface Constants {
 
 
     String FORWARD_FROM_PATH = "forward_from_path";
+
+    String LOG_TRACE_ID = "requestId";
 }
