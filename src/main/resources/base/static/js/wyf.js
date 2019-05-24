@@ -123,6 +123,7 @@ var app = new Vue({
             this.config.isP5 = true;
             this.welfareCode = data.wCodes;
             this.deletedCodesPair = data.deletedCodesPair;
+            this.wyfMessage = "预测码已生成，正在渲染，请稍等一会...";
             console.log('返回值:' + JSON.stringify(data.deletedCodesPair, null, 2));
             if(data.randomKill) {
                 this.isRandomKill = data.randomKill;
