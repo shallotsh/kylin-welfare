@@ -123,8 +123,7 @@ var app = new Vue({
             this.config.isP5 = true;
             this.welfareCode = data.wCodes;
             this.deletedCodesPair = data.deletedCodesPair;
-            this.wyfMessage = "预测码已生成，正在渲染，请稍等一会...";
-            console.log('返回值:' + JSON.stringify(data.deletedCodesPair, null, 2));
+            // console.log('返回值:' + JSON.stringify(data.deletedCodesPair, null, 2));
             if(data.randomKill) {
                 this.isRandomKill = data.randomKill;
             }
@@ -242,7 +241,8 @@ var app = new Vue({
             app.wyfMessage = "正在计算排列5码...";
 
             axios(requestConfig).then(function (resp) {
-                console.log(JSON.stringify(resp));
+                // console.log(JSON.stringify(resp));
+                app.wyfMessage = "计算已完成，正在渲染，请稍等一会...";
                 app.handleFiveCodeResponse(resp.data.data, "预测", null);
 
             }).catch(function (reason) {
