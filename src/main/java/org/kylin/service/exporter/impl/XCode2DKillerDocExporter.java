@@ -101,7 +101,7 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter<XCodeReq>
             }else if("*ab".equals(pattern)){
                 printCode = ""+"*"+code.getCodes().get(0)+code.getCodes().get(1)+ "     ";
             }else if("*ba".equals(pattern)){
-                printCode = ""+code.getCodes().get(1)+code.getCodes().get(0)+"*"+ "     ";
+                printCode = "*"+code.getCodes().get(1)+code.getCodes().get(0)+ "     ";
             }else if("a*b".equals(pattern)){
                 printCode = ""+code.getCodes().get(0)+"*"+code.getCodes().get(1)+ "     ";
             }else if("b*a".equals(pattern)){
