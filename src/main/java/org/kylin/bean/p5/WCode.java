@@ -123,6 +123,9 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         sb.append("[" + getFreq() + "]");
         int size = CollectionUtils.size(codes);
         for(int i=0; i<size; i++){
+            if(i == 3){
+                sb.append("-");
+            }
             sb.append(codes.get(i));
         }
         return sb.toString();
@@ -132,6 +135,9 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         StringBuilder sb = new StringBuilder();
         int size = CollectionUtils.size(codes);
         for(int i=0; i<size; i++){
+            if(i == 3){
+                sb.append("-");
+            }
             sb.append(codes.get(i));
         }
         return sb.toString();
