@@ -45,6 +45,10 @@ public class StrategyFactory {
                 return new HighFreqProcessor();
             case FREQ_KILL_FILTER:
                 return new FreqKillProcessor();
+            case EXTEND_DB:
+                return new ExtendDBProcessor();
+            case RANDOM_SELECT:
+                return new RandomSelectProcessor();
                 default:
                     return null;
         }
