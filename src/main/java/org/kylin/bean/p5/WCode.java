@@ -202,6 +202,10 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         return newObj;
     }
 
+    public WCode copy() throws Exception{
+        return (WCode) clone();
+    }
+
     public WCode asc(){
         Collections.sort(this.getCodes());
         return this;

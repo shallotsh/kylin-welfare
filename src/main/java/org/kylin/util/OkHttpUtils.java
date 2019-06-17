@@ -26,6 +26,7 @@ public class OkHttpUtils {
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("referer", "http://www.cwl.gov.cn/kjxx/fc3d/kjgg/")
+                .addHeader("content-type", "application/json")
                 .build();
 
         Response response = null;

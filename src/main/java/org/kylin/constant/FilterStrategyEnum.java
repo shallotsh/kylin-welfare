@@ -21,15 +21,17 @@ public enum FilterStrategyEnum {
     HIGH_FREQ_FILTER(18, "高频杀码"),
     FREQ_KILL_FILTER(19, "频度杀"),
 
+    EXTEND_DB(21, "扩库"),
+    RANDOM_SELECT(22, "随机选码"),
+
     BOLD_FILTER_IN_2D(100, "2D杀码"),
     INVERSE_SELECT_FILTER_IN_2D(101, "2D筛选"),
     GOSSIP_FILTER_IN_2D(102, "2D二码"),
     ;
     private Integer id;
-    private String key;
     private String desc;
 
-    private FilterStrategyEnum(Integer id, String desc) {
+    FilterStrategyEnum(Integer id, String desc) {
         this.id = id;
         this.desc = desc;
     }
