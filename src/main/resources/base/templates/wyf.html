@@ -255,12 +255,8 @@
                         <div class="row">
 
                             <div class="col-sm-6">
-                                <button type="button" @click="boldProcess(21)" class="btn btn-primary fill_parent"> 扩库 </button>
+                                <button type="button" @click="boldProcess(21)" class="btn btn-primary fill_parent"> 扩库选码 </button>
                             </div>
-                            <div class="col-sm-6">
-                                <button type="button" @click="boldProcess(22)" class="btn btn-primary fill_parent"> 随机选码 </button>
-                            </div>
-
 
                         </div>
 
@@ -285,6 +281,7 @@
                                 <option :value="5">含四杀导出</option>
                                 <option :value="6">含五杀导出</option>
                                 <option :value="100">半页导出</option>
+                                <option :value="101">常规带序号</option>
                             </select>
                         </div>
 
@@ -416,7 +413,7 @@
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-<script src="js/wyf.js?v=9"></script>
+<script src="js/wyf.js?v=10"></script>
 
 
 </body>

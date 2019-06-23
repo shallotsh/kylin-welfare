@@ -13,6 +13,7 @@ public enum ExportPatternEnum {
     CONTAIN_FOUR_KILL(5, "含四杀导出"),
     CONTAIN_FIVE_KILL(6, "含五杀导出"),
     HALF_PAGE(100, "半页导出"),
+    NORMAL_SEQ_NO(101, "常规带序号导出"),
 
     ;
 
