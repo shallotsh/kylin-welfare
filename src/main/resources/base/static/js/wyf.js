@@ -143,10 +143,6 @@ var app = new Vue({
                     codeString = '[' + code.freq + ']' + codeString;
                 }
 
-                if(code.seqNo){
-                    codeString = codeString + "<" + code.seqNo+">";
-                }
-
                 printCodes.push(codeString);
             }
             this.wyfCodes = printCodes;
