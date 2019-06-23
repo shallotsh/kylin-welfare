@@ -47,7 +47,9 @@ var app = new Vue({
         bitCD:null,
         bitDE:null,
         export_format: null,
-        drawNoticeOverview: ''
+        drawNoticeOverview: '',
+        extendCount: null,
+        extendRatio: null
     },
     created: function(){
         this.export_format = 0;
@@ -126,30 +128,42 @@ var app = new Vue({
             this.backupCode = data.backupCodes;
             this.deletedCodesPair = data.deletedCodesPair;
             // console.log('返回值:' + JSON.stringify(data.deletedCodesPair, null, 2));
-            if(data.randomKill) {
+            if (data.randomKill) {
                 this.isRandomKill = data.randomKill;
             }
 
-            if(data.freqSeted) {
+            if (data.freqSeted) {
                 this.freqSeted = data.freqSeted;
             }
 
             var printCodes = [];
-            for( idx in this.welfareCode){
+            for (idx in this.welfareCode) {
                 code = this.welfareCode[idx];
                 // code.codes.reverse();
                 var codeString = code.codes.join("");
-                if(this.isRandomKill || this.freqSeted){
+                if (this.isRandomKill || this.freqSeted) {
                     codeString = '[' + code.freq + ']' + codeString;
                 }
 
                 printCodes.push(codeString);
             }
             this.wyfCodes = printCodes;
-            if(processId == 21){
-                msg = "扩库基数 " + this.backupCode.length + " 注，";
+            if (processId == 21 || processId == 22) {
+                if (data.extendCount) {
+                    this.extendCount = data.extendCount;
+                }
+                if (data.extendRatio) {
+                    this.extendRatio = data.extendRatio;
+                }
+                msg = "基数 " + this.backupCode.length + " 注, 倍数"+ this.extendRatio +"，扩库后" + this.extendCount + "注 ";
             }
-            this.wyfMessage = "排5 " + msg + " 生成: "  + this.wyfCodes.length + " 注" + '(对子: ' + data.pairCodes + ' 注, 非对子: ' + data.nonPairCodes + ' 注)';
+
+            if (processId != 22) {
+                this.wyfMessage = "排5 " + msg + " 生成:" + this.wyfCodes.length + " 注" + '(对子:' + data.pairCodes + ' 注, 非对子:' + data.nonPairCodes + ' 注)';
+            }else{
+                this.wyfMessage = msg;
+            }
+
         },
 
         handleDownload: function(data) {
@@ -311,8 +325,14 @@ var app = new Vue({
                     this.handleException("请输入随机杀注数!");
                     return;
                 }
-            }else if(processorId == 21 && this.backupCode){
+            }else if((processorId == 21 || processorId == 22) && this.backupCode){
                 args.wCodes = this.backupCode;
+                if(this.extendCount){
+                    args.extendCount = this.extendCount;
+                }
+                if(this.extendRatio){
+                    args.extendRatio = this.extendRatio;
+                }
             }
 
             // console.log("ddddd:" + JSON.stringify(args, null, 2));
@@ -335,7 +355,7 @@ var app = new Vue({
                 if(processorId == 14){
                     app.wyfMessage = "总计 " + count + " 注, 随机杀 " + args.randomCount + " 注, 保留码 " + response.data.data.remainedCodesCount + "注，频度+1"
                         + '( 含对子: ' + response.data.data.pairCodes + ' 注，非对子: ' + response.data.data.nonPairCodes + ' 注)';
-                } else if(processorId != 21) {
+                } else if(processorId != 21 && processorId != 22) {
                     app.wyfMessage = "总计 " + count + " 注, 杀码 " + (count - app.wyfCodes.length) + " 注, 余 " + app.wyfCodes.length + " 注."
                         + '(对子: ' + response.data.data.pairCodes + ' 注，非对子: ' + response.data.data.nonPairCodes + ' 注)';
                 }

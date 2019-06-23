@@ -10,6 +10,7 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.kylin.algorithm.strategy.SequenceProcessor;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
+import org.kylin.util.WCodeUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,12 +29,15 @@ public class ExtendAndSelectProcessor implements SequenceProcessor {
         if(wCodeReq != null && StringUtils.isNotBlank(wCodeReq.getBoldCodeFive())) {
             wCodes = wCodeReq.getWCodes();
 
-            Optional<Pair<Integer, Integer>> extendAndSelectCount = parseValuePair(wCodeReq.getBoldCodeFive());
+//            Optional<Pair<Integer, Integer>> extendAndSelectCount = parseValuePair(wCodeReq.getBoldCodeFive());
 
-            if(extendAndSelectCount.isPresent()){
-                extendRatio = extendAndSelectCount.get().getKey();
-                selectCount = extendAndSelectCount.get().getValue();
-            }
+//            if(extendAndSelectCount.isPresent()){
+//                extendRatio = extendAndSelectCount.get().getKey();
+//                selectCount = extendAndSelectCount.get().getValue();
+//            }
+
+            extendRatio = wCodeReq.getExtendRatio();
+            selectCount = NumberUtils.toInt(wCodeReq.getBoldCodeFive());
         }
         return this;
     }
@@ -43,7 +47,7 @@ public class ExtendAndSelectProcessor implements SequenceProcessor {
             return Optional.empty();
         }
 
-        String[] vals = seq.split("\"#|$|@|,|/| |-");
+        String[] vals = seq.split("#|$|@|,|/| |-");
         if(vals == null || vals.length <2){
             log.info("扩库码解析错误");
             return Optional.empty();
@@ -65,19 +69,34 @@ public class ExtendAndSelectProcessor implements SequenceProcessor {
         }
 
 
-        // 虚拟扩库策略
         int expectedCodeNum = wCodes.size() * extendRatio;
 
         int count = 0;
         List<WCode> randomSelected = Lists.newArrayListWithCapacity(selectCount);
-        int randomSize = expectedCodeNum;
 
-        while(count < selectCount && count < expectedCodeNum){
+        List<WCode> ret = Lists.newArrayListWithCapacity(expectedCodeNum);
+        int idx = 1;
+        for(WCode wCode : wCodes){
+            try {
+                if(WCodeUtils.isPair(wCode)){
+                    ret.add(wCode.copy().setSeqNo(idx++));
+                    continue;
+                }
+                for(int i=0; i<extendRatio; i++){
+                    ret.add(wCode.copy().setSeqNo(idx++));
+                }
+            } catch (Exception e) {
+                log.error("发生异常", e);
+            }
+        }
+
+        int randomSize = ret.size();
+
+        while(count < selectCount && count < ret.size()){
             int index = new Random().nextInt(randomSize);
 
-            int realIndex = index / extendRatio;
             try {
-                randomSelected.add(wCodes.get(realIndex).copy().setSeqNo(index));
+                randomSelected.add(ret.get(index).copy());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

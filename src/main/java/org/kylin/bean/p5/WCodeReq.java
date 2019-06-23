@@ -23,6 +23,8 @@ public class WCodeReq {
     private String bitBC;
     private String bitCD;
     private String bitDE;
+    private Integer extendRatio;
+    private Integer extendCount;
 
     public Integer getFilterType() {
         return filterType;
@@ -178,6 +180,24 @@ public class WCodeReq {
 
     public WCodeReq setBitDE(String bitDE) {
         this.bitDE = bitDE;
+        return this;
+    }
+
+    public Integer getExtendRatio() {
+        return extendRatio;
+    }
+
+    public WCodeReq setExtendRatio(Integer extendRatio) {
+        this.extendRatio = extendRatio;
+        return this;
+    }
+
+    public Integer getExtendCount() {
+        return extendCount;
+    }
+
+    public WCodeReq setExtendCount(Integer extendCount) {
+        this.extendCount = extendCount;
         return this;
     }
 
