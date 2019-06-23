@@ -21,8 +21,7 @@ public enum FilterStrategyEnum {
     HIGH_FREQ_FILTER(18, "高频杀码"),
     FREQ_KILL_FILTER(19, "频度杀"),
 
-    EXTEND_DB(21, "扩库"),
-    RANDOM_SELECT(22, "随机选码"),
+    EXTEND_AND_SELECT(21, "扩库"),
 
     BOLD_FILTER_IN_2D(100, "2D杀码"),
     INVERSE_SELECT_FILTER_IN_2D(101, "2D筛选"),

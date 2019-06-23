@@ -41,6 +41,8 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
             return Optional.empty();
         }
 
+        List<WCode> backupCodes = wCodeReq.getWCodes();
+
         SequenceProcessor sequenceProcessor = StrategyFactory.createProcessor(filterStrategyEnum);
         if(sequenceProcessor == null){
             return Optional.empty();
@@ -58,6 +60,10 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
         }
 
         WCodeSummarise wCodeSummarise = WCodeUtils.construct(wCodes, filterStrategyEnum.getKey(), deletedCodes, wCodeReq);
+
+        if(filterStrategyEnum == FilterStrategyEnum.EXTEND_AND_SELECT){
+            wCodeSummarise.setBackupCodes(backupCodes);
+        }
 
         return Optional.of(wCodeSummarise);
     }
@@ -92,7 +98,7 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
 
         try {
             ExportPatternEnum patternEnum = ep.get();
-            if(patternEnum == ExportPatternEnum.NORMAL){
+            if(patternEnum == ExportPatternEnum.NORMAL || patternEnum == ExportPatternEnum.NORMAL_SEQ_NO){
                 return Optional.of(DocUtils.saveWCodes(wCodeReq));
             }else if(patternEnum == ExportPatternEnum.HALF_PAGE){
                 return Optional.of(DocUtils.saveWCodesHalf(wCodeReq));

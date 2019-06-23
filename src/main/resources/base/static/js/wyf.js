@@ -26,6 +26,7 @@ var app = new Vue({
         wyfCodes:[],
         config:global_config,
         welfareCode: null,
+        backupCode: null,
         boldCodeFive: null,
         myriabit: null,
         kilobit: null,
@@ -122,6 +123,7 @@ var app = new Vue({
         handleFiveCodeResponse: function (data, msg, processId) {
             this.config.isP5 = true;
             this.welfareCode = data.wCodes;
+            this.backupCode = data.backupCodes;
             this.deletedCodesPair = data.deletedCodesPair;
             // console.log('返回值:' + JSON.stringify(data.deletedCodesPair, null, 2));
             if(data.randomKill) {
@@ -140,9 +142,17 @@ var app = new Vue({
                 if(this.isRandomKill || this.freqSeted){
                     codeString = '[' + code.freq + ']' + codeString;
                 }
+
+                if(code.seqNo){
+                    codeString = codeString + "<" + code.seqNo+">";
+                }
+
                 printCodes.push(codeString);
             }
             this.wyfCodes = printCodes;
+            if(processId == 21){
+                msg = "扩库基数 " + this.backupCode.length + " 注，";
+            }
             this.wyfMessage = "排5 " + msg + " 生成: "  + this.wyfCodes.length + " 注" + '(对子: ' + data.pairCodes + ' 注, 非对子: ' + data.nonPairCodes + ' 注)';
         },
 
@@ -305,6 +315,8 @@ var app = new Vue({
                     this.handleException("请输入随机杀注数!");
                     return;
                 }
+            }else if(processorId == 21 && this.backupCode){
+                args.wCodes = this.backupCode;
             }
 
             // console.log("ddddd:" + JSON.stringify(args, null, 2));
@@ -320,13 +332,14 @@ var app = new Vue({
                 }
             }).then(function(response) {
                 // console.log('收到返回:' + JSON.stringify(response.data.data, null ,2));
-                app.handleFiveCodeResponse(response.data.data, "含X码杀", processorId);
+
+                var msg = "含X码杀";
+
+                app.handleFiveCodeResponse(response.data.data, msg, processorId);
                 if(processorId == 14){
                     app.wyfMessage = "总计 " + count + " 注, 随机杀 " + args.randomCount + " 注, 保留码 " + response.data.data.remainedCodesCount + "注，频度+1"
                         + '( 含对子: ' + response.data.data.pairCodes + ' 注，非对子: ' + response.data.data.nonPairCodes + ' 注)';
-                }else if(processorId==21){
-                    app.wyfmessage = "扩库后总计 " + count + " 注 ";
-                } else {
+                } else if(processorId != 21) {
                     app.wyfMessage = "总计 " + count + " 注, 杀码 " + (count - app.wyfCodes.length) + " 注, 余 " + app.wyfCodes.length + " 注."
                         + '(对子: ' + response.data.data.pairCodes + ' 注，非对子: ' + response.data.data.nonPairCodes + ' 注)';
                 }

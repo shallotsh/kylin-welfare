@@ -21,6 +21,7 @@ public class WCode implements Cloneable,Comparable,RandomKill{
     private int  sumTail;
     private int classify;
     private boolean deleted;
+    private int seqNo;
 
     public WCode() {
     }
@@ -113,10 +114,20 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         return this;
     }
 
-    public String getString(Boolean withFreq){
+
+    public int getSeqNo() {
+        return seqNo;
+    }
+
+    public WCode setSeqNo(int seqNo) {
+        this.seqNo = seqNo;
+        return this;
+    }
+
+    public String getString(Boolean withFreq, Boolean withSeqNo){
 
         if(withFreq == null || !withFreq){
-            return getString();
+            return getString(withSeqNo);
         }
 
         StringBuilder sb = new StringBuilder();
@@ -128,10 +139,13 @@ public class WCode implements Cloneable,Comparable,RandomKill{
             }
             sb.append(codes.get(i));
         }
+        if(seqNo != 0 && withSeqNo){
+            sb.append("<"+seqNo+">");
+        }
         return sb.toString();
     }
 
-    public String getString(){
+    public String getString(Boolean withSeq){
         StringBuilder sb = new StringBuilder();
         int size = CollectionUtils.size(codes);
         for(int i=0; i<size; i++){
@@ -140,6 +154,11 @@ public class WCode implements Cloneable,Comparable,RandomKill{
             }
             sb.append(codes.get(i));
         }
+
+        if(seqNo != 0 && withSeq){
+            sb.append("<"+seqNo+">");
+        }
+
         return sb.toString();
     }
 
@@ -152,7 +171,7 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         sb.append("[");
         sb.append(this.getFreq());
         sb.append("]");
-        sb.append(getString());
+        sb.append(getString(false));
         sb.append("-");
         sb.append(this.sumTail);
 

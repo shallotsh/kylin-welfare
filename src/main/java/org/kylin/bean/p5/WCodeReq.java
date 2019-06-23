@@ -9,6 +9,7 @@ public class WCodeReq {
     private Integer filterType;
     private String boldCodeFive;
     private List<WCode> wCodes;
+    private List<WCode> backupCodes;
     private Map<String, List<WCode>> deletedCodesPair;
     private List<String> bits;
     private Integer exportType;
@@ -61,6 +62,15 @@ public class WCodeReq {
 
     public void setwCodes(List<WCode> wCodes) {
         this.wCodes = wCodes;
+    }
+
+    public List<WCode> getBackupCodes() {
+        return backupCodes;
+    }
+
+    public WCodeReq setBackupCodes(List<WCode> backupCodes) {
+        this.backupCodes = backupCodes;
+        return this;
     }
 
     public Map<String, List<WCode>> getDeletedCodesPair() {

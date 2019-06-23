@@ -6,6 +6,7 @@ import java.util.Map;
 public class WCodeSummarise {
     private List<WCode> randomKillCodes;
     private List<WCode> wCodes;
+    private List<WCode> backupCodes;
     private Map<String, List<WCode>> deletedCodesPair;
     private Integer pairCodes;
     private Integer nonPairCodes;
@@ -28,6 +29,15 @@ public class WCodeSummarise {
 
     public WCodeSummarise setwCodes(List<WCode> wCodes) {
         this.wCodes = wCodes;
+        return this;
+    }
+
+    public List<WCode> getBackupCodes() {
+        return backupCodes;
+    }
+
+    public WCodeSummarise setBackupCodes(List<WCode> backupCodes) {
+        this.backupCodes = backupCodes;
         return this;
     }
 

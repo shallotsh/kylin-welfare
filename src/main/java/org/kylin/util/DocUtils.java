@@ -11,6 +11,7 @@ import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
 import org.kylin.constant.ClassifyEnum;
 import org.kylin.constant.CodeTypeEnum;
+import org.kylin.constant.ExportPatternEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -298,7 +300,7 @@ public class DocUtils {
             int freq = i;
             List<WCode> exportRandomCodes = wCodes.stream().filter(wCode -> wCode.getFreq() == freq).collect(Collectors.toList());
             String exportTitle = "频度" + freq + "(注数" + CollectionUtils.size(exportRandomCodes) + ")";
-            exportWCodes(doc, exportRandomCodes, exportTitle, null, false, null);
+            exportWCodes(doc, exportRandomCodes, exportTitle, null, false, null, false);
         }
 
         XWPFParagraph headerEnd = doc.createParagraph();
@@ -318,6 +320,8 @@ public class DocUtils {
 
         List<WCode> nonPairCodes = WCodeUtils.filterNonPairCodes(wCodeReq.getwCodes());
 
+        Optional<ExportPatternEnum> ep = ExportPatternEnum.getById(wCodeReq.getExportFormat());
+
         int customRandomCount = 200;
         if(StringUtils.isNumeric(wCodeReq.getRandomCount()) && NumberUtils.toInt(wCodeReq.getRandomCount()) > 0
                 && NumberUtils.toInt(wCodeReq.getRandomCount()) < 1000 ){
@@ -333,38 +337,43 @@ public class DocUtils {
         if(!CollectionUtils.isEmpty(nonPairRandomTenCodes)){
             Collections.sort(nonPairRandomTenCodes);
             String titleString = String.format("排列5码随机·非对子( %d 注)", nonPairRandomTenCodes.size());
-            exportWCodes(doc, nonPairRandomTenCodes, titleString, null, wCodeReq.getFreqSeted(), null);
+            exportWCodes(doc, nonPairRandomTenCodes, titleString, null, wCodeReq.getFreqSeted(),
+                    null, (ep.isPresent() && ep.get()==ExportPatternEnum.NORMAL_SEQ_NO)?true:false);
         }
 
         if(!CollectionUtils.isEmpty(nonPairRandFiveCodes)){
             Collections.sort(nonPairRandFiveCodes);
             String titleString = String.format("排列5码随机·非对子( %d 注)", nonPairRandFiveCodes.size());
-            exportWCodes(doc, nonPairRandFiveCodes, titleString, null, wCodeReq.getFreqSeted(), null);
+            exportWCodes(doc, nonPairRandFiveCodes, titleString, null, wCodeReq.getFreqSeted(),
+                    null,  (ep.isPresent() && ep.get()==ExportPatternEnum.NORMAL_SEQ_NO)?true:false);
         }
 
 
         if(!CollectionUtils.isEmpty(nonPairRand200Codes) && nonPairRand200Codes.size() < CollectionUtils.size(nonPairCodes)){
             Collections.sort(nonPairRand200Codes);
             String titleString = String.format("排列5码随机·非对子( %d 注)", nonPairRand200Codes.size());
-            exportWCodes(doc, nonPairRand200Codes, titleString, null, wCodeReq.getFreqSeted(), null);
+            exportWCodes(doc, nonPairRand200Codes, titleString, null, wCodeReq.getFreqSeted(), null,
+                    (ep.isPresent() && ep.get()==ExportPatternEnum.NORMAL_SEQ_NO)?true:false);
         }
 
         List<WCode> pairCodes = WCodeUtils.filterPairCodes(wCodeReq.getwCodes());
         if(!CollectionUtils.isEmpty(pairCodes)){
             Collections.sort(pairCodes);
             String titleString = String.format("排列5码·对子( %d 注)", pairCodes.size());
-            exportWCodes(doc, pairCodes, titleString, separator, wCodeReq.getFreqSeted(), null);
+            exportWCodes(doc, pairCodes, titleString, separator, wCodeReq.getFreqSeted(),
+                    null,  (ep.isPresent() && ep.get()==ExportPatternEnum.NORMAL_SEQ_NO)?true:false);
         }
 
         if(!CollectionUtils.isEmpty(nonPairCodes)){
             Collections.sort(nonPairCodes);
             String titleString = String.format("排列5码·非对子( %d 注)", nonPairCodes.size());
-            exportWCodes(doc, nonPairCodes, titleString, separator, wCodeReq.getFreqSeted(), null);
+            exportWCodes(doc, nonPairCodes, titleString, separator, wCodeReq.getFreqSeted(), null,
+                    (ep.isPresent() && ep.get()==ExportPatternEnum.NORMAL_SEQ_NO)?true:false);
         }
     }
 
 
-    public static void exportWCodes(XWPFDocument doc, List<WCode> wCodes, String titleString, String separator, Boolean freqSeted, String pattern){
+    public static void exportWCodes(XWPFDocument doc, List<WCode> wCodes, String titleString, String separator, Boolean freqSeted, String pattern, Boolean withSeq){
 
         if(CollectionUtils.isEmpty(wCodes)){
             return;
@@ -402,7 +411,7 @@ public class DocUtils {
 //            }
 //            if(w3DCode.getFreq() != freq) {
 //                freq = w3DCode.getFreq();
-                content.setText(w3DCode.getString(freqSeted) + "     ");
+                content.setText(w3DCode.getString(freqSeted, withSeq) + "     ");
 //            }else{
 //                content.setText(w3DCode.getString() + "     ");
 //            }
@@ -457,7 +466,7 @@ public class DocUtils {
         if(!CollectionUtils.isEmpty(halfPageCodes)){
             Collections.sort(halfPageCodes);
             String titleString = String.format("排列5码·半页码(非对子 %d 注)", halfPageCodes.size());
-            exportWCodes(doc, halfPageCodes, titleString, null, false, null);
+            exportWCodes(doc, halfPageCodes, titleString, null, false, null, false);
         }
 
         // 保存

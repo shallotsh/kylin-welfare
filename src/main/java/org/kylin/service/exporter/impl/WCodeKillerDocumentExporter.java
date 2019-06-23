@@ -73,12 +73,12 @@ public class WCodeKillerDocumentExporter extends AbstractDocumentExporter<WCodeR
 
         if(!CollectionUtils.isEmpty(pairCodes)) {
             String titleString = String.format(filterStrategyEnum.getDesc() + " 对子( %d 注)", pairCodes.size());
-            DocUtils.exportWCodes(doc, pairCodes, titleString, null, data.getFreqSeted(), null);
+            DocUtils.exportWCodes(doc, pairCodes, titleString, null, data.getFreqSeted(), null, exportPatternEnum == ExportPatternEnum.NORMAL_SEQ_NO ? true: false);
         }
 
         if(!CollectionUtils.isEmpty(nonPairCodes)) {
             String titleString = String.format(filterStrategyEnum.getDesc() + " 非对子( %d 注)", nonPairCodes.size());
-            DocUtils.exportWCodes(doc, nonPairCodes, titleString, null, data.getFreqSeted(), null);
+            DocUtils.exportWCodes(doc, nonPairCodes, titleString, null, data.getFreqSeted(), null, exportPatternEnum == ExportPatternEnum.NORMAL_SEQ_NO ? true: false);
         }
     }
 }
