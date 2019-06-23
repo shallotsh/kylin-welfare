@@ -1,6 +1,7 @@
 package org.kylin.service.pfive.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.kylin.algorithm.strategy.SequenceProcessor;
 import org.kylin.algorithm.strategy.Strategy;
@@ -61,8 +62,14 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
 
         WCodeSummarise wCodeSummarise = WCodeUtils.construct(wCodes, filterStrategyEnum.getKey(), deletedCodes, wCodeReq);
 
-        if(filterStrategyEnum == FilterStrategyEnum.EXTEND_AND_SELECT){
+        if(filterStrategyEnum == FilterStrategyEnum.EXTEND_AND_SELECT || filterStrategyEnum == FilterStrategyEnum.EXTEND_CODE){
             wCodeSummarise.setBackupCodes(backupCodes);
+            if(wCodeSummarise.getExtendCount() == null || wCodeReq.getExtendCount() != null){
+                wCodeSummarise.setExtendCount(wCodeReq.getExtendCount());
+            }
+            if(filterStrategyEnum == FilterStrategyEnum.EXTEND_CODE){
+                wCodeSummarise.setExtendRatio(NumberUtils.toInt(wCodeReq.getBoldCodeFive()));
+            }
         }
 
         return Optional.of(wCodeSummarise);

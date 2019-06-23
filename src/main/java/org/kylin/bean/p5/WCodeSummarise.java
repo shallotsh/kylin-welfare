@@ -13,6 +13,8 @@ public class WCodeSummarise {
     private boolean isRandomKill;
     private Integer remainedCodesCount;
     private boolean freqSeted;
+    private Integer extendCount;
+    private Integer extendRatio;
 
     public List<WCode> getRandomKillCodes() {
         return randomKillCodes;
@@ -92,6 +94,24 @@ public class WCodeSummarise {
 
     public WCodeSummarise setFreqSeted(boolean freqSeted) {
         this.freqSeted = freqSeted;
+        return this;
+    }
+
+    public Integer getExtendCount() {
+        return extendCount;
+    }
+
+    public WCodeSummarise setExtendCount(Integer extendCount) {
+        this.extendCount = extendCount;
+        return this;
+    }
+
+    public Integer getExtendRatio() {
+        return extendRatio;
+    }
+
+    public WCodeSummarise setExtendRatio(Integer extendRatio) {
+        this.extendRatio = extendRatio;
         return this;
     }
 }

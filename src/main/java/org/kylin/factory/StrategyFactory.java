@@ -47,6 +47,8 @@ public class StrategyFactory {
                 return new FreqKillProcessor();
             case EXTEND_AND_SELECT:
                 return new ExtendAndSelectProcessor();
+            case EXTEND_CODE:
+                return new ExtendProcessor();
                 default:
                     return null;
         }

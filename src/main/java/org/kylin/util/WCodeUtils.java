@@ -341,13 +341,18 @@ public class WCodeUtils {
 
         // process random kill
         if(wCodeReq != null) {
-            Boolean isRandomKill = wCodeReq.getFilterType() != null && wCodeReq.getFilterType() == FilterStrategyEnum.RANDOM_FILTER.getId();
+            FilterStrategyEnum filterStrategyEnum = FilterStrategyEnum.getById(wCodeReq.getFilterType());
+
+            Boolean isRandomKill = wCodeReq.getFilterType() != null && filterStrategyEnum == FilterStrategyEnum.RANDOM_FILTER;
 
             if (isRandomKill != null && isRandomKill) {
                 wCodeSummarise.setPairCodes(WCodeUtils.getPairCodeCountRemained(wCodes))
                         .setNonPairCodes(WCodeUtils.getNonPairCodeCountRemained(wCodes))
                         .setRemainedCodesCount(WCodeUtils.getRemainedCodes(wCodes))
                         .setRandomKill(isRandomKill);
+            } else if(filterStrategyEnum == FilterStrategyEnum.EXTEND_CODE) {
+                wCodeSummarise.setExtendCount(wCodes.size());
+                wCodeSummarise.setwCodes(Collections.emptyList());
             } else {
                 wCodeSummarise.setPairCodes(WCodeUtils.getPairCodeCount(wCodes))
                         .setNonPairCodes(WCodeUtils.getNonPairCodeCount(wCodes));
