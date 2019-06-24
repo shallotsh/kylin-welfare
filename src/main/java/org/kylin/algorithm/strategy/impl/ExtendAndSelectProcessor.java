@@ -108,6 +108,6 @@ public class ExtendAndSelectProcessor implements SequenceProcessor {
 
     @Override
     public boolean validate() {
-        return CollectionUtils.isNotEmpty(wCodes) && extendRatio > 0 && extendRatio <= 100 && selectCount > 0;
+        return CollectionUtils.isNotEmpty(wCodes) && extendRatio > 0 && extendRatio <= 10000 && selectCount > 0;
     }
 }
