@@ -56,6 +56,6 @@ public class ExtendProcessor implements SequenceProcessor {
 
     @Override
     public boolean validate() {
-        return CollectionUtils.isNotEmpty(wCodes) && extendRatio > 0 && extendRatio <= 100 ;
+        return CollectionUtils.isNotEmpty(wCodes) && extendRatio > 0 && extendRatio <= 10000 ;
     }
 }
