@@ -69,6 +69,7 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
             }
             if(filterStrategyEnum == FilterStrategyEnum.EXTEND_CODE){
                 wCodeSummarise.setExtendRatio(NumberUtils.toInt(wCodeReq.getBoldCodeFive()));
+                wCodeSummarise.setwCodes(wCodes.subList(0, wCodes.size() > 1000 ? 1000: wCodes.size()));
             }
         }
 

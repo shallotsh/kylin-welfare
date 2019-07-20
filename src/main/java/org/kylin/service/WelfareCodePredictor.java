@@ -77,4 +77,21 @@ public interface WelfareCodePredictor {
      * @return
      */
     WelfareCode bitsFilter(P3Param p3Param);
+
+
+    /**
+     * 扩库
+     *
+     * @param p3Param
+     * @return
+     */
+    WelfareCode extendRepo(P3Param p3Param);
+
+    /**
+     * 扩库选择
+     *
+     * @param p3Param
+     * @return
+     */
+    WelfareCode extendSelect(P3Param p3Param);
 }
