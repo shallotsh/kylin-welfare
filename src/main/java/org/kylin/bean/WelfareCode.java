@@ -25,6 +25,8 @@ public class WelfareCode implements Serializable{
     private Integer nonDeletedPairCount;
     private Boolean randomKilled;
     private Integer randomKilledCount;
+    private Integer extendRatio;
+    private Integer countOfExtended;
 
     public CodeTypeEnum getCodeTypeEnum() {
         return codeTypeEnum;
@@ -90,6 +92,25 @@ public class WelfareCode implements Serializable{
 
     public WelfareCode setRandomKilledCount(Integer randomKilledCount) {
         this.randomKilledCount = randomKilledCount;
+        return this;
+    }
+
+
+    public Integer getExtendRatio() {
+        return extendRatio;
+    }
+
+    public WelfareCode setExtendRatio(Integer extendRatio) {
+        this.extendRatio = extendRatio;
+        return this;
+    }
+
+    public Integer getCountOfExtended() {
+        return countOfExtended;
+    }
+
+    public WelfareCode setCountOfExtended(Integer countOfExtended) {
+        this.countOfExtended = countOfExtended;
         return this;
     }
 

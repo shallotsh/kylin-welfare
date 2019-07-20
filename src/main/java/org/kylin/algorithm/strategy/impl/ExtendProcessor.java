@@ -12,6 +12,13 @@ import org.kylin.util.WCodeUtils;
 
 import java.util.List;
 
+/**
+ *  扩库操作
+ *  1.最大按扩库倍数操作；
+ *  2.对子5码不扩库；
+ *
+ */
+
 @Slf4j
 public class ExtendProcessor implements SequenceProcessor {
 

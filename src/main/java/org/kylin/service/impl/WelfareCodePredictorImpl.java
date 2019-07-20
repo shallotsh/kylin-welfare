@@ -20,10 +20,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -292,4 +289,84 @@ public class WelfareCodePredictorImpl implements WelfareCodePredictor {
     }
 
 
+    @Override
+    public WelfareCode extendRepo(P3Param p3Param) {
+
+        WelfareCode welfareCode = p3Param.getWelfareCode();
+
+        Integer ratio = p3Param.getExtendRatio();
+        if(ratio == null){
+            ratio = welfareCode.getExtendRatio();
+        }
+
+        // 构造扩库代码
+        List<W3DCode> w3DCodes = new ArrayList<>();
+        for(W3DCode w3DCode : welfareCode.getW3DCodes()){
+            if(TransferUtil.isPairCode(w3DCode)){
+                w3DCodes.add(w3DCode);
+                continue;
+            }
+
+            for(int i=0; i<ratio; i++){
+                w3DCodes.add(w3DCode);
+            }
+        }
+
+
+        welfareCode.setW3DCodes(w3DCodes);
+        welfareCode.sort(WelfareCode::bitSort).generate();
+        welfareCode.setExtendRatio(p3Param.getExtendRatio());
+        welfareCode.setCountOfExtended(w3DCodes.size());
+
+        return welfareCode;
+    }
+
+    @Override
+    public WelfareCode extendSelect(P3Param p3Param) {
+
+        WelfareCode welfareCode = p3Param.getWelfareCode();
+
+        Integer ratio = p3Param.getExtendRatio();
+        if(ratio == null){
+            ratio = welfareCode.getExtendRatio();
+        }
+
+        // 构造扩库代码
+        List<W3DCode> w3DCodes = new ArrayList<>();
+        for(W3DCode w3DCode : welfareCode.getW3DCodes()){
+            if(TransferUtil.isPairCode(w3DCode)){
+                w3DCodes.add(w3DCode);
+                continue;
+            }
+
+            for(int i=0; i<ratio; i++){
+                w3DCodes.add(w3DCode);
+            }
+        }
+
+        // 随机选择
+
+        int randomSize = w3DCodes.size();
+        int count  = 0;
+        int selectCount = p3Param.getExtendSelectCount();
+        List<W3DCode> randomSelected = new ArrayList<>();
+
+        while(count < selectCount && count < w3DCodes.size()){
+            int index = new Random().nextInt(randomSize);
+
+            try {
+                randomSelected.add(w3DCodes.get(index));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            count += 1;
+        }
+
+        welfareCode.setW3DCodes(randomSelected);
+        welfareCode.sort(WelfareCode::bitSort).generate();
+
+        LOGGER.info("随机选码完成 {} 注", randomSelected.size());
+
+        return welfareCode;
+    }
 }

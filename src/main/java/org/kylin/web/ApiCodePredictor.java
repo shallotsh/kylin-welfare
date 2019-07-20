@@ -168,6 +168,38 @@ public class ApiCodePredictor {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/codes/extend",  method = RequestMethod.POST)
+    public WyfResponse extendRepo(@RequestBody P3Param p3Param){
+
+        LOGGER.info("p3Param:{}" , p3Param);
+
+        if(p3Param.getWelfareCode() == null || p3Param.getExtendRatio() == null){
+            return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "param invalid.");
+        }
+
+        WelfareCode code = welfareCodePredictor.extendRepo(p3Param);
+
+        return new WyfDataResponse<>(code);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/codes/extendSelect",  method = RequestMethod.POST)
+    public WyfResponse extendSelect(@RequestBody P3Param p3Param){
+
+        LOGGER.info("p3Param:{}" , p3Param);
+
+        if(p3Param.getWelfareCode() == null || (p3Param.getExtendRatio() == null && p3Param.getWelfareCode().getExtendRatio() == null)){
+            return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "param invalid.");
+        }
+
+        WelfareCode code = welfareCodePredictor.extendSelect(p3Param);
+
+        return new WyfDataResponse<>(code);
+    }
+
+
+    @ResponseBody
     @RequestMapping(value = "/codes/export",  method = RequestMethod.POST)
     public WyfResponse exportCodes(@RequestBody String codeString,
                               HttpServletResponse response) throws IOException{

@@ -155,7 +155,7 @@ var app = new Vue({
                 if (data.extendRatio) {
                     this.extendRatio = data.extendRatio;
                 }
-                msg = "基数 " + this.backupCode.length + " 注, 倍数"+ this.extendRatio +"，扩库后" + this.extendCount + "注 ";
+                msg = "基数 " + this.backupCode.length + " 注, 倍数"+ this.extendRatio +"，扩库（非对子）后" + this.extendCount + "注 ";
             }
 
             if (processId != 22) {

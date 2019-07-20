@@ -351,6 +351,75 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
         });
     };
 
+    $scope.extendRepo = function() {
+        if(!$rootScope.isPredict){
+            handleException("请先完成预测");
+            return;
+        }
+
+        var data = {
+            extendRatio: $scope.wyf_extend_count,
+            welfareCode: deepCopy($rootScope.welfareCode)
+        };
+
+        if(!$rootScope.backupWelfareCode){
+            // 备份当前编码
+            $rootScope.welfareCode.extendRatio = $scope.wyf_extend_count;
+            $rootScope.backupWelfareCode = deepCopy($rootScope.welfareCode);
+        }
+
+        $http({
+            method:"POST",
+            url:"/api/welfare/codes/extend",
+            data: JSON.stringify(data),
+            headers:{
+                "Content-Type": "application/json; charset=UTF-8"
+            }
+        }).then(function success(response) {
+            handleResponse(response);
+            $rootScope.wyfMessage = "扩库完成，共 " + response.data.data.countOfExtended + "注";
+        }, function fail(response) {
+            console.log("resp:" + JSON.stringify(response.data, null, 2));
+            alert("扩库失败!");
+        });
+
+
+    };
+
+    $scope.wyfExtendSelect = function() {
+        if(!$rootScope.isPredict){
+            handleException("请先完成预测");
+            return;
+        }
+
+        if(!$rootScope.backupWelfareCode){
+            // 备份当前编码
+            $rootScope.backupWelfareCode = deepCopy($rootScope.welfareCode);
+        }
+
+        var data = {
+            extendRatio: $scope.wyf_extend_count,
+            extendSelectCount: $scope.wyf_extend_and_select_count,
+            welfareCode: deepCopy($rootScope.backupWelfareCode)
+        };
+
+        $http({
+            method:"POST",
+            url:"/api/welfare/codes/extendSelect",
+            data: JSON.stringify(data),
+            headers:{
+                "Content-Type": "application/json; charset=UTF-8"
+            }
+        }).then(function success(response) {
+            handleResponse(response);
+            $rootScope.wyfMessage = "扩库选码共"+ $rootScope.wyfCodes.length + "注"
+        }, function fail(response) {
+            console.log("resp:" + JSON.stringify(response.data, null, 2));
+            alert("扩库选码失败!");
+        });
+
+    }
+
 
     $scope.bitsFilter = function() {
         if(!$rootScope.isPredict){
@@ -534,9 +603,20 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
         $rootScope.wyf_ab_filter = undefined;
         $rootScope.wyf_bc_filter = undefined;
         $rootScope.wyf_ac_filter = undefined;
+        $rootScope.wyf_extend_count = 0;
+        $rootScope.wyf_extend_and_select_count = 0;
+        $rootScope.backupWelfareCode = undefined;
     }
 
     function deepCopy(source) {
+        if(source instanceof  Array){
+            return source.slice(0);
+        }
+
+        if( source == undefined || source == null){
+            return source;
+        }
+
         var result = {};
         for (var key in source){
 

@@ -367,6 +367,26 @@
                     </div>
                 </div>
 
+
+                <div class="row">
+                    <div class="col-sm-3 col-md-3">
+                        <input type="number" class="form-control" ng-model="wyf_extend_count" id="wyf_extend_count"
+                               placeholder="扩库注数">
+                    </div>
+                    <div class="col-sm-3 col-md-3">
+                        <button type="button" class="btn btn-primary" ng-click="extendRepo()" >扩库</button>
+                    </div>
+
+                    <div class="col-sm-3 col-md-3">
+                        <input type="text" class="form-control" ng-model="wyf_extend_and_select_count" id="wyf_extend_and_select_count"
+                               placeholder="扩库选码注数">
+                    </div>
+                    <div class="col-sm-3 col-md-3">
+                        <button type="button" class="btn btn-primary" ng-click="wyfExtendSelect()">扩库选码</button>
+                    </div>
+                </div>
+
+
             </div>
 
 
@@ -398,7 +418,7 @@
                 <hr/>
                 <div class="wyf-codes">
                     <ul>
-                        <li ng-repeat="item in wyfCodes"><span style="display: inline-block;">{{item}}</span></li>
+                        <li ng-repeat="item in wyfCodes track by $index"><span style="display: inline-block;">{{item}}</span></li>
                     </ul>
                 </div>
 
