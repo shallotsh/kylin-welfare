@@ -9,6 +9,7 @@ import java.util.Optional;
 @Getter
 public enum ExportPatternEnum {
     NORMAL(0, "常规导出"),
+    GROUP_COLUMN(1, "组首输出"),
     BIG_SUM_KILL(2, "大和杀导出"),
     CONTAIN_FOUR_KILL(5, "含四杀导出"),
     CONTAIN_FIVE_KILL(6, "含五杀导出"),

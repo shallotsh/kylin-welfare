@@ -11,6 +11,8 @@ import org.kylin.bean.p5.WCodeSummarise;
 import org.kylin.constant.ExportPatternEnum;
 import org.kylin.constant.FilterStrategyEnum;
 import org.kylin.factory.StrategyFactory;
+import org.kylin.service.exporter.AbstractDocumentExporter;
+import org.kylin.service.exporter.impl.GroupColumnDocExporter;
 import org.kylin.service.exporter.impl.WCodeKillerDocumentExporter;
 import org.kylin.service.pfive.WCodeProcessService;
 import org.kylin.util.DocUtils;
@@ -117,7 +119,12 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
         }
 
         // 策略导出
-        WCodeKillerDocumentExporter exporter = new WCodeKillerDocumentExporter(new XWPFDocument(), wCodeReq);
+        AbstractDocumentExporter exporter;
+        if(ExportPatternEnum.GROUP_COLUMN == ep.get()) {
+            exporter = new GroupColumnDocExporter(new XWPFDocument(), wCodeReq);
+        }else  {
+            exporter = new WCodeKillerDocumentExporter(new XWPFDocument(), wCodeReq);
+        }
         try {
             exporter.init();
             exporter.writeDefaultDocHeader();
