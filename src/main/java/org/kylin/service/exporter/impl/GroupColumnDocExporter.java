@@ -80,7 +80,19 @@ public class GroupColumnDocExporter extends AbstractDocumentExporter<WCodeReq> {
             return;
         }
 
-        String titleString = String.format(ep.get().getDesc() + " ( %d 注)", wCodes.size());
-        DocUtils.exportWCodes(doc, wCodes, titleString, null, data.getFreqSeted(), null, ep.get() == ExportPatternEnum.NORMAL_SEQ_NO ? true: false);
+        List<WCode> pairCodes = WCodeUtils.filterPairCodes(wCodes);
+        List<WCode> nonPairCodes = WCodeUtils.filterNonPairCodes(wCodes);
+
+
+        if(!CollectionUtils.isEmpty(pairCodes)) {
+            String titleString = String.format(ep.get().getDesc() + " 对子( %d 注)", pairCodes.size());
+            DocUtils.exportWCodes(doc, pairCodes, titleString, null, data.getFreqSeted(), null, ep.get() == ExportPatternEnum.NORMAL_SEQ_NO ? true: false);
+        }
+
+        if(!CollectionUtils.isEmpty(nonPairCodes)) {
+            String titleString = String.format(ep.get().getDesc() + " 非对子( %d 注)", nonPairCodes.size());
+            DocUtils.exportWCodes(doc, nonPairCodes, titleString, null, data.getFreqSeted(), null, ep.get() == ExportPatternEnum.NORMAL_SEQ_NO ? true: false);
+        }
+
     }
 }
