@@ -17,7 +17,7 @@ import java.util.*;
 
 public class GroupColumnDocExporter extends AbstractDocumentExporter<WCodeReq> {
 
-    private Set<Integer> columnIdxs = new HashSet<>(Arrays.asList(0,1,2));
+    private Set<Integer> columnIdxs = new HashSet<>(Arrays.asList(0));
     private int groupSize = 13;
     private List<WCode> wCodes;
 
