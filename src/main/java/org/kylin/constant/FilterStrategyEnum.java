@@ -25,6 +25,7 @@ public enum FilterStrategyEnum {
 
     EXTEND_CODE(22, "扩库"),
     GROUP_HEADER_CODE(23, "组首选码"),
+    ROW_SELECT_CODE(24, "行选码"),
 
     BOLD_FILTER_IN_2D(100, "2D杀码"),
     INVERSE_SELECT_FILTER_IN_2D(101, "2D筛选"),
