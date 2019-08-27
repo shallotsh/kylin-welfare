@@ -1,15 +1,19 @@
 package org.kylin.util;
 
 import com.alibaba.fastjson.JSON;
+import com.github.rholder.retry.RetryException;
+import com.github.rholder.retry.Retryer;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.kylin.bean.sd.SdDrawNoticeResult;
+import org.kylin.exception.NeedRetryExcetpion;
 
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 public class OkHttpUtils {
@@ -19,7 +23,7 @@ public class OkHttpUtils {
 
 
 
-    public static Optional<String> doGet(String url){
+    public static Optional<String> doGet(String url) throws NeedRetryExcetpion{
 
         OkHttpClient client = new OkHttpClient();
 
@@ -35,7 +39,7 @@ public class OkHttpUtils {
             if(response.isSuccessful()) {
                 return Optional.of(response.body().string());
             }else{
-                throw new IOException("Unexpected code " + response);
+                throw new NeedRetryExcetpion("query lottery code error, retry.");
             }
         } catch (IOException e) {
             log.info("doGet error", e);
@@ -47,19 +51,20 @@ public class OkHttpUtils {
     public static Optional<SdDrawNoticeResult> getSdDrawNoticeResult(String name, Integer issueCount){
 
         String url = MessageFormat.format(DRAW_NOTICE_URL_TPL, name, issueCount);
-        Optional<String> retOpt = OkHttpUtils.doGet(url);
-        if(!retOpt.isPresent()){
+
+        Retryer<Optional<String>> retryer = RetryUtils.build(200L, 3);
+        Optional<String> retOpt = null;
+        try {
+            retOpt = retryer.call(() -> OkHttpUtils.doGet(url));
+        } catch (ExecutionException e) {
+            log.info("query execution error.", e);
+            return Optional.empty();
+        } catch (RetryException e) {
+            log.info("query nothing after retry.", e);
             return Optional.empty();
         }
-        try {
-            SdDrawNoticeResult result = JSON.parseObject(retOpt.get(), SdDrawNoticeResult.class);
-            log.info("开奖结果查询 result:{}", result);
-            return Optional.of(result);
-        } catch (Exception e) {
-            log.info("开奖结果转换错误", e);
-        }
 
-        return Optional.empty();
+        return Optional.ofNullable(retOpt.map(ret -> JSON.parseObject(ret, SdDrawNoticeResult.class)).orElseGet(null));
     }
 
 }
