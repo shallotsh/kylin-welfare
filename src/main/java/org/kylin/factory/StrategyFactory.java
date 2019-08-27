@@ -51,6 +51,8 @@ public class StrategyFactory {
                 return new ExtendProcessor();
             case GROUP_HEADER_CODE:
                 return new GroupHeaderProcessor();
+            case ROW_SELECT_CODE:
+                return new RowSelectProcessor();
                 default:
                     return null;
         }
