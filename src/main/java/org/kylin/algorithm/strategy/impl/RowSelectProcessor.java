@@ -46,9 +46,10 @@ public class RowSelectProcessor implements SequenceProcessor {
         List<List<List<WCode>>> codesArrs = Lists.partition(codesArray, groupSize);
 
         for(int i = 0; i<codesArrs.size(); i++){
-            if(rowIdxs.contains(i)){
-                for(List<WCode> wCodeList : codesArrs.get(i)) {
-                    ret.addAll(wCodeList);
+            List<List<WCode>> codesArr = codesArrs.get(i);
+            for(int j=0; j<codesArr.size(); j++) {
+                if (rowIdxs.contains(j)) {
+                    ret.addAll(codesArr.get(j));
                 }
             }
         }
