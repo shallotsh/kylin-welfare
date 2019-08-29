@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class GroupHeaderProcessor implements SequenceProcessor {
 
-    private Integer groupSize = 13;
+    private Integer groupSize = 60;
     private Set<Integer> columnIdxs = new HashSet<>(Arrays.asList(0));
     private List<WCode> wCodes;
 
