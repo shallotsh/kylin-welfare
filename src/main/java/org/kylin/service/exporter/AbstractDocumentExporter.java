@@ -48,7 +48,7 @@ public abstract class AbstractDocumentExporter<T> {
         hr1.setBold(true);
         hr1.setUnderline(UnderlinePatterns.DOT_DOT_DASH);
         hr1.setTextPosition(20);
-        hr1.setFontSize(28);
+        hr1.setFontSize(18);
         hr1.addBreak();
         writeStats();
     }
