@@ -59,10 +59,9 @@ public class WCodeKillerDocumentExporter extends AbstractDocumentExporter{
         XWPFParagraph header = docHolder.getDocument().createParagraph();
         XWPFRun hr2 = header.createRun();
 
-        hr2.setText(filterStrategyEnum.getDesc() + " 共计" + codesSize + "注排列5码!!!     时间："
-                + CommonUtils.getCurrentDateString());
+        hr2.setText(filterStrategyEnum.getDesc() + " 共计" + codesSize + "注排列5码!!!");
         hr2.setTextPosition(10);
-        hr2.setFontSize(18);
+        hr2.setFontSize(16);
 
         XWPFRun hr3 = header.createRun();
         hr3.setText(" ");

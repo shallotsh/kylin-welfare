@@ -290,11 +290,19 @@ public class WCodeUtils {
     }
 
     public static Integer getPairCodeCount(List<WCode> wCodes){
-        return CollectionUtils.size(filterPairCodes(wCodes));
+        if(CollectionUtils.isEmpty(wCodes)){
+            return 0;
+        }
+
+        return (int)wCodes.stream().filter(wCode -> isPair(wCode)).count();
     }
 
     public static Integer getNonPairCodeCount(List<WCode> wCodes){
-        return CollectionUtils.size(filterNonPairCodes(wCodes));
+        if(CollectionUtils.isEmpty(wCodes)){
+            return 0;
+        }
+
+        return (int)wCodes.stream().filter(wCode -> !isPair(wCode)).count();
     }
 
     public static Integer getPairCodeCountRemained(List<WCode> wCodes){

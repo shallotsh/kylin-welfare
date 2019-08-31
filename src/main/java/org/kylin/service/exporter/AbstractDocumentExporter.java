@@ -11,13 +11,14 @@ import org.kylin.util.CommonUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
 public abstract class AbstractDocumentExporter implements IDocExportTool<WCodeReq> {
 
-    private static final String DEFAULT_DOC_TITLE = "《我要发·排列5》福彩3D预测报表";
+    private static final String DEFAULT_DOC_TITLE = "《我要发·排列5》福彩3D预测 %s";
     protected static final String BASE_PATH = "/var/attachment/";
 
     @Override
@@ -29,10 +30,10 @@ public abstract class AbstractDocumentExporter implements IDocExportTool<WCodeRe
         header.setAlignment(ParagraphAlignment.CENTER);
 
         XWPFRun hr1 = header.createRun();
-        hr1.setText(StringUtils.isBlank(title) ? DEFAULT_DOC_TITLE : title);
+        hr1.setText((StringUtils.isBlank(title) ? DEFAULT_DOC_TITLE: title) + LocalDate.now());
         hr1.setBold(true);
         hr1.setUnderline(UnderlinePatterns.DOT_DOT_DASH);
-        hr1.setTextPosition(20);
+        hr1.setTextPosition(12);
         hr1.setFontSize(18);
         hr1.addBreak();
     }
