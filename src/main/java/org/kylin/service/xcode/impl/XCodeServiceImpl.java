@@ -8,7 +8,10 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.kylin.bean.p2.XCodePair;
 import org.kylin.bean.p2.XCodeReq;
 import org.kylin.bean.p5.WCode;
+import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.exporter.DocHolder;
+import org.kylin.service.exporter.ExportToolSelector;
+import org.kylin.service.exporter.IDocExportTool;
 import org.kylin.service.exporter.impl.XCode2DKillerDocExporter;
 import org.kylin.service.xcode.XCodeService;
 import org.kylin.service.xcode.filters.impl.BoldCodeFilter;
@@ -16,6 +19,7 @@ import org.kylin.service.xcode.filters.impl.GossipSimpleFilterr;
 import org.kylin.service.xcode.filters.impl.InverseSelectCodeFilter;
 import org.kylin.service.xcode.filters.impl.KdSimpleFilter;
 import org.kylin.util.WCodeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -24,6 +28,9 @@ import java.util.*;
 @Slf4j
 @Service
 public class XCodeServiceImpl implements XCodeService {
+
+    @Autowired
+    private ExportToolSelector exportToolSelector;
 
     @Override
     public List<WCode> quibinaryEncode(List<Set<Integer>> riddles) {
@@ -128,24 +135,20 @@ public class XCodeServiceImpl implements XCodeService {
     }
 
     @Override
-    public Optional<String> exportWCodeToFile(XCodeReq xCodeReq) {
+    public Optional<String> exportWCodeToFile(XCodeReq xCodeReq) throws IOException{
 
         // 策略导出
         DocHolder docHolder = new DocHolder();
-        XCode2DKillerDocExporter exporter = new XCode2DKillerDocExporter();
-        try {
 
-            exporter.writeTitleAsDefaultFormat(docHolder,"我要发·定位2D法");
-            exporter.writeContentToDoc(docHolder, xCodeReq.adaptToWCodeReq());
-            String fileName = exporter.exportDocAsFile(docHolder);
+        Optional<IDocExportTool> iDocExportTool = exportToolSelector.getByExportPattern(ExportPatternEnum.LOCATION_2D);
+
+        if(iDocExportTool.isPresent()) {
+            iDocExportTool.get().writeTitleAsDefaultFormat(docHolder, "我要发·定位2D法");
+            iDocExportTool.get().writeContentToDoc(docHolder, xCodeReq.adaptToWCodeReq());
+            String fileName = iDocExportTool.get().exportDocAsFile(docHolder);
             return Optional.of(fileName);
-        } catch (IOException e) {
-            log.warn("导出文件错误", e);
-            return Optional.empty();
-        } catch (RuntimeException re){
-            log.warn("导出文件错误", re);
+        }else{
             return Optional.empty();
         }
-
     }
 }

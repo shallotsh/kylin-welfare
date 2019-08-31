@@ -1,9 +1,11 @@
 package org.kylin.service.exporter;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.kylin.constant.ExportPatternEnum;
 
 import javax.print.Doc;
 import java.io.IOException;
+import java.util.List;
 
 public interface IDocExportTool<T> {
     /**
@@ -43,4 +45,11 @@ public interface IDocExportTool<T> {
     default String exportDocAsFile(DocHolder docHolder) throws IOException{
         return exportDocAsFile(docHolder, null, null);
     }
+
+    /**
+     * 获取支持的导出模式
+     *
+     * @return
+     */
+    List<ExportPatternEnum> getSupportedExportPatterns();
 }

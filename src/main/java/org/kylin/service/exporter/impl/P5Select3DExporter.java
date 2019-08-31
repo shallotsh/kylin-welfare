@@ -1,7 +1,6 @@
 package org.kylin.service.exporter.impl;
 
 import com.google.common.collect.Maps;
-import io.swagger.models.auth.In;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
@@ -10,19 +9,17 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.kylin.bean.W3DCode;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
-import org.kylin.constant.BitConstant;
 import org.kylin.constant.ExportPatternEnum;
-import org.kylin.constant.FilterStrategyEnum;
 import org.kylin.service.exporter.AbstractDocumentExporter;
 import org.kylin.service.exporter.DocHolder;
 import org.kylin.util.CommonUtils;
 import org.kylin.util.TransferUtil;
-import org.kylin.util.WyfCollectionUtils;
+import org.springframework.stereotype.Component;
 
-import javax.print.Doc;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 public class P5Select3DExporter extends AbstractDocumentExporter {
 
     @Override
@@ -153,5 +150,8 @@ public class P5Select3DExporter extends AbstractDocumentExporter {
                 wCode.getCodes().get(2));
     }
 
-
+    @Override
+    public List<ExportPatternEnum> getSupportedExportPatterns() {
+        return Arrays.asList(ExportPatternEnum.P5_SELECT_3D);
+    }
 }
