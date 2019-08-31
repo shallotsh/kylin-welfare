@@ -14,6 +14,7 @@ import org.kylin.service.exporter.AbstractDocumentExporter;
 import org.kylin.service.exporter.DocHolder;
 import org.kylin.util.CommonUtils;
 import org.kylin.util.TransferUtil;
+import org.kylin.util.WCodeUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -36,17 +37,21 @@ public class P5Select3DExporter extends AbstractDocumentExporter {
         Optional<ExportPatternEnum> exportPatternEnum = ExportPatternEnum.getById(data.getExportFormat());
         exportPatternEnum.ifPresent(ep -> {
             // 写入统计信息
-            writeStats(docHolder, ep, data.getWCodes().size(), w3DCodeIntegerMap.size());
+//            writeStats(docHolder, ep, data.getWCodes().size(), w3DCodeIntegerMap.size());
             // 导出3D码
+
+            Integer pairP5codesAmount = WCodeUtils.getPairCodeCount(data.getwCodes());
+            Integer nonPairP5codesAmount = WCodeUtils.getNonPairCodeCount(data.getwCodes());
+
 
             List<W3DCode> w3DCodes = new ArrayList<>(w3DCodeIntegerMap.keySet());
             List<W3DCode> pairCodes = TransferUtil.getPairCodes(w3DCodes);
-            String title = String.format("对子 %d 注", pairCodes.size());
+            String title = String.format("对子 %d 注(P5：%d 注)", pairCodes.size(), pairP5codesAmount);
 
             writeW3DCodes(docHolder.getDocument().createParagraph(), pairCodes, w3DCodeIntegerMap, title);
 
             List<W3DCode> nonPairCodes = TransferUtil.getNonPairCodes(w3DCodes);
-            title = String.format("非对子 %d 注", nonPairCodes.size());
+            title = String.format("非对子 %d 注(P5: %d 注)", nonPairCodes.size(), nonPairP5codesAmount);
 
             writeW3DCodes(docHolder.getDocument().createParagraph(), nonPairCodes, w3DCodeIntegerMap, title);
 
@@ -62,7 +67,7 @@ public class P5Select3DExporter extends AbstractDocumentExporter {
 
         paragraph.setAlignment(ParagraphAlignment.LEFT);
         XWPFRun title = paragraph.createRun();
-        title.setFontSize(18);
+        title.setFontSize(16);
         title.setBold(true);
         title.setText(titleString);
         title.addBreak();

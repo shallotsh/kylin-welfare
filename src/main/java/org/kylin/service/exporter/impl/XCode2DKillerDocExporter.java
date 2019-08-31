@@ -28,7 +28,7 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
     public void writeContentToDoc(DocHolder docHolder, WCodeReq data) {
         Objects.requireNonNull(docHolder);
         Objects.requireNonNull(data);
-        writeStats(docHolder);
+//        writeStats(docHolder);
         writeBody(docHolder, data);
     }
 
@@ -40,7 +40,7 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
 
         hr2.setText("时间：" + CommonUtils.getCurrentDateString());
         hr2.setTextPosition(10);
-        hr2.setFontSize(18);
+        hr2.setFontSize(16);
 
         XWPFRun hr3 = header.createRun();
         hr3.setText(" ");
@@ -50,29 +50,29 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
 
 
     private void writeBody(DocHolder docHolder, WCodeReq data) {
-        Boolean freqSeted = data.getFreqSeted();
+        Boolean freqSetted = data.getFreqSeted();
 
         int count = (CollectionUtils.size(data.getwCodes()));
 
         XWPFDocument doc = docHolder.getDocument();
 
         // ab*
-        exportWCodes(doc, data.getwCodes(), "ab* : " + count + " 注", null, freqSeted, "ab*");
+        exportWCodes(doc, data.getwCodes(), "ab* : " + count + " 注", null, freqSetted, "ab*");
 
         // ba*
-        exportWCodes(doc, data.getwCodes(), "ba*: " + count + " 注" , null, freqSeted, "ba*");
+        exportWCodes(doc, data.getwCodes(), "ba*: " + count + " 注" , null, freqSetted, "ba*");
 
         // *ab
-        exportWCodes(doc, data.getwCodes(), "*ab: " + count + " 注", null, freqSeted, "*ab");
+        exportWCodes(doc, data.getwCodes(), "*ab: " + count + " 注", null, freqSetted, "*ab");
 
         // *ba
-        exportWCodes(doc, data.getwCodes(), "*ba: "  + count + " 注", null, freqSeted, "*ba");
+        exportWCodes(doc, data.getwCodes(), "*ba: "  + count + " 注", null, freqSetted, "*ba");
 
         // a*b
-        exportWCodes(doc, data.getwCodes(), "a*b: "  + count + " 注", null, freqSeted, "a*b");
+        exportWCodes(doc, data.getwCodes(), "a*b: "  + count + " 注", null, freqSetted, "a*b");
 
         // b*a
-        exportWCodes(doc, data.getwCodes(), "b*a: "  + count + " 注", null, freqSeted, "b*a");
+        exportWCodes(doc, data.getwCodes(), "b*a: "  + count + " 注", null, freqSetted, "b*a");
 
 
 
@@ -90,7 +90,7 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
         if(!StringUtils.isBlank(titleString)){
             XWPFRun title = paragraph.createRun();
             paragraph.setAlignment(ParagraphAlignment.LEFT);
-            title.setFontSize(18);
+            title.setFontSize(16);
             title.setBold(true);
             title.setText(titleString);
             title.addBreak();

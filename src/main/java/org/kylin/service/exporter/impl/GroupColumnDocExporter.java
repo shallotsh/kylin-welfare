@@ -58,14 +58,14 @@ public class GroupColumnDocExporter extends AbstractDocumentExporter {
 
         Objects.requireNonNull(exportPattern);
 
-        String statDesc = " 共计" + CollectionUtils.size(wCodes)+ "注排列5码!!!     时间："
-                + CommonUtils.getCurrentDateString();
+        String statDesc = exportPattern.getDesc() + " 共计" + CollectionUtils.size(wCodes)+ "注排列5码!!!";
 
         XWPFParagraph header = docHolder.getDocument().createParagraph();
         XWPFRun hr2 = header.createRun();
+        hr2.setBold(false);
         hr2.setText(exportPattern.getDesc() + statDesc);
         hr2.setTextPosition(10);
-        hr2.setFontSize(18);
+        hr2.setFontSize(16);
 
         XWPFRun hr3 = header.createRun();
         hr3.setText(" ");
