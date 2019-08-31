@@ -85,9 +85,10 @@ public class BitSeqFilter implements CodeFilter<WelfareCode>{
 
         for(int id: bitSeqIds){
             Optional<BitSeqEnum> seqEnumOpt = BitSeqEnum.getById(id);
-            if(seqEnumOpt.isPresent()){
+
+            seqEnumOpt.ifPresent(seqEnum -> {
                 bitSeqEnums.add(seqEnumOpt.get());
-            }
+            });
         }
 
         return bitSeqEnums;

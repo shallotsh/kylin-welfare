@@ -14,9 +14,9 @@ public class BitsUtils {
         for(int id: bitSeqIds){
             if(id <= 0) continue;
             Optional<BitSeqEnum> seqEnumOpt = BitSeqEnum.getById(id);
-            if(seqEnumOpt.isPresent()){
+            seqEnumOpt.ifPresent(seqEnum ->{
                 bitSeqEnums.add(seqEnumOpt.get());
-            }
+            });
         }
         return bitSeqEnums;
     }

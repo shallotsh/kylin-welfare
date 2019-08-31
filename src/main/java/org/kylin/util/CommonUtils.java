@@ -108,10 +108,9 @@ public class CommonUtils {
 
     public static boolean isGoogleBrowser(HttpServletRequest request){
         Optional<String> agentOpt = getAgent(request);
-        if(agentOpt.isPresent()){
-            return agentOpt.get().contains("Chrome");
-        }
-        return false;
+
+        return agentOpt.map(agent -> agent.contains("Chrome"))
+                .orElse(Boolean.FALSE);
     }
 
 }

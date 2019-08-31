@@ -321,6 +321,7 @@ public class DocUtils {
         List<WCode> nonPairCodes = WCodeUtils.filterNonPairCodes(wCodeReq.getwCodes());
 
         Optional<ExportPatternEnum> ep = ExportPatternEnum.getById(wCodeReq.getExportFormat());
+        boolean isNormalSeqNo =  ep.map( e -> e ==ExportPatternEnum.NORMAL_SEQ_NO ?true:false).orElse(Boolean.FALSE);
 
         int customRandomCount = 200;
         if(StringUtils.isNumeric(wCodeReq.getRandomCount()) && NumberUtils.toInt(wCodeReq.getRandomCount()) > 0
@@ -338,14 +339,14 @@ public class DocUtils {
             Collections.sort(nonPairRandomTenCodes);
             String titleString = String.format("排列5码随机·非对子( %d 注)", nonPairRandomTenCodes.size());
             exportWCodes(doc, nonPairRandomTenCodes, titleString, null, wCodeReq.getFreqSeted(),
-                    null, (ep.isPresent() && ep.get()==ExportPatternEnum.NORMAL_SEQ_NO)?true:false);
+                    null, isNormalSeqNo);
         }
 
         if(!CollectionUtils.isEmpty(nonPairRandFiveCodes)){
             Collections.sort(nonPairRandFiveCodes);
             String titleString = String.format("排列5码随机·非对子( %d 注)", nonPairRandFiveCodes.size());
             exportWCodes(doc, nonPairRandFiveCodes, titleString, null, wCodeReq.getFreqSeted(),
-                    null,  (ep.isPresent() && ep.get()==ExportPatternEnum.NORMAL_SEQ_NO)?true:false);
+                    null,  isNormalSeqNo);
         }
 
 
@@ -353,7 +354,7 @@ public class DocUtils {
             Collections.sort(nonPairRand200Codes);
             String titleString = String.format("排列5码随机·非对子( %d 注)", nonPairRand200Codes.size());
             exportWCodes(doc, nonPairRand200Codes, titleString, null, wCodeReq.getFreqSeted(), null,
-                    (ep.isPresent() && ep.get()==ExportPatternEnum.NORMAL_SEQ_NO)?true:false);
+                    isNormalSeqNo);
         }
 
         List<WCode> pairCodes = WCodeUtils.filterPairCodes(wCodeReq.getwCodes());
@@ -361,14 +362,14 @@ public class DocUtils {
             Collections.sort(pairCodes);
             String titleString = String.format("排列5码·对子( %d 注)", pairCodes.size());
             exportWCodes(doc, pairCodes, titleString, separator, wCodeReq.getFreqSeted(),
-                    null,  (ep.isPresent() && ep.get()==ExportPatternEnum.NORMAL_SEQ_NO)?true:false);
+                    null,  isNormalSeqNo);
         }
 
         if(!CollectionUtils.isEmpty(nonPairCodes)){
             Collections.sort(nonPairCodes);
             String titleString = String.format("排列5码·非对子( %d 注)", nonPairCodes.size());
             exportWCodes(doc, nonPairCodes, titleString, separator, wCodeReq.getFreqSeted(), null,
-                    (ep.isPresent() && ep.get()==ExportPatternEnum.NORMAL_SEQ_NO)?true:false);
+                    isNormalSeqNo);
         }
     }
 

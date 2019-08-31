@@ -73,14 +73,8 @@ public class KylinPermutationFiveMethodApi {
         }
         LOGGER.info("收到串处理: wCodeReq_size={},conditions={}", CollectionUtils.size(wCodeReq.getwCodes()), wCodeReq.getConditions());
         Optional<WCodeSummarise> optSms = wCodeProcessService.sequenceProcess(wCodeReq);
-
-        if(optSms.isPresent()) {
-            LOGGER.info("串处理完成: wCodes_size={}", CollectionUtils.size(optSms.get().getwCodes()));
-            return new WyfDataResponse<>(optSms.get());
-        }else{
-            LOGGER.warn("处理失败");
-            return new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "内部处理错误");
-        }
+        return optSms.map(sms -> new WyfDataResponse(sms))
+                .orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "内部处理错误"));
     }
 
 
@@ -93,13 +87,9 @@ public class KylinPermutationFiveMethodApi {
         }
         LOGGER.info("收到位处理: wCodeReq_size={},conditions={}", CollectionUtils.size(wCodeReq.getwCodes()), wCodeReq.getConditions());
         Optional<WCodeSummarise> optSms = wCodeProcessService.bitsProcess(wCodeReq);
-        if(optSms.isPresent()){
-            LOGGER.info("位处理完成: wCodes_size={}", CollectionUtils.size(optSms.get().getwCodes()));
-            return new WyfDataResponse<>(optSms.get());
-        }else{
-            LOGGER.warn("内部处理错误");
-            return new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "内部处理错误");
-        }
+
+        return optSms.map(sms -> new WyfDataResponse(sms))
+                .orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "内部处理错误"));
     }
 
 
