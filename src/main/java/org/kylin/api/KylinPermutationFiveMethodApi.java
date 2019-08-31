@@ -110,11 +110,12 @@ public class KylinPermutationFiveMethodApi {
             return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "导出数据错误");
         }
 
-        Optional<String> optFile = wCodeProcessService.exportWCodeToFile(wCodeReq);
-        if(optFile.isPresent()){
-            return new WyfDataResponse<>(optFile.get());
-        }else{
-            LOGGER.error("export-codes-error wCodeReq={}", JSON.toJSONString(wCodeReq));
+
+        try {
+            Optional<String> optFile = wCodeProcessService.exportWCodeToFile(wCodeReq);
+            return optFile.map(file -> new WyfDataResponse(file)).get();
+        } catch (Exception e) {
+            LOGGER.error("export-codes-error wCodeReq={}", JSON.toJSONString(wCodeReq), e);
             return new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }

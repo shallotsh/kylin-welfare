@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -29,6 +30,25 @@ public class CommonUtils {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = formatter.format(currentTime);
         return dateString;
+    }
+
+
+    public static String createIfNotExist(String parentPath, String subPath) throws IOException {
+
+        Objects.requireNonNull(parentPath, "parentPath can not be null.");
+        Objects.requireNonNull(subPath, "subPath can not be null.");
+        String fullPath;
+        if(!parentPath.endsWith("/")){
+            fullPath = parentPath + File.separator + subPath;
+        }else{
+            fullPath = parentPath + subPath;
+        }
+        if(createDirIfNotExist(fullPath)){
+            return fullPath;
+        }else{
+            throw new IOException("create target directory error. target directory:" + fullPath);
+        }
+
     }
 
 

@@ -8,6 +8,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.kylin.bean.p2.XCodePair;
 import org.kylin.bean.p2.XCodeReq;
 import org.kylin.bean.p5.WCode;
+import org.kylin.service.exporter.DocHolder;
 import org.kylin.service.exporter.impl.XCode2DKillerDocExporter;
 import org.kylin.service.xcode.XCodeService;
 import org.kylin.service.xcode.filters.impl.BoldCodeFilter;
@@ -130,12 +131,13 @@ public class XCodeServiceImpl implements XCodeService {
     public Optional<String> exportWCodeToFile(XCodeReq xCodeReq) {
 
         // 策略导出
-        XCode2DKillerDocExporter exporter = new XCode2DKillerDocExporter(new XWPFDocument(), xCodeReq);
+        DocHolder docHolder = new DocHolder();
+        XCode2DKillerDocExporter exporter = new XCode2DKillerDocExporter();
         try {
-            exporter.init();
-            exporter.writeDocHeader("我要发·定位2D法");
-            exporter.writeBody();
-            String fileName = exporter.exportCodes();
+
+            exporter.writeTitleAsDefaultFormat(docHolder,"我要发·定位2D法");
+            exporter.writeContentToDoc(docHolder, xCodeReq.adaptToWCodeReq());
+            String fileName = exporter.exportDocAsFile(docHolder);
             return Optional.of(fileName);
         } catch (IOException e) {
             log.warn("导出文件错误", e);

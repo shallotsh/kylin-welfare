@@ -2,6 +2,7 @@ package org.kylin.bean.p2;
 
 import lombok.extern.slf4j.Slf4j;
 import org.kylin.bean.p5.WCode;
+import org.kylin.bean.p5.WCodeReq;
 
 import java.util.List;
 
@@ -106,5 +107,13 @@ public class XCodeReq {
                 ", freqSeted=" + freqSeted +
                 ", xCodePairs=" + xCodePairs +
                 '}';
+    }
+
+    public WCodeReq adaptToWCodeReq(){
+        WCodeReq wCodeReq = new WCodeReq();
+        wCodeReq.setWCodes(this.getwCodes());
+        wCodeReq.setFreqSeted(freqSeted);
+
+        return wCodeReq;
     }
 }

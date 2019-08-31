@@ -1,107 +1,63 @@
 package org.kylin.service.exporter;
 
 
+import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.*;
+import org.kylin.bean.p5.WCodeReq;
 import org.kylin.util.CommonUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
-public abstract class AbstractDocumentExporter<T> {
+public abstract class AbstractDocumentExporter implements IDocExportTool<WCodeReq> {
 
+    private static final String DEFAULT_DOC_TITLE = "《我要发·排列5》福彩3D预测报表";
     protected static final String BASE_PATH = "/var/attachment/";
 
-    protected XWPFDocument doc;
+    @Override
+    public void writeTitleAsDefaultFormat(DocHolder docHolder, String title) {
 
-    protected T data;
-
-    public AbstractDocumentExporter(XWPFDocument doc, T data) {
-        Objects.requireNonNull(data);
-        this.doc = doc;
-        this.data = data;
-    }
-
-    public void init(){
-        if(Objects.isNull(data)){
-            throw new RuntimeException("Data is NULL");
-        }
-
-        if(Objects.isNull(doc)){
-            doc = new XWPFDocument();
-        }
-    }
-    public void writeDefaultDocHeader(){
-        writeDocHeader(null);
-    }
-    public void writeDocHeader(String title){
-        XWPFParagraph header = doc.createParagraph();
+        XWPFParagraph header = docHolder.getDocument().createParagraph();
         header.setVerticalAlignment(TextAlignment.TOP);
         header.setWordWrap(true);
         header.setAlignment(ParagraphAlignment.CENTER);
+
         XWPFRun hr1 = header.createRun();
-        hr1.setText(toUTF8(StringUtils.isBlank(title) ? "《我要发·排列5》福彩3D预测报表" : title));
+        hr1.setText(StringUtils.isBlank(title) ? DEFAULT_DOC_TITLE : title);
         hr1.setBold(true);
         hr1.setUnderline(UnderlinePatterns.DOT_DOT_DASH);
         hr1.setTextPosition(20);
         hr1.setFontSize(18);
         hr1.addBreak();
-        writeStats();
     }
 
-    public abstract void writeStats();
+    @Override
+    public String exportDocAsFile(DocHolder docHolder, String fullPath, String fileName) throws IOException {
 
+        String targetDirName = getTargetFilePath(fullPath);
+        String subDirectory = CommonUtils.getCurrentTimeString().substring(0,6);
+        String targetPath = CommonUtils.createIfNotExist(targetDirName, subDirectory);
+        fileName = (StringUtils.isBlank(fileName) ? CommonUtils.getCurrentTimeString() : (fileName )) + ".docx";
+        String exportFileName = targetPath + File.separator + fileName;
 
-    public abstract void writeBody();
+        // save data
+        @Cleanup FileOutputStream out = new FileOutputStream(exportFileName);
+        docHolder.getDocument().write(out);
 
-    public String exportCodes() throws IOException{
-        return exportCodes(null, null);
+        return fileName;
     }
 
-    public String exportCodes(String path, String targetFileName) throws IOException{
+    private String getTargetFilePath(String fullPath){
 
-        if(StringUtils.isBlank(path)){
-            path = BASE_PATH;
-        }
-
-        if(!path.endsWith("/")){
-            path += "/";
-        }
-
-        String fileName = StringUtils.isBlank(targetFileName) ? CommonUtils.getCurrentTimeString() : (targetFileName );
-        String subDirectory = fileName.substring(0,6);
-        String targetDirName = path + subDirectory;
-
-        if(!CommonUtils.createDirIfNotExist(targetDirName)){
-            log.info("save-wCodes-create-directory-error targetDirName={}", targetDirName);
-            throw new IOException("directory create error");
-        }
-
-
-        String exportName = fileName + "_deleted_codes.docx";
-
-        // 保存
-        StringBuilder sb = new StringBuilder();
-        sb.append(targetDirName);
-        sb.append(File.separator);
-        sb.append(exportName);
-        FileOutputStream out = new FileOutputStream(sb.toString());
-        doc.write(out);
-        out.close();
-
-        return exportName;
-    }
-
-
-    protected static String toUTF8(String str){
-        if(StringUtils.isBlank(str)){
-            return str;
-        }
-        return str;
+        return Optional.ofNullable(fullPath)
+                .map(path -> path.endsWith("/")?path : path + "/")
+                .orElse(BASE_PATH);
     }
 
 }

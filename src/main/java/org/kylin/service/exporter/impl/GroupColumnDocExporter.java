@@ -9,31 +9,37 @@ import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
 import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.exporter.AbstractDocumentExporter;
+import org.kylin.service.exporter.DocHolder;
 import org.kylin.util.CommonUtils;
 import org.kylin.util.DocUtils;
 import org.kylin.util.WCodeUtils;
 
 import java.util.*;
 
-public class GroupColumnDocExporter extends AbstractDocumentExporter<WCodeReq> {
+public class GroupColumnDocExporter extends AbstractDocumentExporter {
 
     private Set<Integer> columnIdxs = new HashSet<>(Arrays.asList(0));
     private int groupSize = 13;
-    private List<WCode> wCodes;
-
-    public GroupColumnDocExporter(XWPFDocument doc, WCodeReq data) {
-        super(doc, data);
-    }
 
     @Override
-    public void init() {
-        super.init();
-        List<WCode> oriCodes = data.getWCodes();
+    public void writeContentToDoc(DocHolder docHolder, WCodeReq data) {
+        Objects.requireNonNull(docHolder);
+        Objects.requireNonNull(data);
+        List<WCode> targetCodes = getTargetCodes(data.getWCodes());
+        if(CollectionUtils.isEmpty(targetCodes)) return;
+        Optional<ExportPatternEnum> exportPatternEnum = ExportPatternEnum.getById(data.getExportFormat());
+        exportPatternEnum.ifPresent(ep -> {
+            writeStats(docHolder, targetCodes, ep);
+            writeBody(docHolder, targetCodes, ep, data.getFreqSeted());
+        });
+
+    }
+
+    public List<WCode> getTargetCodes(List<WCode> oriCodes) {
         if(CollectionUtils.isEmpty(oriCodes)){
-            wCodes = Collections.emptyList();
-            return;
+            return Collections.emptyList();
         }
-        wCodes = new ArrayList<>();
+        List<WCode> wCodes = new ArrayList<>();
         List<List<WCode>> codeArray = Lists.partition(oriCodes, 13);
         for(List<WCode> wCodeList : codeArray){
             for(int i=0; i<wCodeList.size(); i++){
@@ -43,22 +49,19 @@ public class GroupColumnDocExporter extends AbstractDocumentExporter<WCodeReq> {
 
             }
         }
+        return wCodes;
     }
 
-    @Override
-    public void writeStats() {
-        if(CollectionUtils.isEmpty(wCodes)){
-            return;
-        }
+    public void writeStats(DocHolder docHolder, List<WCode> wCodes, ExportPatternEnum exportPattern) {
 
-        XWPFParagraph header = doc.createParagraph();
+        Objects.requireNonNull(exportPattern);
+
+        String statDesc = " 共计" + CollectionUtils.size(wCodes)+ "注排列5码!!!     时间："
+                + CommonUtils.getCurrentDateString();
+
+        XWPFParagraph header = docHolder.getDocument().createParagraph();
         XWPFRun hr2 = header.createRun();
-        Optional<ExportPatternEnum> ep = ExportPatternEnum.getById(data.getExportFormat());
-        if(!ep.isPresent()){
-            return;
-        }
-        hr2.setText(toUTF8(ep.get().getDesc() + " 共计" + CollectionUtils.size(wCodes)+ "注排列5码!!!     时间："
-                + CommonUtils.getCurrentDateString() ));
+        hr2.setText(exportPattern.getDesc() + statDesc);
         hr2.setTextPosition(10);
         hr2.setFontSize(18);
 
@@ -67,32 +70,34 @@ public class GroupColumnDocExporter extends AbstractDocumentExporter<WCodeReq> {
         hr3.addBreak();
     }
 
-    @Override
-    public void writeBody() {
-        if(CollectionUtils.isEmpty(wCodes)){
-            return;
-        }
+    public void writeBody(DocHolder docHolder, List<WCode> wCodes, ExportPatternEnum exportPattern, Boolean isSetFreq) {
 
-//        Collections.sort(wCodes);
-
-        Optional<ExportPatternEnum> ep = ExportPatternEnum.getById(data.getExportFormat());
-        if(!ep.isPresent()){
-            return;
-        }
+        Objects.requireNonNull(exportPattern);
 
         List<WCode> pairCodes = WCodeUtils.filterPairCodes(wCodes);
         List<WCode> nonPairCodes = WCodeUtils.filterNonPairCodes(wCodes);
 
 
         if(!CollectionUtils.isEmpty(pairCodes)) {
-            String titleString = String.format(ep.get().getDesc() + " 对子( %d 注)", pairCodes.size());
-            DocUtils.exportWCodes(doc, pairCodes, titleString, null, data.getFreqSeted(), null, ep.get() == ExportPatternEnum.NORMAL_SEQ_NO ? true: false);
+            String titleString = String.format(exportPattern.getDesc() + " 对子( %d 注)", pairCodes.size());
+            DocUtils.exportWCodes(docHolder.getDocument(),
+                    pairCodes,
+                    titleString,
+                    null,
+                    isSetFreq,
+                    null,
+                    exportPattern == ExportPatternEnum.NORMAL_SEQ_NO ? true: false);
         }
 
         if(!CollectionUtils.isEmpty(nonPairCodes)) {
-            String titleString = String.format(ep.get().getDesc() + " 非对子( %d 注)", nonPairCodes.size());
-            DocUtils.exportWCodes(doc, nonPairCodes, titleString, null, data.getFreqSeted(), null, ep.get() == ExportPatternEnum.NORMAL_SEQ_NO ? true: false);
+            String titleString = String.format(exportPattern.getDesc() + " 非对子( %d 注)", nonPairCodes.size());
+            DocUtils.exportWCodes(docHolder.getDocument(),
+                    nonPairCodes,
+                    titleString,
+                    null,
+                    isSetFreq,
+                    null,
+                    exportPattern == ExportPatternEnum.NORMAL_SEQ_NO ? true: false);
         }
-
     }
 }
