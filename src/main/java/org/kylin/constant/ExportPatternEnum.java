@@ -13,6 +13,7 @@ public enum ExportPatternEnum {
     BIG_SUM_KILL(2, "大和杀导出"),
     CONTAIN_FOUR_KILL(5, "含四杀导出"),
     CONTAIN_FIVE_KILL(6, "含五杀导出"),
+    P5_SELECT_3D(7, "P5取3D导出"),
     HALF_PAGE(100, "半页导出"),
     NORMAL_SEQ_NO(101, "常规带序号导出"),
 
@@ -20,6 +21,8 @@ public enum ExportPatternEnum {
 
     private int id;
     private String desc;
+
+
 
     public static Optional<ExportPatternEnum> getById(int id){
         for(ExportPatternEnum exportPatternEnum : ExportPatternEnum.values()){

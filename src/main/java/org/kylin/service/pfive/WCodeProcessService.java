@@ -3,6 +3,7 @@ package org.kylin.service.pfive;
 import org.kylin.bean.p5.WCodeReq;
 import org.kylin.bean.p5.WCodeSummarise;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public interface WCodeProcessService {
@@ -29,6 +30,6 @@ public interface WCodeProcessService {
      * @param wCodeReq
      * @return
      */
-    Optional<String> exportWCodeToFile(WCodeReq wCodeReq);
+    Optional<String> exportWCodeToFile(WCodeReq wCodeReq) throws IOException;
 
 }

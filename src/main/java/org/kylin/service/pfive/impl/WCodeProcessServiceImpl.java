@@ -12,6 +12,7 @@ import org.kylin.constant.ExportPatternEnum;
 import org.kylin.constant.FilterStrategyEnum;
 import org.kylin.factory.StrategyFactory;
 import org.kylin.service.exporter.AbstractDocumentExporter;
+import org.kylin.service.exporter.DocHolder;
 import org.kylin.service.exporter.impl.GroupColumnDocExporter;
 import org.kylin.service.exporter.impl.WCodeKillerDocumentExporter;
 import org.kylin.service.pfive.WCodeProcessService;
@@ -99,7 +100,7 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
 
 
     @Override
-    public Optional<String> exportWCodeToFile(WCodeReq wCodeReq) {
+    public Optional<String> exportWCodeToFile(WCodeReq wCodeReq) throws IOException{
 
         Optional<ExportPatternEnum> ep = ExportPatternEnum.getById(wCodeReq.getExportFormat());
         if(!ep.isPresent()){
@@ -120,16 +121,16 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
 
         // 策略导出
         AbstractDocumentExporter exporter;
+        DocHolder docHolder = new DocHolder();
         if(ExportPatternEnum.GROUP_COLUMN == ep.get()) {
-            exporter = new GroupColumnDocExporter(new XWPFDocument(), wCodeReq);
+            exporter = new GroupColumnDocExporter();
         }else  {
-            exporter = new WCodeKillerDocumentExporter(new XWPFDocument(), wCodeReq);
+            exporter = new WCodeKillerDocumentExporter();
         }
         try {
-            exporter.init();
-            exporter.writeDefaultDocHeader();
-            exporter.writeBody();
-            String fileName = exporter.exportCodes();
+            exporter.writeTitleAsDefaultFormat(docHolder, null);
+            exporter.writeContentToDoc(docHolder, wCodeReq);
+            String fileName = exporter.exportDocAsFile(docHolder);
             return Optional.of(fileName);
         } catch (IOException e) {
             log.warn("导出文件错误", e);

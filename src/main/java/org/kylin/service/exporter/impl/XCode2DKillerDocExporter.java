@@ -8,22 +8,30 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.kylin.bean.p2.XCodeReq;
 import org.kylin.bean.p5.WCode;
+import org.kylin.bean.p5.WCodeReq;
 import org.kylin.service.exporter.AbstractDocumentExporter;
+import org.kylin.service.exporter.DocHolder;
 import org.kylin.util.CommonUtils;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-public class XCode2DKillerDocExporter extends AbstractDocumentExporter<XCodeReq>{
-
-    public XCode2DKillerDocExporter(XWPFDocument doc, XCodeReq data) {
-        super(doc, data);
-    }
+public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
 
     @Override
-    public void writeStats() {
+    public void writeContentToDoc(DocHolder docHolder, WCodeReq data) {
+        Objects.requireNonNull(docHolder);
+        Objects.requireNonNull(data);
+        writeStats(docHolder);
+        writeBody(docHolder, data);
+    }
 
-        XWPFParagraph header = doc.createParagraph();
+
+    private void writeStats(DocHolder docHolder) {
+
+        XWPFParagraph header = docHolder.getDocument().createParagraph();
         XWPFRun hr2 = header.createRun();
 
         hr2.setText("时间：" + CommonUtils.getCurrentDateString());
@@ -36,11 +44,13 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter<XCodeReq>
 
     }
 
-    @Override
-    public void writeBody() {
+
+    private void writeBody(DocHolder docHolder, WCodeReq data) {
         Boolean freqSeted = data.getFreqSeted();
 
         int count = (CollectionUtils.size(data.getwCodes()));
+
+        XWPFDocument doc = docHolder.getDocument();
 
         // ab*
         exportWCodes(doc, data.getwCodes(), "ab* : " + count + " 注", null, freqSeted, "ab*");
@@ -64,8 +74,7 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter<XCodeReq>
 
     }
 
-
-    public  void exportWCodes(XWPFDocument doc, List<WCode> wCodes, String titleString, String separator, Boolean freqSeted, String pattern){
+    private  void exportWCodes(XWPFDocument doc, List<WCode> wCodes, String titleString, String separator, Boolean freqSeted, String pattern){
 
         if(CollectionUtils.isEmpty(wCodes)){
             return;
@@ -79,7 +88,7 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter<XCodeReq>
             paragraph.setAlignment(ParagraphAlignment.LEFT);
             title.setFontSize(18);
             title.setBold(true);
-            title.setText(toUTF8(titleString));
+            title.setText(titleString);
             title.addBreak();
         }
 
