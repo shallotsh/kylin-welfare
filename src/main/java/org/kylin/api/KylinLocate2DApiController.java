@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -90,11 +91,12 @@ public class KylinLocate2DApiController {
             return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "导出数据错误");
         }
 
-        Optional<String> optFile = xCodeService.exportWCodeToFile(req);
-        if(optFile.isPresent()){
-            return new WyfDataResponse<>(optFile.get());
-        }else{
-            log.error("export-codes-error wCodeReq={}", JSON.toJSONString(req));
+        Optional<String> optFile = null;
+        try {
+            optFile = xCodeService.exportWCodeToFile(req);
+            return optFile.map(f -> new WyfDataResponse(f)).orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误"));
+        } catch (IOException e) {
+            log.error("导出文件错误", e);
             return new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }

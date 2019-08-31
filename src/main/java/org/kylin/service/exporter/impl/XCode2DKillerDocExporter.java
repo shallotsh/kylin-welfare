@@ -9,15 +9,19 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.kylin.bean.p2.XCodeReq;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
+import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.exporter.AbstractDocumentExporter;
 import org.kylin.service.exporter.DocHolder;
 import org.kylin.util.CommonUtils;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+@Component
 public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
 
     @Override
@@ -130,5 +134,10 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
 
         XWPFRun sep = paragraph.createRun();
         sep.setTextPosition(50);
+    }
+
+    @Override
+    public List<ExportPatternEnum> getSupportedExportPatterns() {
+        return Arrays.asList(ExportPatternEnum.LOCATION_2D);
     }
 }

@@ -13,9 +13,11 @@ import org.kylin.service.exporter.DocHolder;
 import org.kylin.util.CommonUtils;
 import org.kylin.util.DocUtils;
 import org.kylin.util.WCodeUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class GroupColumnDocExporter extends AbstractDocumentExporter {
 
     private Set<Integer> columnIdxs = new HashSet<>(Arrays.asList(0));
@@ -99,5 +101,10 @@ public class GroupColumnDocExporter extends AbstractDocumentExporter {
                     null,
                     exportPattern == ExportPatternEnum.NORMAL_SEQ_NO ? true: false);
         }
+    }
+
+    @Override
+    public List<ExportPatternEnum> getSupportedExportPatterns() {
+        return Arrays.asList(ExportPatternEnum.GROUP_COLUMN);
     }
 }

@@ -7,6 +7,9 @@ package org.kylin.bean;
 public class WyfDataResponse<T> extends WyfResponse {
     T data;
 
+    public WyfDataResponse() {
+    }
+
     public WyfDataResponse(T data) {
         this.data = data;
     }

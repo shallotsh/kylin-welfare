@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
  * @author huangyawu
  * @date 2017/6/25 下午3:24.
  */
-public class WyfErrorResponse extends WyfResponse{
+public class WyfErrorResponse extends WyfDataResponse{
     private Error error;
 
     public WyfErrorResponse(Integer code, String message) {

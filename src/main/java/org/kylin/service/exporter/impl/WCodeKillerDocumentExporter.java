@@ -13,12 +13,11 @@ import org.kylin.service.exporter.DocHolder;
 import org.kylin.util.CommonUtils;
 import org.kylin.util.DocUtils;
 import org.kylin.util.WCodeUtils;
+import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
+@Component
 public class WCodeKillerDocumentExporter extends AbstractDocumentExporter{
 
 
@@ -103,5 +102,12 @@ public class WCodeKillerDocumentExporter extends AbstractDocumentExporter{
                     exportPatternEnum == ExportPatternEnum.NORMAL_SEQ_NO ? true: false);
         }
 
+    }
+
+    @Override
+    public List<ExportPatternEnum> getSupportedExportPatterns() {
+        return Arrays.asList(ExportPatternEnum.BIG_SUM_KILL,
+                ExportPatternEnum.CONTAIN_FOUR_KILL,
+                ExportPatternEnum.CONTAIN_FIVE_KILL);
     }
 }

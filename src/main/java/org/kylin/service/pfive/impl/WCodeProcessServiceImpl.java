@@ -13,6 +13,8 @@ import org.kylin.constant.FilterStrategyEnum;
 import org.kylin.factory.StrategyFactory;
 import org.kylin.service.exporter.AbstractDocumentExporter;
 import org.kylin.service.exporter.DocHolder;
+import org.kylin.service.exporter.ExportToolSelector;
+import org.kylin.service.exporter.IDocExportTool;
 import org.kylin.service.exporter.impl.GroupColumnDocExporter;
 import org.kylin.service.exporter.impl.P5Select3DExporter;
 import org.kylin.service.exporter.impl.WCodeKillerDocumentExporter;
@@ -35,6 +37,9 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
 
     @Resource
     private List<Strategy< List<WCode>, WCodeReq>> bitStrategies;
+
+    @Resource
+    private ExportToolSelector exportToolSelector;
 
     @Override
     public Optional<WCodeSummarise> sequenceProcess(WCodeReq wCodeReq) {
@@ -121,26 +126,17 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
         }
 
         // 策略导出
-        AbstractDocumentExporter exporter;
         DocHolder docHolder = new DocHolder();
-        if(ExportPatternEnum.GROUP_COLUMN == ep.get()) {
-            exporter = new GroupColumnDocExporter();
-        } else if(ExportPatternEnum.P5_SELECT_3D == ep.get()){
-            exporter = new P5Select3DExporter();
-        }
-        else  {
-            exporter = new WCodeKillerDocumentExporter();
-        }
-        try {
-            exporter.writeTitleAsDefaultFormat(docHolder, null);
-            exporter.writeContentToDoc(docHolder, wCodeReq);
-            String fileName = exporter.exportDocAsFile(docHolder);
+
+        Optional<IDocExportTool> iDocExportToolOptional =  exportToolSelector.getByExportPattern(ep.get());
+
+        if(iDocExportToolOptional.isPresent()) {
+            iDocExportToolOptional.get().writeTitleAsDefaultFormat(docHolder, null);
+            iDocExportToolOptional.get().writeContentToDoc(docHolder, wCodeReq);
+            String fileName = iDocExportToolOptional.get().exportDocAsFile(docHolder);
             return Optional.of(fileName);
-        } catch (IOException e) {
-            log.warn("导出文件错误", e);
-            return Optional.empty();
-        } catch (RuntimeException re){
-            log.warn("导出文件错误", re);
+        }else{
+            log.error("没有查询到对应的导出工具 exportPattern:{}", ep.get());
             return Optional.empty();
         }
     }

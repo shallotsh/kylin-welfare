@@ -17,6 +17,8 @@ public enum ExportPatternEnum {
     HALF_PAGE(100, "半页导出"),
     NORMAL_SEQ_NO(101, "常规带序号导出"),
 
+    LOCATION_2D(201, "定位2D导出"),
+
     ;
 
     private int id;

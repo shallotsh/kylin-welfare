@@ -3,6 +3,7 @@ package org.kylin.service.xcode;
 import org.kylin.bean.p2.XCodeReq;
 import org.kylin.bean.p5.WCode;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -40,7 +41,7 @@ public interface XCodeService {
      * @param xCodeReq
      * @return
      */
-    Optional<String> exportWCodeToFile(XCodeReq xCodeReq);
+    Optional<String> exportWCodeToFile(XCodeReq xCodeReq) throws IOException;
 
 
 }
