@@ -14,6 +14,7 @@ import org.kylin.factory.StrategyFactory;
 import org.kylin.service.exporter.AbstractDocumentExporter;
 import org.kylin.service.exporter.DocHolder;
 import org.kylin.service.exporter.impl.GroupColumnDocExporter;
+import org.kylin.service.exporter.impl.P5Select3DExporter;
 import org.kylin.service.exporter.impl.WCodeKillerDocumentExporter;
 import org.kylin.service.pfive.WCodeProcessService;
 import org.kylin.util.DocUtils;
@@ -124,7 +125,10 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
         DocHolder docHolder = new DocHolder();
         if(ExportPatternEnum.GROUP_COLUMN == ep.get()) {
             exporter = new GroupColumnDocExporter();
-        }else  {
+        } else if(ExportPatternEnum.P5_SELECT_3D == ep.get()){
+            exporter = new P5Select3DExporter();
+        }
+        else  {
             exporter = new WCodeKillerDocumentExporter();
         }
         try {
