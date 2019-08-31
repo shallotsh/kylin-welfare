@@ -7,19 +7,21 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 @Slf4j
 @Component
-public class GuavaCacheWrapper {
+public class GuavaCacheWrapper<T> {
 
-    private static Cache<String, Object> cache;
+    private Cache<String, T> cache;
 
     @PostConstruct
     public void init(){
         cache = CacheBuilder.newBuilder()
                 .maximumSize(100)
-                .expireAfterWrite(60, TimeUnit.MINUTES)
+                .expireAfterWrite(120, TimeUnit.MINUTES)
                 .concurrencyLevel(Runtime.getRuntime().availableProcessors())
                 .recordStats()
                 .build();
@@ -27,15 +29,25 @@ public class GuavaCacheWrapper {
     }
 
 
-    public<T> void put(String key, T obj){
+    public void put(String key, T obj){
         assertCache();
         cache.put(key, obj);
     }
 
-    public <T> T  getIfPresent(String key){
+    public T  getIfPresent(String key){
         assertCache();
-        return (T)cache.getIfPresent(key);
+        return cache.getIfPresent(key);
     }
+
+    public T get(String key, Supplier<T> supplier){
+        try {
+            return cache.get(key, supplier::get);
+        } catch (ExecutionException e) {
+            log.error("guava get error. key:{}", key, e);
+            return supplier.get();
+        }
+    }
+
 
     public void invalidateAll(){
         assertCache();

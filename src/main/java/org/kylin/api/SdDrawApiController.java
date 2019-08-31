@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -25,7 +24,7 @@ public class SdDrawApiController {
 
 
     @Autowired
-    private GuavaCacheWrapper cacheWrapper;
+    private GuavaCacheWrapper<SdDrawNoticeResult> cacheWrapper;
 
     @RequestMapping(value = "/draw/notice", method = RequestMethod.GET)
     public WyfResponse findDrawNotice(String name, Integer issueCount){
@@ -34,22 +33,19 @@ public class SdDrawApiController {
         if(issueCount == null || issueCount <= 0) issueCount = 1;
 
         String key = name + issueCount;
+        String issueName = name;
+        Integer iCount = issueCount;
 
-        SdDrawNoticeResult result = cacheWrapper.getIfPresent(key);
-        if(!Objects.isNull(result)){
-            return new WyfDataResponse<>(result);
+        SdDrawNoticeResult result = null;
+        try {
+            result = cacheWrapper.get(key, () -> OkHttpUtils.getSdDrawNoticeResult(issueName, iCount).get());
+            return Optional.ofNullable(result)
+                    .map(ret -> new WyfDataResponse<>(ret))
+                    .orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                            "查询开奖错误"));
+        }finally {
+            log.info("查询开奖结果 result:{}", Optional.ofNullable(result).map(ret -> ret));
         }
-
-        Optional<SdDrawNoticeResult> resultOpt = OkHttpUtils.getSdDrawNoticeResult(name, issueCount);
-        if(!resultOpt.isPresent()){
-            return new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "查询开奖错误");
-        }
-
-        log.info("查询开奖结果 result:{}", resultOpt.get());
-
-        cacheWrapper.put(key, resultOpt.get());
-
-        return new WyfDataResponse<>(resultOpt.get());
     }
 
 }
