@@ -21,4 +21,8 @@ public class WyfDataResponse<T> extends WyfResponse {
     public void setData(T data) {
         this.data = data;
     }
+
+    public static<T> WyfDataResponse of(T data){
+        return new WyfDataResponse(data);
+    }
 }

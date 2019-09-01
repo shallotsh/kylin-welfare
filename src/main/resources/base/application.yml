@@ -3,9 +3,15 @@ server:
   compression:
     enabled: true
 
+
+zk:
+  server-list: 127.0.0.1:2181,127.0.0.1:21822,127.0.0.1:2183
+  session-timeout: 5000
+
+
 spring:
 #  mvc:
-#    static-path-pattern: /**
+#    static-id-pattern: /**
 #  resources:
 #    static-locations: classpath:/static/
   application:
