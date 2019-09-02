@@ -77,27 +77,37 @@ public class ZkDistributedLock implements DistributedLock {
 
     }
 
-    public String attemptGetLock(String key, Long timeoutMilli, String value) throws Exception {
+    public String attemptGetLock(String key, Long timeoutMilli, String value) throws Exception{
         String nodeName = LOCK_BASE_PATH +"/" + key + SEPARATOR;
-        ConfigNode node = zooKeeperService.createZkNode( nodeName, value, ZooKeeperService.EPHEMERAL_SEQUENTIAL);
 
-        List<String> subNodeNames = zooKeeperService.getChildren(LOCK_BASE_PATH);
-        List<String> targetSubNames = subNodeNames.stream().filter( n -> n.startsWith(key)).collect(Collectors.toList());
-        Collections.sort(targetSubNames);
+        ConfigNode node = null;
+        try {
+            node = zooKeeperService.createZkNode( nodeName, value, ZooKeeperService.EPHEMERAL_SEQUENTIAL);
 
-        if(node.getId().contains(targetSubNames.get(0))){
-            // get lock
-            log.info("acquired distributed lock. key={}, node:{}", key, node.getId());
-            LockHolder lockHolder = new LockHolder(Thread.currentThread(), node.getId());
-            lockHolderThreadLocal.set(lockHolder);
-            return node.getId();
+            List<String> subNodeNames = zooKeeperService.getChildren(LOCK_BASE_PATH);
+            List<String> targetSubNames = subNodeNames.stream().filter( n -> n.startsWith(key)).collect(Collectors.toList());
+            Collections.sort(targetSubNames);
+
+            if(node.getId().contains(targetSubNames.get(0))){
+                // get lock
+                log.info("acquired distributed lock. key={}, node:{}", key, node.getId());
+                LockHolder lockHolder = new LockHolder(Thread.currentThread(), node.getId());
+                lockHolderThreadLocal.set(lockHolder);
+                return node.getId();
+            }
+
+            String preNode = node.getId().substring(node.getId().lastIndexOf("/") + 1);
+            int preNodePos = Collections.binarySearch(targetSubNames, preNode) - 1;
+            String waitLockNodeName = targetSubNames.get(preNodePos);
+
+            waitToGetLock( LOCK_BASE_PATH + "/" + waitLockNodeName, timeoutMilli, node.getId());
+        } catch (Exception e) {
+            if(node != null){
+                // 获取锁失败，但是要删除已经创建的临时节点
+                zooKeeperService.deleteNode(node.getId());
+            }
+            throw e;
         }
-
-        String preNode = node.getId().substring(node.getId().lastIndexOf("/") + 1);
-        int preNodePos = Collections.binarySearch(targetSubNames, preNode) - 1;
-        String waitLockNodeName = targetSubNames.get(preNodePos);
-
-        waitToGetLock( LOCK_BASE_PATH + "/" + waitLockNodeName, timeoutMilli, node.getId());
 
         LockHolder lockHolder = new LockHolder(Thread.currentThread(), node.getId());
         lockHolderThreadLocal.set(lockHolder);
