@@ -103,8 +103,7 @@ public class ConfigController {
                 String ret = lockNode + "--> " + val;
                 return WyfDataResponse.of(ret);
             } finally {
-                log.info("release lock.");
-                zkDistributedLock.releaseLock(lockNode, String.valueOf(val));
+                zkDistributedLock.releaseLock(lockNode);
             }
         } catch (Exception e) {
             log.warn("try lock occurs error.", e);

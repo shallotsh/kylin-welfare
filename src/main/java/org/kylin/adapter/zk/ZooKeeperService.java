@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -59,7 +60,7 @@ public class ZooKeeperService implements Watcher, Validator {
     public void init(){
         try {
             zk = new ZooKeeper(serverList, NumberUtils.toInt(sessionTimeout, 5000),this);
-//            connectedSemaphore.await();
+            connectedSemaphore.await(3000L, TimeUnit.MILLISECONDS);
 //
 //            if(!zk.getState().isConnected()){
 //                return ;

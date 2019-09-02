@@ -21,10 +21,9 @@ public interface DistributedLock {
      * 释放分布式锁
      *
      * @param key
-     * @param value
      * @throws DistributedLockException
      */
-    void releaseLock(String key, String value) throws DistributedLockException;
+    void releaseLock(String key) throws DistributedLockException;
 
 
     /**

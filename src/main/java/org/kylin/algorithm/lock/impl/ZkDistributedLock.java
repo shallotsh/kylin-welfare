@@ -1,5 +1,7 @@
 package org.kylin.algorithm.lock.impl;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.WatchedEvent;
@@ -16,8 +18,11 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Component
@@ -26,6 +31,8 @@ public class ZkDistributedLock implements DistributedLock {
 
     private static final String LOCK_BASE_PATH = "/locks";
     private static final String SEPARATOR = "_";
+
+    private ThreadLocal<LockHolder> lockHolderThreadLocal  = new ThreadLocal<>();
 
     @Getter
     private boolean isInitSuccess = false;
@@ -50,25 +57,16 @@ public class ZkDistributedLock implements DistributedLock {
     @Override
     public String tryLock(String key, Long timeoutMilli, String value) throws DistributedLockException {
 
-        String nodeName = LOCK_BASE_PATH +"/" + key + SEPARATOR;
+
         try {
-            ConfigNode node = zooKeeperService.createZkNode( nodeName, value, ZooKeeperService.EPHEMERAL_SEQUENTIAL);
-            List<String> subNodeNames = zooKeeperService.getChildren(LOCK_BASE_PATH);
-            List<String> targetSubNames = subNodeNames.stream().filter( n -> n.startsWith(key)).collect(Collectors.toList());
-            Collections.sort(targetSubNames);
-            if(node.getId().contains(targetSubNames.get(0))){
-                // get lock
-                log.info("acquired distributed lock. key={}, node:{}", key, node.getId());
-                return node.getId();
+            // reentrant lock
+            LockHolder lockHolder = lockHolderThreadLocal.get();
+
+            if(Objects.nonNull(lockHolder)){
+                lockHolder.getLockCount().incrementAndGet();
+                return lockHolder.getLockPath();
             }
-
-            String preNode = node.getId().substring(node.getId().lastIndexOf("/") + 1);
-            int preNodePos = Collections.binarySearch(targetSubNames, preNode) - 1;
-            String waitLockNodeName = targetSubNames.get(preNodePos);
-
-            waitLock( LOCK_BASE_PATH + "/" + waitLockNodeName, timeoutMilli, node.getId());
-            log.info("acquired distributed lock after wait lock. key={}, node={}", key, node.getId());
-            return node.getId();
+            return attemptGetLock(key, timeoutMilli, value);
         } catch (DistributedLockException e){
           throw e;
         } catch (Exception e) {
@@ -79,7 +77,38 @@ public class ZkDistributedLock implements DistributedLock {
 
     }
 
-    private boolean waitLock(String preLockNode, Long timeoutMilli, String currentNode) throws Exception{
+    public String attemptGetLock(String key, Long timeoutMilli, String value) throws Exception {
+        String nodeName = LOCK_BASE_PATH +"/" + key + SEPARATOR;
+        ConfigNode node = zooKeeperService.createZkNode( nodeName, value, ZooKeeperService.EPHEMERAL_SEQUENTIAL);
+
+        List<String> subNodeNames = zooKeeperService.getChildren(LOCK_BASE_PATH);
+        List<String> targetSubNames = subNodeNames.stream().filter( n -> n.startsWith(key)).collect(Collectors.toList());
+        Collections.sort(targetSubNames);
+
+        if(node.getId().contains(targetSubNames.get(0))){
+            // get lock
+            log.info("acquired distributed lock. key={}, node:{}", key, node.getId());
+            LockHolder lockHolder = new LockHolder(Thread.currentThread(), node.getId());
+            lockHolderThreadLocal.set(lockHolder);
+            return node.getId();
+        }
+
+        String preNode = node.getId().substring(node.getId().lastIndexOf("/") + 1);
+        int preNodePos = Collections.binarySearch(targetSubNames, preNode) - 1;
+        String waitLockNodeName = targetSubNames.get(preNodePos);
+
+        waitToGetLock( LOCK_BASE_PATH + "/" + waitLockNodeName, timeoutMilli, node.getId());
+
+        LockHolder lockHolder = new LockHolder(Thread.currentThread(), node.getId());
+        lockHolderThreadLocal.set(lockHolder);
+
+        log.info("acquired distributed lock after wait lock. key={}, current node={}", key, node.getId());
+
+        return node.getId();
+    }
+
+
+    private boolean waitToGetLock(String preLockNode, Long timeoutMilli, String currentNode) throws Exception{
 
         log.info("waiting lock, preLockNode:{}, current node:{}", preLockNode, currentNode);
 
@@ -110,17 +139,37 @@ public class ZkDistributedLock implements DistributedLock {
     }
 
     @Override
-    public void releaseLock(String key, String value) throws DistributedLockException {
+    public void releaseLock(String key) throws DistributedLockException {
         // 先释放锁，无需任何条件
         try {
+            lockHolderThreadLocal.remove();
             zooKeeperService.deleteNode(key);
         } catch (Exception e) {
             log.error("delete node error. key={}", key, e);
+        } finally {
+            log.info("release lock. key:{}", key);
         }
     }
 
     @Override
     public boolean isValid() {
         return isInitSuccess();
+    }
+
+
+    public static class LockHolder {
+
+        @Getter
+        private Thread currentThread;
+        @Getter
+        private AtomicLong lockCount;
+        @Getter
+        private String lockPath;
+
+        public LockHolder(Thread currentThread, String lockPath) {
+            this.currentThread = currentThread;
+            this.lockPath = lockPath;
+            lockCount = new AtomicLong(1);
+        }
     }
 }
