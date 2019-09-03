@@ -7,6 +7,7 @@ import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.kylin.bean.W3DCode;
+import org.kylin.bean.WelfareCode;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
 import org.kylin.constant.ExportPatternEnum;
@@ -94,6 +95,8 @@ public class P5Select3DExporter extends AbstractDocumentExporter {
         content.setFontSize(14);
         paragraph.setAlignment(ParagraphAlignment.LEFT);
 
+        Collections.sort(w3DCodes, WelfareCode::bitSort);
+
         List<W3DCode> codes = w3DCodes.stream().filter(w3DCode -> w3DCode.getFreq()!=0).collect(Collectors.toList());
         boolean printFreq = !CollectionUtils.isEmpty(codes);
 
@@ -102,12 +105,10 @@ public class P5Select3DExporter extends AbstractDocumentExporter {
             if(printFreq) {
                 ct = w3DCode.toString();
             }else{
-                ct = w3DCode.toString().substring(3);
+                ct = w3DCode.toString().substring(3,6);
             }
             int cnt = w3DCodeIntegerMap.getOrDefault(w3DCode, 0);
-            if(cnt > 1){
-                ct += "(" + cnt + ")";
-            }
+            ct += "(" + cnt + ")";
             ct += "     ";
             content.setText(ct);
         }
@@ -118,8 +119,6 @@ public class P5Select3DExporter extends AbstractDocumentExporter {
         XWPFRun sep = paragraph.createRun();
         sep.setTextPosition(50);
     }
-
-
 
 
     private void writeStats(DocHolder docHolder, ExportPatternEnum exportPatternEnum, Integer p5Size, Integer p3Size) {

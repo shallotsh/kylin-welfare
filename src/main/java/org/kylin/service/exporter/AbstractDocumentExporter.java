@@ -12,13 +12,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
 public abstract class AbstractDocumentExporter implements IDocExportTool<WCodeReq> {
 
-    private static final String DEFAULT_DOC_TITLE = "《我要发·排列5》福彩3D预测 %s";
+    private static final String DEFAULT_DOC_TITLE = "《我要发·排列5》福彩3D预测";
     protected static final String BASE_PATH = "/var/attachment/";
 
     @Override
