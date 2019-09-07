@@ -135,7 +135,7 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         int size = CollectionUtils.size(codes);
         for(int i=0; i<size; i++){
             if(i == 3){
-                sb.append("-");
+                sb.append("_");
             }
             sb.append(codes.get(i));
         }
@@ -150,7 +150,7 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         int size = CollectionUtils.size(codes);
         for(int i=0; i<size; i++){
             if(i == 3){
-                sb.append("-");
+                sb.append("_");
             }
             sb.append(codes.get(i));
         }

@@ -103,7 +103,8 @@ public class KylinPermutationFiveMethodApi {
 
         try {
             Optional<String> optFile = wCodeProcessService.exportWCodeToFile(wCodeReq);
-            return optFile.map(file -> new WyfDataResponse(file)).get();
+            return optFile.map(file -> new WyfDataResponse(file))
+                    .orElse(new WyfErrorResponse(HttpStatus.FAILED_DEPENDENCY.value(), "导出失败"));
         } catch (Exception e) {
             LOGGER.error("export-codes-error wCodeReq={}", JSON.toJSONString(wCodeReq), e);
             return new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");

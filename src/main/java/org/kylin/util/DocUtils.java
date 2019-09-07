@@ -381,6 +381,8 @@ public class DocUtils {
         }
 
         XWPFParagraph paragraph = doc.createParagraph();
+        paragraph.setAlignment(ParagraphAlignment.LEFT);
+        paragraph.setWordWrap(Boolean.TRUE);
         if(!StringUtils.isBlank(titleString)){
             XWPFRun title = paragraph.createRun();
             paragraph.setAlignment(ParagraphAlignment.LEFT);
