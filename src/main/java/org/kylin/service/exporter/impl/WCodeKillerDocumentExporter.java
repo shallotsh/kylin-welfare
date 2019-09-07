@@ -1,7 +1,6 @@
 package org.kylin.service.exporter.impl;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.kylin.bean.p5.WCode;
@@ -10,7 +9,6 @@ import org.kylin.constant.ExportPatternEnum;
 import org.kylin.constant.FilterStrategyEnum;
 import org.kylin.service.exporter.AbstractDocumentExporter;
 import org.kylin.service.exporter.DocHolder;
-import org.kylin.util.CommonUtils;
 import org.kylin.util.DocUtils;
 import org.kylin.util.WCodeUtils;
 import org.springframework.stereotype.Component;
@@ -47,7 +45,8 @@ public class WCodeKillerDocumentExporter extends AbstractDocumentExporter{
 
         FilterStrategyEnum filterStrategyEnum = FilterStrategyEnum.getById(ep.get().getId());
         return Optional.ofNullable(filterStrategyEnum)
-                .map(strategy ->  getDeleteCodes(wCodeReq, strategy.getKey())).get();
+                .map(strategy ->  getDeleteCodes(wCodeReq, strategy.getKey()))
+                .orElse(Collections.emptyList());
     }
 
     private List<WCode> getDeleteCodes(WCodeReq wCodeReq, String key){
@@ -107,6 +106,7 @@ public class WCodeKillerDocumentExporter extends AbstractDocumentExporter{
     public List<ExportPatternEnum> getSupportedExportPatterns() {
         return Arrays.asList(ExportPatternEnum.BIG_SUM_KILL,
                 ExportPatternEnum.CONTAIN_FOUR_KILL,
-                ExportPatternEnum.CONTAIN_FIVE_KILL);
+                ExportPatternEnum.CONTAIN_FIVE_KILL,
+                ExportPatternEnum.CONTAIN_THREE_KILL);
     }
 }

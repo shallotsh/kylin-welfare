@@ -294,11 +294,12 @@
                         <div class="col-sm-2">
                             <select v-model="export_format" class="form-control" v-show="config.isP5">
                                 <option :value="0" selected="selected">常规导出</option>
-                                <option :value="1">组首输出</option>
+                                <option :value="202">组首输出</option>
                                 <option :value="2">大和杀导出</option>
+                                <option :value="4">含三杀导出</option>
                                 <option :value="5">含四杀导出</option>
                                 <option :value="6">含五杀导出</option>
-                                <option :value="7">P5取3D输出</option>
+                                <option :value="203">P5取3D输出</option>
                                 <option :value="100">半页导出</option>
                                 <option :value="101">常规带序号</option>
                             </select>
