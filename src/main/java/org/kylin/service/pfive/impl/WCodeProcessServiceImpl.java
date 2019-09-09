@@ -107,26 +107,12 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
         if(!ep.isPresent()){
             return Optional.empty();
         }
-
-        try {
-            ExportPatternEnum patternEnum = ep.get();
-            if(patternEnum == ExportPatternEnum.NORMAL || patternEnum == ExportPatternEnum.NORMAL_SEQ_NO){
-                return Optional.of(DocUtils.saveWCodes(wCodeReq));
-            }else if(patternEnum == ExportPatternEnum.HALF_PAGE){
-                return Optional.of(DocUtils.saveWCodesHalf(wCodeReq));
-            }
-        } catch (IOException e) {
-            log.info("导出文件错误", e);
-            return Optional.empty();
-        }
-
         // 策略导出
-        DocHolder docHolder = new DocHolder();
-
         Optional<IDocExportTool> iDocExportToolOptional =  exportToolSelector.getByExportPattern(ep.get());
 
         if(iDocExportToolOptional.isPresent()) {
-            iDocExportToolOptional.get().writeTitleAsDefaultFormat(docHolder, null);
+            DocHolder docHolder = new DocHolder();
+            iDocExportToolOptional.get().writeTitleAsDefaultFormat(docHolder, ep.get().getTitle());
             iDocExportToolOptional.get().writeContentToDoc(docHolder, wCodeReq);
             String fileName = iDocExportToolOptional.get().exportDocAsFile(docHolder);
             return Optional.of(fileName);
