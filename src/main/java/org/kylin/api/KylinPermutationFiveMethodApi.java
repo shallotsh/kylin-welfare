@@ -113,6 +113,7 @@ public class KylinPermutationFiveMethodApi {
 
     @ResponseBody
     @RequestMapping(value = "/codes/export/half",  method = RequestMethod.POST)
+    @Deprecated
     public WyfResponse exportCodesHalf(@RequestBody WCodeReq wCodeReq){
         if(wCodeReq == null){
             return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "导出数据错误");
