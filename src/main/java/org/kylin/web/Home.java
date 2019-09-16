@@ -35,6 +35,21 @@ public class Home {
         return "wyf_2d";
     }
 
+    @RequestMapping("/frame")
+    public String frame(){
+        return "wyf_frame";
+    }
+
+    @RequestMapping("/expert")
+    public String expert(){
+        return "wyf_expert";
+    }
+
+    @RequestMapping("/expert_inner")
+    public String expertInner(){
+        return "wyf_expert_inner";
+    }
+
 
     @RequestMapping("/login")
     public String login(String origin, HttpServletRequest request){
