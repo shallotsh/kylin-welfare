@@ -49,19 +49,19 @@ var app = new Vue({
         doPermutate: function () {
 
             var paramArray = [];
-            paramArray.push(this.sequence);;
+            paramArray.push(this.sequence);
 
             var args = {
                 "sequences": paramArray
             };
             console.log("sequences:" + JSON.stringify(args));
-            this.wyfMessage = "正在计算...";
+            app.wyfMessage = "正在计算...";
             axios({
               method: 'post',
-              url: '/api/2d/shuffle',
+              url: '/api/expert/3d/shuffle',
               data: args
             }).then(function(response) {
-                    app.handle2DCodeResponse(response.data.data, '定位2D组码');
+                    app.handle3DCodeResponse(response.data.data, '专家推荐法组码');
                 })
                 .catch(function(error){
                     console.log(error)
@@ -69,13 +69,14 @@ var app = new Vue({
 
         },
 
-        handle2DCodeResponse: function (data, msg) {
+        handle3DCodeResponse: function (data, msg) {
+            console.log(JSON.stringify(data))
             this.wCodes = data.wCodes;
             if(data.freqSeted) {
                 this.freqSeted = data.freqSeted;
             }
             this.config.isPredict = true;
-            this.wyfMessage =  msg + " : "  + this.wCodes.length + " 注" ;
+            app.wyfMessage =  msg + " : "  + this.wCodes.length + " 注" ;
         },
 
         resetInput: function () {
@@ -122,7 +123,7 @@ var app = new Vue({
                     this.wCodes = this.wCodes.concat(this.cacheQueue[this.compItems[idx]]);
                 }
             }
-            this.wyfMessage = '已选择队列【' + this.compItems + '】共计 ' + count + ' 注二码.';
+            this.wyfMessage = '已选择队列【' + this.compItems + '】共计 ' + count + ' 注三码.';
             console.log('Item(index='+this.compItems+' in the cache queue was selected.');
         },
 
@@ -151,16 +152,16 @@ var app = new Vue({
                 // "arrayIndexes": this.compItems
             };
             console.log("compArgs:" + JSON.stringify(args));
-            this.wyfMessage = "正在计算...";
+            app.wyfMessage = "正在计算...";
             axios({
                 method: 'post',
-                url: '/api/2d/comp/select',
+                url: '/api/expert/3d/comp/select',
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
                 }
             }).then(function(response) {
-                app.handle2DCodeResponse(response.data.data, '综合选码');
+                app.handle3DCodeResponse(response.data.data, '综合选码');
             })
                 .catch(function(error){
                     console.log(error)
@@ -188,8 +189,7 @@ var app = new Vue({
             var args = {
                 "wCodes": this.wCodes,
                 "boldCodeSeq": this.boldCodeSeq,
-                "inverseCodeSeq": this.inverseCodeSeq,
-                "gossipCodeSeq": this.gossipCodeSeq,
+                "sumTailValues": this.sumValue,
                 "kdSeq": this.kdSeq
             };
 
@@ -199,13 +199,14 @@ var app = new Vue({
 
             axios({
                 method:"POST",
-                url:"/api/2d/kill/code",
-                data: args,
+                url:"/api/expert/3d/kill/code",
+                data: JSON.stringify(args),
+
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
                 }
             }).then(function(response) {
-                app.handle2DCodeResponse(response.data.data, "定位2码杀码");
+                app.handle3DCodeResponse(response.data.data, "专家推荐法杀码");
                 app.wyfMessage = "总计 " + count + " 注, 杀码 " + (count - app.wCodes.length) + " 注, 余 " + app.wCodes.length + " 注.";
             }).catch(function(response) {
                 console.log("resp:" + JSON.stringify(response.data, null, 2));
@@ -220,15 +221,25 @@ var app = new Vue({
                 return;
             }
 
+            var exportCodes = [];
+            if(this.cacheQueue.length > 0){
+                for(var idx=0; idx < this.cacheQueue.length; idx ++){
+                    exportCodes = exportCodes.concat(this.cacheQueue[idx]);
+                }
+            }else{
+                exportCodes = this.wCodes;
+            }
+
+
             var args = {
-                wCodes: this.wCodes,
+                wCodes: exportCodes,
                 freqSeted: this.freqSeted
             };
 
-            // console.log('canshu:' + JSON.stringify(args, null, 2));
+            console.log('canshu:' + JSON.stringify(args, null, 2));
             axios({
                 method:"POST",
-                url:"/api/2d/codes/export",
+                url:"/api/expert/3d/codes/export",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"

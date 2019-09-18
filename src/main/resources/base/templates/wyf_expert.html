@@ -96,7 +96,7 @@
                     <input type="text" class="form-control" v-model="sequence" placeholder="预测序列" />
                 </div>
                 <div class="col-sm-2 col-sm-push-1">
-                    <button type="button" class="btn btn-primary fill_parent" @click="doPermutate"> 组 码 </button>
+                    <button type="button" class="btn btn-primary fill_parent" @click="doPermutate"> 专家组码 </button>
                 </div>
             </div>
 
@@ -144,7 +144,7 @@
                         </div>
 
                         <div class="col-sm-6">
-                            <button type="button" @click="compSelect" class="btn btn-success fill_parent" style="margin-bottom: 10px"> 综合选码 </button>
+                            <button type="button" disabled="disabled" @click="compSelect" class="btn btn-success fill_parent" style="margin-bottom: 10px"> 综合选码 </button>
                         </div>
                     </div>
 
