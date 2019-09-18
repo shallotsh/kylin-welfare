@@ -21,6 +21,8 @@ public enum ExportPatternEnum {
     GROUP_COLUMN(202, "组首输出", null),
     P5_SELECT_3D(203, "P5取3D导出", null),
 
+    EXPERT_3D(204, "专家推荐法", null),
+
     ;
 
     private int id;

@@ -69,7 +69,7 @@ public class XCodeServiceImpl implements XCodeService {
             return Collections.emptyList();
         }
 
-        List<WCode> target = req.getwCodes();
+        List<WCode> target = req.getWCodes();
         int count = CollectionUtils.size(target);
         log.info("杀码前 {} 注2D", count);
 
