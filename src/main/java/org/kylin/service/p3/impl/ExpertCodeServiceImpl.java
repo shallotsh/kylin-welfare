@@ -33,8 +33,8 @@ public class ExpertCodeServiceImpl implements ExpertCodeService {
         // 编码
         Set<WCode> wCodes = new HashSet<>();
         for(int i=0; i<riddleSeq.size(); i++){
-            for(int j=0; j<riddleSeq.size(); j++){
-                for(int k=0; k<riddleSeq.size(); k++){
+            for(int j=i+1; j<riddleSeq.size(); j++){
+                for(int k=j+1; k<riddleSeq.size(); k++){
                     if(i != j && i != k && j != k){
                         WCode wCode = new WCode(3, riddleSeq.get(i), riddleSeq.get(j), riddleSeq.get(k));
                         wCodes.add(wCode);
