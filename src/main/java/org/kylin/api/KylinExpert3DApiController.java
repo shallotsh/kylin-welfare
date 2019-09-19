@@ -12,6 +12,7 @@ import org.kylin.bean.p5.WCodeSummarise;
 import org.kylin.service.p3.ExpertCodeService;
 import org.kylin.service.xcode.XCodeService;
 import org.kylin.util.TransferUtil;
+import org.kylin.util.WCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -56,8 +57,14 @@ public class KylinExpert3DApiController {
         List<WCode> ret = expertCodeService.expertEncode(riddles);
 
         log.info("expert shuffle ret: {}", ret);
+        Integer pairCount = WCodeUtils.getPairCodeCount(ret);
 
-        return new WyfDataResponse<>(new WCodeSummarise().setwCodes(ret));
+        WCodeSummarise summarise = new WCodeSummarise();
+        summarise.setwCodes(ret);
+        summarise.setPairCodes(pairCount);
+        summarise.setNonPairCodes(CollectionUtils.size(ret) - pairCount);
+
+        return new WyfDataResponse<>(summarise);
     }
 
 
@@ -76,7 +83,13 @@ public class KylinExpert3DApiController {
 
         log.info("expert kill code ret: {}", ret);
 
-       return  new WyfDataResponse<>(new WCodeSummarise().setwCodes(ret));
+        Integer pairCount = WCodeUtils.getPairCodeCount(ret);
+        WCodeSummarise summarise = new WCodeSummarise();
+        summarise.setwCodes(ret);
+        summarise.setPairCodes(pairCount);
+        summarise.setNonPairCodes(CollectionUtils.size(ret) - pairCount);
+
+       return  new WyfDataResponse<>(summarise);
     }
 
     @ResponseBody

@@ -21,7 +21,9 @@ var app = new Vue({
         cacheQueue: new Array(),
         compItems: [],
         drawNotice: null,
-        drawNoticeOverview: ''
+        drawNoticeOverview: '',
+        pairCount:null,
+        nonPairCount:null
     },
     created: function(){
         this.export_format = 0;
@@ -72,11 +74,13 @@ var app = new Vue({
         handle3DCodeResponse: function (data, msg) {
             console.log(JSON.stringify(data))
             this.wCodes = data.wCodes;
+            this.pairCount = data.pairCodes;
+            this.nonPairCount = data.nonPairCodes;
             if(data.freqSeted) {
                 this.freqSeted = data.freqSeted;
             }
             this.config.isPredict = true;
-            app.wyfMessage =  msg + " : "  + this.wCodes.length + " 注" ;
+            app.wyfMessage =  msg + " : "  + this.wCodes.length + " 注(对子:" + app.pairCount + " 注,非对子:" + app.nonPairCount + " 注)" ; ;
         },
 
         resetInput: function () {
@@ -87,7 +91,9 @@ var app = new Vue({
             this.inverseCodeSeq = null,
                 this.kdSeq = null,
             this.wyfMessage = '这一行是统计数据展示区域',
-            this.wCodes = null
+            this.wCodes = null,
+                this.pairCount = null,
+                this.nonPairCount = null
 
         },
 
@@ -207,7 +213,7 @@ var app = new Vue({
                 }
             }).then(function(response) {
                 app.handle3DCodeResponse(response.data.data, "专家推荐法杀码");
-                app.wyfMessage = "总计 " + count + " 注, 杀码 " + (count - app.wCodes.length) + " 注, 余 " + app.wCodes.length + " 注.";
+                app.wyfMessage = "总计 " + count + " 注, 杀码 " + (count - app.wCodes.length) + " 注, 余 " + app.wCodes.length + " 注(对子:" + app.pairCount + " 注,非对子:" + app.nonPairCount + " 注)" ;
             }).catch(function(response) {
                 console.log("resp:" + JSON.stringify(response.data, null, 2));
                 app.handleException("杀码请求失败!");
