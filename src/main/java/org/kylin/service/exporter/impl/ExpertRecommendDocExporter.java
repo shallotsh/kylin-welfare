@@ -47,7 +47,7 @@ public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
 
     }
 
-    public static void writeSubTitle(XWPFParagraph paragraph, String titleString){
+    public void writeSubTitle(XWPFParagraph paragraph, String titleString){
 
         if(StringUtils.isBlank(titleString)) {
             return;
@@ -70,7 +70,7 @@ public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
     }
 
 
-    public static void writeW3DCodes( XWPFParagraph paragraph, List<W3DCode> w3DCodes, String title){
+    public void writeW3DCodes( XWPFParagraph paragraph, List<W3DCode> w3DCodes, String title){
 
         if(CollectionUtils.isEmpty(w3DCodes)){
             return;
@@ -82,11 +82,14 @@ public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
         content.setFontSize(14);
         paragraph.setAlignment(ParagraphAlignment.LEFT);
 
-        Collections.sort(w3DCodes, WelfareCode::bitSort);
+
 
         List<W3DCode> codes = w3DCodes.stream().filter(w3DCode -> w3DCode.getFreq()!=0).collect(Collectors.toList());
         boolean printFreq = !CollectionUtils.isEmpty(codes);
 
+        Map<W3DCode, Integer> stat = getW3DCodeIntStat(w3DCodes);
+        w3DCodes = new ArrayList<>(stat.keySet());
+        Collections.sort(w3DCodes, WelfareCode::bitSort);
         for(W3DCode w3DCode : w3DCodes) {
             String ct;
             if(printFreq) {
@@ -94,7 +97,11 @@ public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
             }else{
                 ct = w3DCode.toString().substring(3,6);
             }
-            ct += "     ";
+            if(stat.get(w3DCode) > 1){
+                ct += "("+ stat.get(w3DCode) +")    ";
+            }else {
+                ct += "        ";
+            }
             content.setText(ct);
         }
 
@@ -106,19 +113,18 @@ public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
     }
 
 
-    private void writeStats(DocHolder docHolder, ExportPatternEnum exportPatternEnum, Integer p5Size, Integer p3Size) {
+    private Map<W3DCode, Integer> getW3DCodeIntStat(List<W3DCode> w3DCodes){
+        if(CollectionUtils.isEmpty(w3DCodes)){
+            return Collections.emptyMap();
+        }
 
-        XWPFParagraph header = docHolder.getDocument().createParagraph();
-        XWPFRun hr2 = header.createRun();
+        Map<W3DCode, Integer> statMap = new HashMap<>();
+        w3DCodes.forEach(code -> {
+            Integer count = statMap.getOrDefault(code, 0);
+            statMap.put(code, count + 1);
+        });
 
-        hr2.setText(exportPatternEnum.getDesc() + " 共计" + p5Size + "注排列5码!!!提取注数："+ p3Size +" 注  "
-                + CommonUtils.getCurrentDateString());
-        hr2.setTextPosition(10);
-        hr2.setFontSize(18);
-
-        XWPFRun hr3 = header.createRun();
-        hr3.setText(" ");
-        hr3.addBreak();
+        return statMap;
     }
 
     private W3DCode from(WCode wCode){
