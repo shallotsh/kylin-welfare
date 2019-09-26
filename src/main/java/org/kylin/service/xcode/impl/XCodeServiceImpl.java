@@ -69,7 +69,7 @@ public class XCodeServiceImpl implements XCodeService {
         }
 
         // 编码
-        Set<WCode> wCodes = new HashSet<>();
+        List<WCode> wCodes = new ArrayList<>();
         for(int i=0; i<riddleSeq.size(); i++){
             for(int j=i+1; j<riddleSeq.size(); j++){
                 WCode wCode = new WCode(2, riddleSeq.get(i), riddleSeq.get(j));
@@ -77,10 +77,9 @@ public class XCodeServiceImpl implements XCodeService {
             }
         }
 
-        List<WCode> ret = new ArrayList<>(wCodes);
-        Collections.sort(ret);
+        Collections.sort(wCodes);
 
-        return ret;
+        return wCodes;
     }
 
     @Override

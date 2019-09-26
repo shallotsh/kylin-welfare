@@ -6,6 +6,8 @@ import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.kylin.bean.W3DCode;
+import org.kylin.bean.WelfareCode;
 import org.kylin.bean.p2.XCodeReq;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
@@ -16,10 +18,7 @@ import org.kylin.util.CommonUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
@@ -60,19 +59,19 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
         exportWCodes(doc, data.getwCodes(), "ab* : " + count + " 注", null, freqSetted, "ab*");
 
         // ba*
-        exportWCodes(doc, data.getwCodes(), "ba*: " + count + " 注" , null, freqSetted, "ba*");
+//        exportWCodes(doc, data.getwCodes(), "ba*: " + count + " 注" , null, freqSetted, "ba*");
 
         // *ab
         exportWCodes(doc, data.getwCodes(), "*ab: " + count + " 注", null, freqSetted, "*ab");
 
         // *ba
-        exportWCodes(doc, data.getwCodes(), "*ba: "  + count + " 注", null, freqSetted, "*ba");
+//        exportWCodes(doc, data.getwCodes(), "*ba: "  + count + " 注", null, freqSetted, "*ba");
 
         // a*b
         exportWCodes(doc, data.getwCodes(), "a*b: "  + count + " 注", null, freqSetted, "a*b");
 
         // b*a
-        exportWCodes(doc, data.getwCodes(), "b*a: "  + count + " 注", null, freqSetted, "b*a");
+//        exportWCodes(doc, data.getwCodes(), "b*a: "  + count + " 注", null, freqSetted, "b*a");
 
 
 
@@ -104,21 +103,30 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
         XWPFRun content = paragraph.createRun();
         content.setFontSize(14);
 
+        Map<WCode, Integer> stat = getW3DCodeIntStat(wCodes);
+        wCodes = new ArrayList<>(stat.keySet());
+        Collections.sort(wCodes);
+
         for(WCode code : wCodes) {
 
             String printCode = "";
             if("ab*".equals(pattern)) {
-                printCode =  ""+code.getCodes().get(0)+code.getCodes().get(1)+"*"+ "     ";
+                printCode =  ""+code.getCodes().get(0)+code.getCodes().get(1)+"*";
             }else if("ba*".equals(pattern)){
-                printCode = ""+code.getCodes().get(1)+code.getCodes().get(0)+"*"+ "     ";
+                printCode = ""+code.getCodes().get(1)+code.getCodes().get(0)+"*";
             }else if("*ab".equals(pattern)){
-                printCode = ""+"*"+code.getCodes().get(0)+code.getCodes().get(1)+ "     ";
+                printCode = ""+"*"+code.getCodes().get(0)+code.getCodes().get(1);
             }else if("*ba".equals(pattern)){
-                printCode = "*"+code.getCodes().get(1)+code.getCodes().get(0)+ "     ";
+                printCode = "*"+code.getCodes().get(1)+code.getCodes().get(0);
             }else if("a*b".equals(pattern)){
-                printCode = ""+code.getCodes().get(0)+"*"+code.getCodes().get(1)+ "     ";
+                printCode = ""+code.getCodes().get(0)+"*"+code.getCodes().get(1);
             }else if("b*a".equals(pattern)){
-                printCode = ""+code.getCodes().get(1)+"*"+code.getCodes().get(0)+ "     ";
+                printCode = ""+code.getCodes().get(1)+"*"+code.getCodes().get(0);
+            }
+            if(stat.get(code) > 1){
+                printCode += "("+ stat.get(code) + ")  ";
+            }else {
+                printCode += "     ";
             }
 
             if(freqSeted != null && freqSeted){
@@ -134,6 +142,20 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
 
         XWPFRun sep = paragraph.createRun();
         sep.setTextPosition(50);
+    }
+
+    private Map<WCode, Integer> getW3DCodeIntStat(List<WCode> w3DCodes){
+        if(CollectionUtils.isEmpty(w3DCodes)){
+            return Collections.emptyMap();
+        }
+
+        Map<WCode, Integer> statMap = new HashMap<>();
+        w3DCodes.forEach(code -> {
+            Integer count = statMap.getOrDefault(code, 0);
+            statMap.put(code, count + 1);
+        });
+
+        return statMap;
     }
 
     @Override
