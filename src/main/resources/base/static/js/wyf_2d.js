@@ -52,9 +52,6 @@ var app = new Vue({
 
             var paramArray = [];
             paramArray.push(this.sequence1);
-            paramArray.push(this.sequence2);
-            paramArray.push(this.sequence3);
-            paramArray.push(this.sequence4);
 
             var args = {
                 "sequences": paramArray

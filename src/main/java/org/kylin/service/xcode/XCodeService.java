@@ -18,6 +18,15 @@ public interface XCodeService {
      */
     List<WCode> quibinaryEncode(List<Set<Integer>> riddles);
 
+
+    /**
+     * 专家组码
+     *
+     * @param riddles
+     * @return
+     */
+    List<WCode> expertEncode(List<Integer> riddles);
+
     /**
      * 杀码
      *
