@@ -63,6 +63,27 @@ public class XCodeServiceImpl implements XCodeService {
 
 
     @Override
+    public List<WCode> expertEncode(List<Integer> riddleSeq) {
+        if(CollectionUtils.size(riddleSeq) < 2){
+            return Collections.emptyList();
+        }
+
+        // 编码
+        Set<WCode> wCodes = new HashSet<>();
+        for(int i=0; i<riddleSeq.size(); i++){
+            for(int j=i+1; j<riddleSeq.size(); j++){
+                WCode wCode = new WCode(2, riddleSeq.get(i), riddleSeq.get(j));
+                wCodes.add(wCode);
+            }
+        }
+
+        List<WCode> ret = new ArrayList<>(wCodes);
+        Collections.sort(ret);
+
+        return ret;
+    }
+
+    @Override
     public List<WCode> killCodes(XCodeReq req) {
 
         if(Objects.isNull(req)){

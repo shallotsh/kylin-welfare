@@ -42,14 +42,14 @@ public class KylinLocate2DApiController {
 
         log.info("shuffle req:{}", req);
 
-        if(Objects.isNull(req) || CollectionUtils.isEmpty(req.getSequences())){
-            log.warn(" 参数错误");
+        if(Objects.isNull(req) ||
+                CollectionUtils.isEmpty(req.getSequences())){
+            log.warn("参数错误");
             return WyfErrorResponse.buildErrorResponse();
         }
 
-        List<Set<Integer>> riddles = TransferUtil.toIntegerSets(req.getSequences());
-
-        List<WCode> ret = xCodeService.quibinaryEncode(riddles);
+        List<Integer> riddles = TransferUtil.toIntegerList(req.getSequences().get(0));
+        List<WCode> ret = xCodeService.expertEncode(riddles);
 
         log.info("shuffle ret: {}", ret);
 
