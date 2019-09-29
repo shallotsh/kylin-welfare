@@ -92,13 +92,13 @@ public class KylinExpert3DApiController {
        return  new WyfDataResponse<>(summarise);
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/comp/select", method = RequestMethod.POST)
-    public WyfResponse compSelect(@RequestBody XCodeReq req){
-        log.info("comp-select req:{}", req);
-
-        return  new WyfDataResponse<>(new WCodeSummarise().setwCodes(xCodeService.compSelectCodes(req)).setFreqSeted(true));
-    }
+//    @ResponseBody
+//    @RequestMapping(value = "/comp/select", method = RequestMethod.POST)
+//    public WyfResponse compSelect(@RequestBody XCodeReq req){
+//        log.info("comp-select req:{}", req);
+//
+//        return  new WyfDataResponse<>(new WCodeSummarise().setwCodes(xCodeService.compSelectCodes(req)).setFreqSeted(true));
+//    }
 
 
     @ResponseBody

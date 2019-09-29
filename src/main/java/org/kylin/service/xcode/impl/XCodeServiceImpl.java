@@ -69,14 +69,15 @@ public class XCodeServiceImpl implements XCodeService {
         }
 
         // 编码
-        List<WCode> wCodes = new ArrayList<>();
+        Set<WCode> wCodeSet = new HashSet<>();
         for(int i=0; i<riddleSeq.size(); i++){
             for(int j=i+1; j<riddleSeq.size(); j++){
                 WCode wCode = new WCode(2, riddleSeq.get(i), riddleSeq.get(j));
-                wCodes.add(wCode);
+                wCodeSet.add(wCode);
             }
         }
 
+        List<WCode> wCodes = new ArrayList<>(wCodeSet);
         Collections.sort(wCodes);
 
         return wCodes;
@@ -138,6 +139,15 @@ public class XCodeServiceImpl implements XCodeService {
         }
 
         return WCodeUtils.merge(wCodesArray);
+
+//        List<WCode> wCodes = new ArrayList<>();
+//        for(XCodePair pair : req.getxCodePairs()){
+//            wCodes.addAll(pair.getwCodes());
+//        }
+//
+//        Collections.sort(wCodes);
+//
+//        return wCodes;
     }
 
     public static void main(String[] args) {

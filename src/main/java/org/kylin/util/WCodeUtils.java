@@ -148,15 +148,14 @@ public class WCodeUtils {
      * @param pairs     抽象二码，示例：筛选二码
      * @return
      */
-    public static boolean isEqualAnyInPairCodeUnorder(WCode wCode, List<Pair<Integer, Integer>> pairs){
+    public static boolean isEqualAnyInPairCodeInOrder(WCode wCode, List<Pair<Integer, Integer>> pairs){
 
         if(wCode == null || CollectionUtils.isEmpty(pairs)){
             return false;
         }
 
         for(Pair<Integer, Integer> pair : pairs){
-            if( (pair.getKey().equals(wCode.getCodes().get(0)) && pair.getValue().equals(wCode.getCodes().get(1)))
-                    || (pair.getKey().equals(wCode.getCodes().get(1)) && pair.getValue().equals(wCode.getCodes().get(0))) ){
+            if( (pair.getKey().equals(wCode.getCodes().get(0)) && pair.getValue().equals(wCode.getCodes().get(1)))){
                 return true;
             }
         }
