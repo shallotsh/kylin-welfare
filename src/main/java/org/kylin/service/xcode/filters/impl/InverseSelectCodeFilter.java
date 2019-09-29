@@ -25,7 +25,7 @@ public class InverseSelectCodeFilter implements SimpleFilter{
         }
 
         List<WCode> ret = target.stream().filter(
-                wCode -> !WCodeUtils.isEqualAnyInPairCodeUnorder(wCode, pairs)
+                wCode -> !WCodeUtils.isEqualAnyInPairCodeInOrder(wCode, pairs)
         ).collect(Collectors.toList());
 
         return ret;

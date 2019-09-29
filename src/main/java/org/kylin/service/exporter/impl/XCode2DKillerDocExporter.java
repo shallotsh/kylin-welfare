@@ -123,10 +123,10 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
             }else if("b*a".equals(pattern)){
                 printCode = ""+code.getCodes().get(1)+"*"+code.getCodes().get(0);
             }
+            printCode += "     ";
+
             if(stat.get(code) > 1){
-                printCode += "("+ stat.get(code) + ")  ";
-            }else {
-                printCode += "     ";
+                printCode += "("+ stat.get(code) + ")" + "     ";
             }
 
             if(freqSeted != null && freqSeted){
