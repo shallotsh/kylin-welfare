@@ -1,9 +1,11 @@
 package org.kylin.service.pfive.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.kylin.algorithm.strategy.SequenceProcessor;
 import org.kylin.algorithm.strategy.Strategy;
+import org.kylin.bean.LabelValue;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
 import org.kylin.bean.p5.WCodeSummarise;
@@ -20,10 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -77,6 +76,25 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
             }
         }
 
+
+        // 保存已删除的3D码，以便导出
+        if(Objects.equals(Boolean.TRUE, wCodeReq.getSavePoint())){
+            List<LabelValue<List<WCode>>> delCodes = wCodeReq.getDeletedCodes();
+            List<WCode> deletedWCodes = WCodeUtils.minus(backupCodes, wCodes);
+            if(CollectionUtils.isNotEmpty(deletedWCodes)){
+                if(CollectionUtils.isEmpty(deletedCodes)){
+                    delCodes = new ArrayList<>();
+                }
+                delCodes.add(LabelValue.<List<WCode>>builder()
+                        .label(filterStrategyEnum.getDesc())
+                        .data(deletedWCodes)
+                        .build());
+            }
+            if(CollectionUtils.isNotEmpty(delCodes)){
+                wCodeSummarise.setDeletedCodes(delCodes);
+            }
+        }
+
         return Optional.of(wCodeSummarise);
     }
 
@@ -88,6 +106,8 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
         }
 
         List<WCode> wCodes = wCodeReq.getWCodes();
+        List<WCode> backupCodes = new ArrayList<>(wCodes);
+
         for(Strategy< List<WCode>, WCodeReq> strategy: bitStrategies) {
             if(strategy.shouldExecute(wCodeReq)) {
                 wCodes = strategy.execute(wCodeReq, wCodes);
@@ -96,7 +116,27 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
 
         Collections.sort(wCodes);
 
-        return Optional.of(WCodeUtils.construct(wCodes,null, null, wCodeReq));
+        WCodeSummarise summarise = WCodeUtils.construct(wCodes,null, null, wCodeReq);
+
+        // 保存已删除的3D码，以便导出
+        if(Objects.equals(Boolean.TRUE, wCodeReq.getSavePoint())){
+            List<LabelValue<List<WCode>>> deletedCodes = wCodeReq.getDeletedCodes();
+            List<WCode> deletedWCodes = WCodeUtils.minus(backupCodes, wCodes);
+            if(CollectionUtils.isNotEmpty(deletedWCodes)){
+                if(CollectionUtils.isEmpty(deletedCodes)){
+                    deletedCodes = new ArrayList<>();
+                }
+                deletedCodes.add(LabelValue.<List<WCode>>builder()
+                        .label("位杀")
+                        .data(deletedWCodes)
+                        .build());
+            }
+            if(CollectionUtils.isNotEmpty(deletedCodes)){
+                summarise.setDeletedCodes(deletedCodes);
+            }
+        }
+
+        return Optional.ofNullable(summarise);
     }
 
 

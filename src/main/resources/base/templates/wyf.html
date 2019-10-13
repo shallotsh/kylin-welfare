@@ -308,6 +308,7 @@
                                 <option :value="4">含三杀导出</option>
                                 <option :value="5">含四杀导出</option>
                                 <option :value="6">含五杀导出</option>
+                                <option :value="7">删除码导出</option>
                                 <option :value="203">P5取3D输出</option>
                                 <option :value="100">半页导出</option>
                                 <option :value="101">常规带序号</option>
@@ -329,6 +330,13 @@
                                 <li v-for="item in wyfCodes"style="display: inline;margin: 10px 10px;line-height: 40px;"><span style="display: inline-block;">{{item}}</span></li>
                             </ul>
                         </div>
+                    </div>
+                    <!-- 设置选项 -->
+                    <div class="row">
+                        <label class="checkbox-inline"></label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="inlineCheckbox20" value="1" v-model="savePoint"> 设置删除码保存点
+                        </label>
                     </div>
                 </div>
             </div>
@@ -442,7 +450,7 @@
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-<script src="js/wyf.js?v=12"></script>
+<script src="js/wyf.js?v=13"></script>
 
 
 </body>

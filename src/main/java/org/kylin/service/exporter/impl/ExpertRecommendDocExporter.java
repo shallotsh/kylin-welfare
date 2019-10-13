@@ -13,7 +13,6 @@ import org.kylin.bean.p5.WCodeReq;
 import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.exporter.AbstractDocumentExporter;
 import org.kylin.service.exporter.DocHolder;
-import org.kylin.util.CommonUtils;
 import org.kylin.util.TransferUtil;
 import org.springframework.stereotype.Component;
 

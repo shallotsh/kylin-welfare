@@ -518,4 +518,17 @@ public class WCodeUtils {
     }
 
 
+    public static List<WCode> minus(List<WCode> wCodes, List<WCode> subtractor){
+
+        if(CollectionUtils.isEmpty(subtractor)){
+            return wCodes;
+        }
+
+        if(CollectionUtils.isEmpty(wCodes)){
+            return Collections.emptyList();
+        }
+
+        return new ArrayList<>(Sets.difference(Sets.newHashSet(wCodes), Sets.newHashSet(subtractor)));
+    }
+
 }
