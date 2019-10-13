@@ -1,5 +1,7 @@
 package org.kylin.bean.p5;
 
+import org.kylin.bean.LabelValue;
+
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +17,8 @@ public class WCodeSummarise {
     private boolean freqSeted;
     private Integer extendCount;
     private Integer extendRatio;
+
+    private List<LabelValue<List<WCode>>> deletedCodes;
 
     public List<WCode> getRandomKillCodes() {
         return randomKillCodes;
@@ -112,6 +116,15 @@ public class WCodeSummarise {
 
     public WCodeSummarise setExtendRatio(Integer extendRatio) {
         this.extendRatio = extendRatio;
+        return this;
+    }
+
+    public List<LabelValue<List<WCode>>> getDeletedCodes() {
+        return deletedCodes;
+    }
+
+    public WCodeSummarise setDeletedCodes(List<LabelValue<List<WCode>>> deletedCodes) {
+        this.deletedCodes = deletedCodes;
         return this;
     }
 }

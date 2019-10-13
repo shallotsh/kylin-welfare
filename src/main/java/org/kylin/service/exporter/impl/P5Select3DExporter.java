@@ -14,6 +14,7 @@ import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.exporter.AbstractDocumentExporter;
 import org.kylin.service.exporter.DocHolder;
 import org.kylin.util.CommonUtils;
+import org.kylin.util.DocUtils;
 import org.kylin.util.TransferUtil;
 import org.kylin.util.WCodeUtils;
 import org.springframework.stereotype.Component;
@@ -60,27 +61,6 @@ public class P5Select3DExporter extends AbstractDocumentExporter {
 
     }
 
-    public static void writeSubTitle(XWPFParagraph paragraph, String titleString){
-
-        if(StringUtils.isBlank(titleString)) {
-            return;
-        }
-
-        paragraph.setAlignment(ParagraphAlignment.LEFT);
-        XWPFRun title = paragraph.createRun();
-        title.setFontSize(16);
-        title.setBold(true);
-        title.setText(titleString);
-        title.addBreak();
-
-        XWPFRun hr = paragraph.createRun();
-        hr.setFontSize(10);
-        hr.setText("----------------------------------------");
-        hr.addBreak();
-
-        paragraph.setWordWrap(true);
-
-    }
 
 
     public static void writeW3DCodes( XWPFParagraph paragraph, List<W3DCode> w3DCodes, Map<W3DCode, Integer> w3DCodeIntegerMap, String title){
@@ -89,7 +69,7 @@ public class P5Select3DExporter extends AbstractDocumentExporter {
             return;
         }
 
-        writeSubTitle(paragraph, title);
+        DocUtils.writeSubTitle(paragraph, title);
 
         XWPFRun content = paragraph.createRun();
         content.setFontSize(14);

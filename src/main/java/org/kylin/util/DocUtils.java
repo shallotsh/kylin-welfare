@@ -445,4 +445,27 @@ public class DocUtils {
         LOGGER.info("file saved!!! path:{}", filePath);
     }
 
+
+    public static void writeSubTitle(XWPFParagraph paragraph, String titleString){
+
+        if(StringUtils.isBlank(titleString)) {
+            return;
+        }
+
+        paragraph.setAlignment(ParagraphAlignment.LEFT);
+        XWPFRun title = paragraph.createRun();
+        title.setFontSize(16);
+        title.setBold(true);
+        title.setText(titleString);
+        title.addBreak();
+
+        XWPFRun hr = paragraph.createRun();
+        hr.setFontSize(10);
+        hr.setText("----------------------------------------");
+        hr.addBreak();
+
+        paragraph.setWordWrap(true);
+
+    }
+
 }

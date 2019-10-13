@@ -1,6 +1,7 @@
 package org.kylin.bean.p5;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.kylin.bean.LabelValue;
 
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,9 @@ public class WCodeReq {
     private String bitDE;
     private Integer extendRatio;
     private Integer extendCount;
+
+    private Boolean savePoint;
+    private List<LabelValue<List<WCode>>> deletedCodes;
 
     public Integer getFilterType() {
         return filterType;
@@ -201,10 +205,30 @@ public class WCodeReq {
         return this;
     }
 
+
+    public Boolean getSavePoint() {
+        return savePoint;
+    }
+
+    public WCodeReq setSavePoint(Boolean savePoint) {
+        this.savePoint = savePoint;
+        return this;
+    }
+
+    public List<LabelValue<List<WCode>>> getDeletedCodes() {
+        return deletedCodes;
+    }
+
+    public WCodeReq setDeletedCodes(List<LabelValue<List<WCode>>> deletedCodes) {
+        this.deletedCodes = deletedCodes;
+        return this;
+    }
+
     public String getConditions(){
         return "WCodeReq{" +
                 "filterType=" + filterType +
                 ", boldCodeFive='" + boldCodeFive + '\'' +
+                ", savePoint=" + savePoint + '\'' +
                 ", wCodes_size=" + CollectionUtils.size(wCodes) +
                 ", bits=" + bits +
                 '}';
@@ -227,6 +251,9 @@ public class WCodeReq {
                 ", bitBC='" + bitBC + '\'' +
                 ", bitCD='" + bitCD + '\'' +
                 ", bitDE='" + bitDE + '\'' +
+                ", extendRatio=" + extendRatio +
+                ", extendCount=" + extendCount +
+                ", savePoint=" + savePoint +
                 '}';
     }
 }

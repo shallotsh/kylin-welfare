@@ -42,6 +42,7 @@ var app = new Vue({
         wyf_bca:null,
         wyf_cab:null,
         wyf_cba:null,
+        savePoint: null,
         bitAB:null,
         bitBC:null,
         bitCD:null,
@@ -125,6 +126,7 @@ var app = new Vue({
         handleFiveCodeResponse: function (data, msg, processId) {
             this.config.isP5 = true;
             this.welfareCode = data.wCodes;
+            this.deletedCodes = data.deletedCodes;
             this.backupCode = data.backupCodes;
             this.deletedCodesPair = data.deletedCodesPair;
             // console.log('返回值:' + JSON.stringify(data.deletedCodesPair, null, 2));
@@ -278,7 +280,9 @@ var app = new Vue({
             var args = {
                 filterType: processorId,
                 wCodes: this.welfareCode,
-                deletedCodesPair: this.deletedCodesPair
+                deletedCodesPair: this.deletedCodesPair,
+                savePoint: this.savePoint,
+                deletedCodes: this.deletedCodes
             };
 
             if(processorId == 9){
@@ -316,7 +320,9 @@ var app = new Vue({
                 filterType: processorId,
                 wCodes: this.welfareCode,
                 deletedCodesPair: this.deletedCodesPair,
-                boldCodeFive: this.boldCodeFive
+                boldCodeFive: this.boldCodeFive,
+                savePoint: this.savePoint,
+                deletedCodes: this.deletedCodes
             };
 
             if(processorId == 14 ){
@@ -392,7 +398,9 @@ var app = new Vue({
                 bitAB: this.bitAB,
                 bitBC: this.bitBC,
                 bitCD: this.bitCD,
-                bitDE: this.bitDE
+                bitDE: this.bitDE,
+                savePoint: this.savePoint,
+                deletedCodes: this.deletedCodes
             };
 
             console.log('abc: ' + this.wyf_abc + ', acb: ' + this.wyf_acb);
@@ -430,7 +438,9 @@ var app = new Vue({
                 randomKill: this.isRandomKill,
                 freqSeted : this.freqSeted,
                 exportFormat: this.export_format,
-                deletedCodesPair: this.deletedCodesPair
+                deletedCodesPair: this.deletedCodesPair,
+                savePoint: this.savePoint,
+                deletedCodes: this.deletedCodes
             };
 
             // console.log('canshu:' + JSON.stringify(args, null, 2));
