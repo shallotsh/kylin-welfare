@@ -82,7 +82,7 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
             List<LabelValue<List<WCode>>> delCodes = wCodeReq.getDeletedCodes();
             List<WCode> deletedWCodes = WCodeUtils.minus(backupCodes, wCodes);
             if(CollectionUtils.isNotEmpty(deletedWCodes)){
-                if(CollectionUtils.isEmpty(deletedCodes)){
+                if(CollectionUtils.isEmpty(delCodes)){
                     delCodes = new ArrayList<>();
                 }
                 delCodes.add(LabelValue.<List<WCode>>builder()

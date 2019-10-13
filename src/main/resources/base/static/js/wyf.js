@@ -126,7 +126,9 @@ var app = new Vue({
         handleFiveCodeResponse: function (data, msg, processId) {
             this.config.isP5 = true;
             this.welfareCode = data.wCodes;
-            this.deletedCodes = data.deletedCodes;
+            if(this.savePoint) {
+                this.deletedCodes = data.deletedCodes;
+            }
             this.backupCode = data.backupCodes;
             this.deletedCodesPair = data.deletedCodesPair;
             // console.log('返回值:' + JSON.stringify(data.deletedCodesPair, null, 2));
@@ -301,6 +303,7 @@ var app = new Vue({
                     "Content-Type": "application/json; charset=UTF-8"
                 }
             }).then(function(response) {
+                app.deletedCodes = null;
                 app.handleFiveCodeResponse(response.data.data, "杀码", processorId);
                 app.wyfMessage = "总计 " + count + " 注, 杀码 " + (count - app.wyfCodes.length) + " 注, 余 " + app.wyfCodes.length + " 注."
                     + '(对子: ' + response.data.data.pairCodes + ' 注, 非对子: ' + response.data.data.nonPairCodes + ' 注)';
