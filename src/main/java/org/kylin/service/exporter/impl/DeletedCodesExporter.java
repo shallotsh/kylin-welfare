@@ -35,7 +35,7 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
         }
 
         for(int i=0; i<wCodesArray.size(); i++){
-            printCodes(docHolder.getDocument().createParagraph(), wCodesArray.get(i), i);
+            printCodes(docHolder.getDocument().createParagraph(), wCodesArray.get(i), i+1);
         }
     }
 
