@@ -12,6 +12,7 @@ import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.exporter.AbstractDocumentExporter;
 import org.kylin.service.exporter.DocHolder;
 import org.kylin.util.DocUtils;
+import org.kylin.util.WCodeUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -35,11 +36,20 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
         }
 
         for(int i=0; i<wCodesArray.size(); i++){
-            printCodes(docHolder.getDocument().createParagraph(), wCodesArray.get(i), i+1);
+            LabelValue<List<WCode>> labelValue = wCodesArray.get(i);
+
+            List<WCode> pairCodes = WCodeUtils.filterPairCodes(labelValue.getData());
+            LabelValue<List<WCode>> pairLabelCodes = LabelValue.<List<WCode>>builder().label(labelValue.getLabel()).data(pairCodes).build();
+            printCodes(docHolder.getDocument().createParagraph(), pairLabelCodes, i+1, "对子");
+
+            List<WCode> nonPairCodes = WCodeUtils.filterNonPairCodes(labelValue.getData());
+            LabelValue<List<WCode>> nonPairLabelCodes = LabelValue.<List<WCode>>builder().label(labelValue.getLabel()).data(nonPairCodes).build();
+            printCodes(docHolder.getDocument().createParagraph(), nonPairLabelCodes, i+1, "非对子");
+
         }
     }
 
-    private void printCodes(XWPFParagraph paragraph, LabelValue<List<WCode>> labelValue, Integer index){
+    private void printCodes(XWPFParagraph paragraph, LabelValue<List<WCode>> labelValue, Integer index, String desc){
 
         Objects.requireNonNull(labelValue);
 
@@ -49,7 +59,7 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
 
         List<WCode> wCodes = labelValue.getData();
 
-        DocUtils.writeSubTitle(paragraph, "A" + index + "(操作:" + labelValue.getLabel() + ", 杀码 " + wCodes.size() + " 注): ");
+        DocUtils.writeSubTitle(paragraph, "A" + index + "(操作:" + labelValue.getLabel() + ", 杀码" + desc + wCodes.size() + " 注): ");
 
         XWPFRun content = paragraph.createRun();
         content.setFontSize(14);
