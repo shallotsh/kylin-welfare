@@ -37,10 +37,10 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
 
         for(int i=0; i<wCodesArray.size(); i++){
             LabelValue<List<WCode>> labelValue = wCodesArray.get(i);
-
-            List<WCode> pairCodes = WCodeUtils.filterPairCodes(labelValue.getData());
-            LabelValue<List<WCode>> pairLabelCodes = LabelValue.<List<WCode>>builder().label(labelValue.getLabel()).data(pairCodes).build();
-            printCodes(docHolder.getDocument().createParagraph(), pairLabelCodes, i+1, "对子");
+//
+//            List<WCode> pairCodes = WCodeUtils.filterPairCodes(labelValue.getData());
+//            LabelValue<List<WCode>> pairLabelCodes = LabelValue.<List<WCode>>builder().label(labelValue.getLabel()).data(pairCodes).build();
+//            printCodes(docHolder.getDocument().createParagraph(), pairLabelCodes, i+1, "对子");
 
             List<WCode> nonPairCodes = WCodeUtils.filterNonPairCodes(labelValue.getData());
             LabelValue<List<WCode>> nonPairLabelCodes = LabelValue.<List<WCode>>builder().label(labelValue.getLabel()).data(nonPairCodes).build();
