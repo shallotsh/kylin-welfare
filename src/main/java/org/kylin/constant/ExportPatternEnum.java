@@ -15,6 +15,7 @@ public enum ExportPatternEnum {
     CONTAIN_FIVE_KILL(6, "含五杀导出", null),
 
     DELETED_CODES(7, "删除码导出", null),
+    DELETED_HAS_SAME_BIT_CODES(8, "重删除码导出", null),
 
     HALF_PAGE(100, "半页导出", "《我要发·排列5》福彩3D预测(半页)"),
     NORMAL_SEQ_NO(101, "常规带序号导出", null),
