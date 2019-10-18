@@ -531,4 +531,16 @@ public class WCodeUtils {
         return new ArrayList<>(Sets.difference(Sets.newHashSet(wCodes), Sets.newHashSet(subtractor)));
     }
 
+    public static int hashCode(WCode wCode, Integer bitNum){
+        Objects.requireNonNull(wCode);
+        int prime = 31;
+        int result = 1;
+
+        for(int i=0; i<bitNum && i<wCode.getCodes().size(); i++){
+            result = prime * result + wCode.getCodes().get(i);
+        }
+
+        return result;
+    }
+
 }

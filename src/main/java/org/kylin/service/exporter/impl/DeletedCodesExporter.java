@@ -39,7 +39,7 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
 
         if(ExportPatternEnum.getById(data.getExportFormat()).get() == ExportPatternEnum.DELETED_HAS_SAME_BIT_CODES){
 
-            List<WCode> wCodes = getDoubleCheckedCodes(wCodesArray);
+            List<WCode> wCodes = deduplication(getDoubleCheckedCodes(wCodesArray));
             if(CollectionUtils.isEmpty(wCodes)){
                 return ;
             }
@@ -88,6 +88,19 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
             content.setText(ct + Constants.EXPORT_SEPARATOR);
         }
         content.addBreak();
+    }
+
+    private List<WCode> deduplication(List<WCode> wCodes){
+        if(CollectionUtils.isEmpty(wCodes)){
+            return Collections.emptyList();
+        }
+
+        Map<Integer, WCode> wCodeMap = new HashMap<>();
+        for(WCode wCode : wCodes){
+            wCodeMap.put(WCodeUtils.hashCode(wCode, 3), wCode );
+        }
+
+        return new ArrayList<>(wCodeMap.values());
     }
 
     private List<WCode> getDoubleCheckedCodes(List<LabelValue<List<WCode>>> wCodesArr) {
