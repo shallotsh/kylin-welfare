@@ -110,7 +110,7 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
 
         List<List<WCode>> wCodesArray = wCodesArr.stream().map(wCodes -> WCodeUtils.filterNonPairCodes(wCodes.getData())).collect(Collectors.toList());
 
-        Set<WCode> wCodes = new HashSet<>();
+        Map<WCode, Integer> codeStat = new HashMap<>();
         Set<Pair<Integer, Integer>> pairs = new HashSet<>();
         int count = 0;
         for(int i=0; i<wCodesArray.size(); i++){
@@ -127,14 +127,29 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
                 log.info("计算pair：left={}, right={}", i, j);
 
                 List<WCode> wCodesX = wCodesArray.get(j);
-                wCodes.addAll(getHasRepeatedCodesInLeftThreeBits(wCodes1, wCodesX));
+                List<WCode> codes = getHasRepeatedCodesInLeftThreeBits(wCodes1, wCodesX);
+                putAllRepeatedCodes(codeStat, codes);
             }
         }
-        List<WCode> wCodeList = new ArrayList<>(wCodes);
+
+
+        List<WCode> wCodeList = codeStat.entrySet().stream().filter(entry -> entry.getValue() >= 3).map(Map.Entry::getKey).collect(Collectors.toList());
         Collections.sort(wCodeList);
         log.info("合并取重完成 from: {} reduce to {} .", count, wCodeList.size());
         return wCodeList;
     }
+
+    private void putAllRepeatedCodes(Map<WCode, Integer> wCodeStat, List<WCode> wCodes){
+        Objects.requireNonNull(wCodes);
+        if(CollectionUtils.isEmpty(wCodes)){
+            return;
+        }
+
+        for(WCode wCode : wCodes){
+            wCodeStat.put(wCode, wCodeStat.getOrDefault(wCode, 0) + 1);
+        }
+    }
+
 
     private List<WCode> getHasRepeatedCodesInLeftThreeBits(List<WCode> wCodes1,List<WCode> wCodes2){
         if(CollectionUtils.isEmpty(wCodes1) || CollectionUtils.isEmpty(wCodes2)){
