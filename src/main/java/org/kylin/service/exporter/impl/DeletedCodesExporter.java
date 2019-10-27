@@ -39,6 +39,10 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
 
         if(ExportPatternEnum.getById(data.getExportFormat()).get() == ExportPatternEnum.DELETED_HAS_SAME_BIT_CODES){
 
+            if(CollectionUtils.size(wCodesArray) < 3){
+                return;
+            }
+
             List<WCode> wCodes = deduplication(getDoubleCheckedCodes(wCodesArray));
             if(CollectionUtils.isEmpty(wCodes)){
                 return ;
@@ -127,7 +131,7 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
                 log.info("计算pair：left={}, right={}", i, j);
 
                 List<WCode> wCodesX = wCodesArray.get(j);
-                List<WCode> codes = getHasRepeatedCodesInLeftThreeBits(wCodes1, wCodesX);
+                Set<WCode> codes = getHasRepeatedCodesInLeftThreeBits(wCodes1, wCodesX);
                 putAllRepeatedCodes(codeStat, codes);
             }
         }
@@ -139,7 +143,7 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
         return wCodeList;
     }
 
-    private void putAllRepeatedCodes(Map<WCode, Integer> wCodeStat, List<WCode> wCodes){
+    private void putAllRepeatedCodes(Map<WCode, Integer> wCodeStat, Set<WCode> wCodes){
         Objects.requireNonNull(wCodes);
         if(CollectionUtils.isEmpty(wCodes)){
             return;
@@ -151,12 +155,12 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
     }
 
 
-    private List<WCode> getHasRepeatedCodesInLeftThreeBits(List<WCode> wCodes1,List<WCode> wCodes2){
+    private Set<WCode> getHasRepeatedCodesInLeftThreeBits(List<WCode> wCodes1,List<WCode> wCodes2){
         if(CollectionUtils.isEmpty(wCodes1) || CollectionUtils.isEmpty(wCodes2)){
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
 
-        List<WCode> wCodes = new ArrayList<>();
+        Set<WCode> wCodes = new HashSet<>();
         for(int i=0; i<wCodes1.size(); i++){
             for(int j=0; j<wCodes2.size(); j++) {
                 if(hasTwoSameBitCodesAtLeast(wCodes1.get(i), wCodes2.get(j))){
