@@ -6,7 +6,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.eclipse.jetty.http.HttpStatus;
 import org.kylin.bean.LabelValue;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
@@ -43,7 +42,14 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
                 return;
             }
 
-            List<WCode> wCodes = deduplication(getDoubleCheckedCodes(wCodesArray));
+            // 转换为3码非对子
+            List<List<WCode>> threeDimCodesArray = wCodesArray.stream()
+                    .map(wCodes -> WCodeUtils.filterNonPairCodes(wCodes.getData()))
+                    .map(wCodes -> WCodeUtils.transferToPermutationThreeCodes(wCodes))
+                    .collect(Collectors.toList());
+
+
+            List<WCode> wCodes = getRepeatCheckedCodes(threeDimCodesArray);
             if(CollectionUtils.isEmpty(wCodes)){
                 return ;
             }
@@ -94,25 +100,10 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
         content.addBreak();
     }
 
-    private List<WCode> deduplication(List<WCode> wCodes){
-        if(CollectionUtils.isEmpty(wCodes)){
+    private List<WCode> getRepeatCheckedCodes(List<List<WCode>> wCodesArray) {
+        if(CollectionUtils.isEmpty(wCodesArray)){
             return Collections.emptyList();
         }
-
-        Map<Integer, WCode> wCodeMap = new HashMap<>();
-        for(WCode wCode : wCodes){
-            wCodeMap.put(WCodeUtils.hashCode(wCode, 3), wCode );
-        }
-
-        return new ArrayList<>(wCodeMap.values());
-    }
-
-    private List<WCode> getDoubleCheckedCodes(List<LabelValue<List<WCode>>> wCodesArr) {
-        if(CollectionUtils.isEmpty(wCodesArr)){
-            return Collections.emptyList();
-        }
-
-        List<List<WCode>> wCodesArray = wCodesArr.stream().map(wCodes -> WCodeUtils.filterNonPairCodes(wCodes.getData())).collect(Collectors.toList());
 
         Map<WCode, Integer> codeStat = new HashMap<>();
         Set<Pair<Integer, Integer>> pairs = new HashSet<>();
@@ -163,37 +154,14 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
         Set<WCode> wCodes = new HashSet<>();
         for(int i=0; i<wCodes1.size(); i++){
             for(int j=0; j<wCodes2.size(); j++) {
-                if(hasTwoSameBitCodesAtLeast(wCodes1.get(i), wCodes2.get(j))){
+                if(Objects.equals(wCodes1.get(i), wCodes2.get(j))){
                     wCodes.add(wCodes1.get(i));
                     wCodes.add(wCodes2.get(j));
-//                    log.info("Get. left={},right={}", wCodes1.get(i).getString(false, false), wCodes2.get(j).getString(false, false));
                 }
             }
         }
 
         return wCodes;
-    }
-
-
-    /**
-     * 前三位中至少两位相等
-     * @param a
-     * @param b
-     * @return
-     */
-    private boolean hasTwoSameBitCodesAtLeast(WCode a, WCode b){
-        if(a.getDim() != b.getDim()){
-            return false;
-        }
-
-        int count = 0;
-        for(int i= 0; i<a.getDim() && i<3; i++){
-            if(a.getCodes().get(i) == b.getCodes().get(i)){
-                count++;
-            }
-        }
-
-        return count >= 2;
     }
 
 
