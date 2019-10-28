@@ -6,6 +6,7 @@ import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.kylin.algorithm.pattern.BitSeqEnum;
 import org.kylin.bean.W3DCode;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
@@ -108,6 +109,20 @@ public class WCodeUtils {
         }
         Collections.sort(permutationFiveCodes);
         return permutationFiveCodes;
+    }
+
+    public static List<WCode> transferToPermutationThreeCodes(List<WCode> wCodes) {
+        if(CollectionUtils.isEmpty(wCodes) || !validateCodes(wCodes) || wCodes.get(0).getDim() != 5){
+            return Collections.emptyList();
+        }
+
+        Set<WCode> retSets = new HashSet<>();
+        for(WCode wCode: wCodes){
+            retSets.add(new WCode(3, wCode.getCodes().get(0), wCode.getCodes().get(1), wCode.getCodes().get(2)));
+        }
+        List<WCode> ret = new ArrayList<>(retSets);
+        Collections.sort(ret);
+        return ret;
     }
 
 
