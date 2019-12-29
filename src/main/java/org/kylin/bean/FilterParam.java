@@ -11,7 +11,6 @@ import lombok.ToString;
 public class FilterParam {
 
     private String sumValue;
-    private String binarySumValue;
     private String boldCode;
     private String gossip;
     private String range;
@@ -52,15 +51,6 @@ public class FilterParam {
 
     public void setSumValue(String sumValue) {
         this.sumValue = sumValue;
-    }
-
-    public String getBinarySumValue() {
-        return binarySumValue;
-    }
-
-    public FilterParam setBinarySumValue(String binarySumValue) {
-        this.binarySumValue = binarySumValue;
-        return this;
     }
 
     public String getBoldCode() {
