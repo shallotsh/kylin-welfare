@@ -9,7 +9,7 @@ import org.kylin.constant.CodeTypeEnum;
 import java.util.List;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/6/25 下午3:35.
  */
 public interface WelfareCodePredictor {

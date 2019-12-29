@@ -1,7 +1,7 @@
 package org.kylin.constant;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/6/25 下午3:15.
  */
 public enum CodeTypeEnum {

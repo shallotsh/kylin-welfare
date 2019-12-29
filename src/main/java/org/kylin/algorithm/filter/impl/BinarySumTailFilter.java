@@ -17,7 +17,7 @@ import java.util.Set;
 
 /**
  * 二码和值尾杀码
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/7/23 下午12:37.
  */
 @Service

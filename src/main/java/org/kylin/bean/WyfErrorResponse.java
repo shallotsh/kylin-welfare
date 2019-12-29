@@ -3,7 +3,7 @@ package org.kylin.bean;
 import org.springframework.http.HttpStatus;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/6/25 下午3:24.
  */
 public class WyfErrorResponse extends WyfDataResponse{

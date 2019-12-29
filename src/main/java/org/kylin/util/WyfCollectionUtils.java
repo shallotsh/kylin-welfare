@@ -9,7 +9,7 @@ import org.kylin.constant.CodeTypeEnum;
 import java.util.*;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/7/16 下午3:56.
  */
 public class WyfCollectionUtils {

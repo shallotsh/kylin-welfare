@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/7/16 下午3:57.
  * ref: http://svn.apache.org/repos/asf/poi/trunk/src/examples/src/org/apache/poi/xwpf/usermodel/examples/SimpleDocument.java
  *      https://poi.apache.org/document/quick-guide-xwpf.html

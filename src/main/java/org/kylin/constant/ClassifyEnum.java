@@ -1,7 +1,7 @@
 package org.kylin.constant;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/9/20 上午12:11.
  */
 public enum ClassifyEnum {

@@ -3,7 +3,7 @@ package org.kylin.bean;
 import java.util.List;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/7/26 下午11:14.
  */
 public class PolyParam {

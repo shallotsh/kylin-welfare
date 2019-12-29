@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/7/20 下午11:48.
  */
 public class Encoders {

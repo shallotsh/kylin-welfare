@@ -8,7 +8,7 @@ import org.kylin.algorithm.RandomKill;
 import java.util.*;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/6/30 上午1:42.
  */
 public class WCode implements Cloneable,Comparable,RandomKill{

@@ -4,7 +4,7 @@ package org.kylin.algorithm.strategy;
 import java.util.Objects;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/7/29 下午2:14.
  */
 @FunctionalInterface

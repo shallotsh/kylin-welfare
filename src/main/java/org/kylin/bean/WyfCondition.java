@@ -3,7 +3,7 @@ package org.kylin.bean;
 import java.util.List;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/8/13 下午10:23.
  */
 public class WyfCondition {

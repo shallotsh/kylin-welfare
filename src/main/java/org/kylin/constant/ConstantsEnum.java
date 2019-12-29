@@ -1,7 +1,7 @@
 package org.kylin.constant;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/7/29 下午2:21.
  */
 public enum  ConstantsEnum {

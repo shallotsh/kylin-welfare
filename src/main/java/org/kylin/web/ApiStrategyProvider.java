@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/7/29 下午2:31.
  */
 @Controller
