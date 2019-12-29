@@ -13,6 +13,7 @@ var app = new Vue({
         sequence2:'',
         sequence3:'',
         sequence4:'',
+        sumValue: null,
         boldCodeSeq: null,
         gossipCodeSeq: null,
         inverseCodeSeq: null,
@@ -86,6 +87,7 @@ var app = new Vue({
             this.sequence2 ='',
             this.sequence3 ='',
             this.sequence4 ='',
+            this.sumValue = null,
             this.boldCodeSeq = null,
             this.gossipCodeSeq = null,
             this.inverseCodeSeq = null,
@@ -191,6 +193,7 @@ var app = new Vue({
 
             var args = {
                 "wCodes": this.wCodes,
+                "sumTailValues": this.sumValue,
                 "boldCodeSeq": this.boldCodeSeq,
                 "inverseCodeSeq": this.inverseCodeSeq,
                 "gossipCodeSeq": this.gossipCodeSeq,

@@ -97,6 +97,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
         var args = {
             "welfareCode": $rootScope.welfareCode,
             "sumValue": $scope.wyf_sum_tail,
+            "binarySumValue": $scope.binary_sum_tail,
             "boldCode": $scope.wyf_bold,
             "gossip": $scope.wyf_gossip,
             "range": $scope.wyf_range,
@@ -180,6 +181,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
         $scope.input_3 = undefined;
         $scope.input_4 = undefined;
         $scope.wyf_sum_tail =undefined;
+        $scope.binary_sum_tail = undefined;
         $scope.wyf_bold = undefined;
         $scope.wyf_gossip = undefined;
         $scope.wyf_range = undefined;

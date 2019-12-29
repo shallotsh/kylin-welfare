@@ -6,6 +6,7 @@ import org.kylin.algorithm.RandomKill;
 import org.kylin.constant.BitConstant;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -228,6 +229,17 @@ public class W3DCode implements RandomKill,Cloneable{
 
         this.codes[index] = value;
         return this;
+    }
+
+    public Set<Integer> getBinarySumValueSet(){
+        Set<Integer> ret = new HashSet<>();
+        ret.add((this.codes[BitConstant.DECADE] + this.codes[BitConstant.UNIT])%10);
+        if(this.codes[BitConstant.HUNDRED] != null){
+            ret.add((this.codes[BitConstant.DECADE] + this.codes[BitConstant.HUNDRED])%10);
+            ret.add((this.codes[BitConstant.HUNDRED] + this.codes[BitConstant.UNIT])%10);
+        }
+
+        return ret;
     }
 
 }

@@ -129,23 +129,27 @@
                 <hr/>
                 <div class="row">
 
-                    <div class="col-sm-6 col-md-6">
-                        <div class="form-group">
-                            <label for="wyf_sum_tail" class="col-md-4 control-label">和值尾</label>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" ng-model="wyf_sum_tail" id="wyf_sum_tail"
-                                       placeholder="请输入和值尾" ng-trim="false">
-                            </div>
+                    <div class="col-sm-4 col-md-4">
+                        <div class="form-inline">
+                            <label for="wyf_sum_tail" class="control-label" >和值尾</label>
+                            <input type="text" size="10" class="form-control fill_parent_50" ng-model="wyf_sum_tail" id="wyf_sum_tail"
+                                   placeholder="三码和尾" ng-trim="false">
                         </div>
                     </div>
 
-                    <div class="col-sm-6 col-md-6">
-                        <div class="form-group">
-                            <label for="wyf_range" class="col-sm-4 control-label">跨度</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" ng-model="wyf_range" id="wyf_range"
-                                       placeholder="请输入跨度">
-                            </div>
+                    <div class="col-sm-4 col-md-4">
+                        <div class="form-inline">
+                            <label for="binary_sum_tail" class=" control-label">二码和尾</label>
+                            <input type="text" size="10" class="form-control fill_parent_50" ng-model="binary_sum_tail" id="binary_sum_tail"
+                                   placeholder="两码和尾" ng-trim="false">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 col-md-4">
+                        <div class="form-inline">
+                            <label for="wyf_range" class="control-label">跨度</label>
+                            <input type="text" size="11" class="form-control fill_parent_50" ng-model="wyf_range" id="wyf_range"
+                                   placeholder="请输入跨度">
                         </div>
                     </div>
 

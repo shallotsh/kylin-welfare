@@ -14,10 +14,7 @@ import org.kylin.service.exporter.ExportToolSelector;
 import org.kylin.service.exporter.IDocExportTool;
 import org.kylin.service.exporter.impl.XCode2DKillerDocExporter;
 import org.kylin.service.xcode.XCodeService;
-import org.kylin.service.xcode.filters.impl.BoldCodeFilter;
-import org.kylin.service.xcode.filters.impl.GossipSimpleFilterr;
-import org.kylin.service.xcode.filters.impl.InverseSelectCodeFilter;
-import org.kylin.service.xcode.filters.impl.KdSimpleFilter;
+import org.kylin.service.xcode.filters.impl.*;
 import org.kylin.util.WCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -120,6 +117,12 @@ public class XCodeServiceImpl implements XCodeService {
             count = CollectionUtils.size(target);
         }
 
+        if(CollectionUtils.isNotEmpty(target)
+                && StringUtils.isNotBlank(req.getSumTailValues())){
+            target = new SumTailCodeFilter().filter(target, req.getSumTailValues());
+            log.info("和尾杀 {} 注2D", (count - CollectionUtils.size(target)));
+            count = CollectionUtils.size(target);
+        }
 
         log.info("杀码后 {} 注2D", count);
 

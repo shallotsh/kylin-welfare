@@ -124,7 +124,7 @@ public class IterationStrategy implements Strategy<WelfareCode, WyfParam>{
         WelfareCode cacheCode = new WelfareCode(welfareCode);
 
         // 进行 和值尾， 跨度, 大和，全奇全偶， 两头，全大全小 等杀码操作
-        new SubTailFilter().filter(welfareCode, filterParam);
+        new SumTailFilter().filter(welfareCode, filterParam);
         new RangeFilter().filter(welfareCode, filterParam);
         param.setKillDipolar(true);
         param.setKillOneEnd(true);
