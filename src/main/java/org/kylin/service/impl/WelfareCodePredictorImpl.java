@@ -170,7 +170,7 @@ public class WelfareCodePredictorImpl implements WelfareCodePredictor {
         Iterator<W3DCode> iterator = w3DCodes.iterator();
         while(iterator.hasNext()){
             W3DCode w3DCode = iterator.next();
-            if(sumTails.contains(w3DCode.getSumTail())){
+            if(sumTails.contains(w3DCode.getSumTail()) ||  sumTails.stream().anyMatch(e -> w3DCode.getBinarySumValueSet().contains(e))){
                 w3DCode.addFreq(1);
             }
         }
