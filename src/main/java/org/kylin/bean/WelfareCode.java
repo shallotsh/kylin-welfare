@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/6/25 下午3:14.
  */
 public class WelfareCode implements Serializable{

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/7/29 下午2:15.
  */
 public class IterationStrategy implements Strategy<WelfareCode, WyfParam>{

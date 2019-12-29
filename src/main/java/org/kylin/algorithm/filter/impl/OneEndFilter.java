@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * 全大全小杀码法
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/7/23 下午3:33.
  */
 @Service

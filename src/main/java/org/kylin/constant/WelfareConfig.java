@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/10/5 上午10:40.
  */
 public interface WelfareConfig {

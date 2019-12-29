@@ -1,7 +1,7 @@
 package org.kylin.constant;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/9/17 下午10:28.
  */
 public interface BitConstant {

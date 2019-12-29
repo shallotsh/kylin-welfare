@@ -3,7 +3,7 @@ package org.kylin.algorithm.filter;
 import org.kylin.bean.FilterParam;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/7/23 下午12:34.
  */
 @FunctionalInterface

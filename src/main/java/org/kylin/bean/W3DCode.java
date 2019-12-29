@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/6/30 上午1:42.
  */
 public class W3DCode implements RandomKill,Cloneable{

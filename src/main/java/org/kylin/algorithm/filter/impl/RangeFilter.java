@@ -15,7 +15,7 @@ import java.util.Set;
 
 /**
  *  跨度杀码
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/7/23 下午3:13.
  */
 @Service

@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * 杀两头
- * @author huangyawu
+ * @author shallotsh
  * @date 2017/7/23 下午3:25.
  */
 @Service
