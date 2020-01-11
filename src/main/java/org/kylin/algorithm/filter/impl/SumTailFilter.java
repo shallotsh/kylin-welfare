@@ -36,8 +36,9 @@ public class SumTailFilter implements CodeFilter<WelfareCode>{
         Iterator<W3DCode> iterator = w3DCodes.iterator();
         while(iterator.hasNext()){
             W3DCode w3DCode = iterator.next();
-            // 二码/三码的和值尾都不满足条件，则删除
-            if(!st.contains(w3DCode.getSumTail()) && !st.stream().anyMatch(e -> w3DCode.getBinarySumValueSet().contains(e))){
+            // 二码值尾都不满足条件，则删除
+            // 不考虑三码的和, 20200108
+            if(!st.stream().anyMatch(e -> w3DCode.getBinarySumValueSet().contains(e))){
                 iterator.remove();
             }
         }
