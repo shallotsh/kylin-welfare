@@ -1,5 +1,6 @@
 package org.kylin.algorithm.strategy.impl;
 
+import com.google.common.collect.Sets;
 import org.apache.commons.collections4.CollectionUtils;
 import org.kylin.algorithm.strategy.SequenceProcessor;
 import org.kylin.bean.p5.WCode;
@@ -30,7 +31,7 @@ public class SumTailProcessor implements SequenceProcessor {
             return wCodes;
         }
 
-        List<WCode> ret = wCodes.stream().filter(wCode -> sumTailSet.contains(wCode.sum() % 10)).collect(Collectors.toList());
+        List<WCode> ret = wCodes.stream().filter(wCode -> !Sets.intersection(wCode.sumOfPreThreeBit(), sumTailSet).isEmpty()).collect(Collectors.toList());
 
         return ret;
     }

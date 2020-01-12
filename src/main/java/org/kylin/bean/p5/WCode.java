@@ -234,6 +234,24 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         return this.getCodes().stream().reduce(0, Integer::sum);
     }
 
+    /**
+     * 前三位两码之和
+     * @return
+     */
+    public Set<Integer> sumOfPreThreeBit(){
+        Set<Integer> set = new HashSet<>();
+        if(dim < 2){
+            return set;
+        }
+        set.add((codes.get(0) + codes.get(1)) % 10);
+        if(dim >= 3){
+            set.add((codes.get(0) + codes.get(2))%10);
+            set.add((codes.get(1) + codes.get(2))%10);
+        }
+
+        return set;
+    }
+
     public int getMax(){
         return Collections.max(this.getCodes());
     }

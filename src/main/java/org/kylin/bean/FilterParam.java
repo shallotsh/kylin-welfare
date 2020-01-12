@@ -168,7 +168,7 @@ public class FilterParam {
     public void setOneEnd(Integer oneEnd) {
         this.oneEnd = oneEnd;
         if(oneEnd != null && oneEnd == 1){
-            isKillAllOddEven = true;
+            isKillOneEnd = true;
         }
     }
 

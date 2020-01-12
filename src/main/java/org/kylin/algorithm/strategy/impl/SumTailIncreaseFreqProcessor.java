@@ -1,5 +1,6 @@
 package org.kylin.algorithm.strategy.impl;
 
+import com.google.common.collect.Sets;
 import org.kylin.algorithm.strategy.SequenceProcessor;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
@@ -34,8 +35,9 @@ public class SumTailIncreaseFreqProcessor implements SequenceProcessor {
         }
 
         for(WCode wCode : wCodes){
-            int sumTail = wCode.getCodes().subList(0, 3).stream().reduce(0, Integer::sum) % 10;
-            if(sumTailCodes.contains(sumTail)){
+            // int sumTail = wCode.getCodes().subList(0, 3).stream().reduce(0, Integer::sum) % 10;
+            // 新内涵 20200111, 前三位两两之和
+            if(!Sets.intersection(sumTailCodes, wCode.sumOfPreThreeBit()).isEmpty()){
                 wCode.increaseFreq();
             }
         }
