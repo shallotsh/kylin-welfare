@@ -43,6 +43,10 @@ public class OkHttpUtils {
             }
         } catch (IOException e) {
             log.info("doGet error", e);
+        } finally {
+            if(response != null){
+                response.close();
+            }
         }
         return Optional.empty();
     }
@@ -60,7 +64,7 @@ public class OkHttpUtils {
             log.info("query execution error.", e);
             return Optional.empty();
         } catch (RetryException e) {
-            log.info("query nothing after retry.", e);
+            //log.info("query nothing after retry.", e);
             return Optional.empty();
         }
 
