@@ -38,7 +38,7 @@ public class SdDrawApiController {
 
         SdDrawNoticeResult result = null;
         try {
-            result = cacheWrapper.get(key, () -> OkHttpUtils.getSdDrawNoticeResult(issueName, iCount).get());
+            result = cacheWrapper.get(key, () -> OkHttpUtils.getSdDrawNoticeResult(issueName, iCount).orElse(null));
             return Optional.ofNullable(result)
                     .map(ret -> new WyfDataResponse<>(ret))
                     .orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
