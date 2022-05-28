@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.kylin.bean.BaseCodeReq;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
+import org.kylin.service.exporter.ExportPropertites;
 
 import java.util.List;
 
@@ -20,7 +21,10 @@ public class XCodeReq extends BaseCodeReq {
 //    private List<WCode>[] wCodesArray;
 //    private List<Integer> arrayIndexes;
     private List<XCodePair> xCodePairs;
-
+    /**
+     * 导出附加信息
+     */
+    private ExportPropertites exportPropertites;
 
     public XCodeReq() {
     }
@@ -97,7 +101,15 @@ public class XCodeReq extends BaseCodeReq {
         return this;
     }
 
-//    @Override
+    public ExportPropertites getExportPropertites() {
+        return exportPropertites;
+    }
+
+    public void setExportPropertites(ExportPropertites exportPropertites) {
+        this.exportPropertites = exportPropertites;
+    }
+
+    //    @Override
 //    public String toString() {
 //        return "XCodeReq{" +
 //                "sequences=" + sequences +

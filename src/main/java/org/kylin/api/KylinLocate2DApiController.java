@@ -90,7 +90,7 @@ public class KylinLocate2DApiController {
         if(req == null){
             return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "导出数据错误");
         }
-
+        log.info("打印 req:{}", JSON.toJSONString(req));
         Optional<String> optFile = null;
         try {
             optFile = xCodeService.exportWCodeToFile(req);

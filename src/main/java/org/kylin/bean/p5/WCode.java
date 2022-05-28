@@ -221,8 +221,12 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         return newObj;
     }
 
-    public WCode copy() throws Exception{
-        return (WCode) clone();
+    public WCode copy(){
+        try {
+            return (WCode) clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public WCode asc(){

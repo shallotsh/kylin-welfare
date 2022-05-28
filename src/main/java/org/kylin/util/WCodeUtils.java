@@ -533,6 +533,21 @@ public class WCodeUtils {
     }
 
 
+    public static List<WCode> mergeCodes(List<WCode> wCodesArray){
+        if(CollectionUtils.isEmpty(wCodesArray)){
+            return Collections.emptyList();
+        }
+        Map<String, List<WCode>> wCodeMap = wCodesArray.stream()
+                .collect(Collectors.groupingBy(x->x.getString(Boolean.FALSE)));
+        List<WCode> ret = Lists.newArrayListWithExpectedSize(wCodeMap.size());
+        wCodeMap.forEach((k, v) -> {
+            WCode code = v.get(0).copy();
+            code.setFreq(v.size());
+            ret.add(code);
+        });
+        return ret;
+    }
+
     public static List<WCode> minus(List<WCode> wCodes, List<WCode> subtractor){
 
         if(CollectionUtils.isEmpty(subtractor)){

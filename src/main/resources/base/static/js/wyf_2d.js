@@ -20,6 +20,7 @@ var app = new Vue({
         // inverseCodeSeq: null,
         kdSeq: null,
         wCodes: null,
+        freqLowLimit: 0,
         wyfMessage:global_config.statisticsAreaTip,
         config: global_config,
         cacheQueue: new Array(),
@@ -91,6 +92,7 @@ var app = new Vue({
             // this.sumValue = null,
             this.boldCodeSeq = null,
                 this.kdSeq = null,
+                this.freqLowLimit = 0,
             // this.gossipCodeSeq = null,
             // this.inverseCodeSeq = null,
             this.wyfMessage = global_config.statisticsAreaTip,
@@ -228,7 +230,10 @@ var app = new Vue({
 
             var args = {
                 wCodes: this.wCodes,
-                freqSeted: this.freqSeted
+                freqSeted: this.freqSeted,
+                exportPropertites: {
+                    freqLowLimit: this.freqLowLimit
+                }
             };
 
             // console.log('canshu:' + JSON.stringify(args, null, 2));
@@ -259,7 +264,7 @@ var app = new Vue({
                 code = this.wCodes[idx];
                 var codeString = code.codes.join("");
                 if(this.freqSeted){
-                    codeString = '[' + code.freq + ']' + codeString;
+                    codeString = codeString + '(' + code.freq + ')';
                 }
                 printCodes.push(codeString);
             }

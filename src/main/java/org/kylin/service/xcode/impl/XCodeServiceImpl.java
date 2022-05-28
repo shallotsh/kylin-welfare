@@ -1,5 +1,6 @@
 package org.kylin.service.xcode.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -137,22 +139,13 @@ public class XCodeServiceImpl implements XCodeService {
         if(CollectionUtils.isEmpty(xCodePairs)){
             return Collections.emptyList();
         }
-
-        List<List<WCode>> wCodesArray = new ArrayList<>();
-        for(XCodePair pair : xCodePairs){
-            wCodesArray.add(pair.getwCodes());
-        }
-
-        return WCodeUtils.merge(wCodesArray);
-
-//        List<WCode> wCodes = new ArrayList<>();
-//        for(XCodePair pair : req.getxCodePairs()){
-//            wCodes.addAll(pair.getwCodes());
-//        }
-//
-//        Collections.sort(wCodes);
-//
-//        return wCodes;
+        log.info("param:{}", JSON.toJSONString(xCodePairs));
+        List<WCode> ret = WCodeUtils.mergeCodes(xCodePairs.stream()
+                .flatMap(x->x.getwCodes().stream())
+                .collect(Collectors.toList()));
+        Collections.sort(ret);
+        log.info("compSelect ret:{}", JSON.toJSONString(ret));
+        return ret;
     }
 
     public static void main(String[] args) {
@@ -173,7 +166,7 @@ public class XCodeServiceImpl implements XCodeService {
     public Optional<String> exportWCodeToFile(XCodeReq xCodeReq) throws IOException{
 
         // 策略导出
-        DocHolder docHolder = new DocHolder();
+        DocHolder docHolder = new DocHolder(xCodeReq.getExportPropertites());
 
         Optional<IDocExportTool> iDocExportTool = exportToolSelector.getByExportPattern(ExportPatternEnum.LOCATION_2D);
 
