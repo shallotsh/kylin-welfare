@@ -264,7 +264,7 @@ var app = new Vue({
                 code = this.wCodes[idx];
                 var codeString = code.codes.join("");
                 if(this.freqSeted){
-                    codeString = codeString + '(' + code.freq + ')';
+                    codeString = codeString + '(' + (code.freq == 0? 1: code.freq ) + ')';
                 }
                 printCodes.push(codeString);
             }
