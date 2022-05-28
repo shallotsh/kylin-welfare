@@ -1,5 +1,6 @@
 package org.kylin.service.xcode;
 
+import org.kylin.bean.p2.XCodePair;
 import org.kylin.bean.p2.XCodeReq;
 import org.kylin.bean.p5.WCode;
 
@@ -41,7 +42,7 @@ public interface XCodeService {
      * @param req
      * @return
      */
-    List<WCode> compSelectCodes(XCodeReq req);
+    List<WCode> compSelectCodes(List<XCodePair> xCodePairs);
 
 
     /**

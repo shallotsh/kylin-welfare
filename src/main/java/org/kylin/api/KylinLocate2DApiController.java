@@ -38,7 +38,7 @@ public class KylinLocate2DApiController {
 
     @ResponseBody
     @RequestMapping(value = "/shuffle", method = RequestMethod.POST)
-    public WyfResponse shuffle2d(@RequestBody XCodeReq req){
+    public WyfResponse compose2dCode(@RequestBody XCodeReq req){
 
         log.info("shuffle req:{}", req);
 
@@ -80,7 +80,7 @@ public class KylinLocate2DApiController {
     public WyfResponse compSelect(@RequestBody XCodeReq req){
         log.info("comp-select req:{}", req);
 
-        return  new WyfDataResponse<>(new WCodeSummarise().setwCodes(xCodeService.compSelectCodes(req)).setFreqSeted(false));
+        return  new WyfDataResponse<>(new WCodeSummarise().setwCodes(xCodeService.compSelectCodes(req.getxCodePairs())).setFreqSeted(true));
     }
 
 

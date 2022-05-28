@@ -2,7 +2,8 @@ var global_config = {
     isPredict: false,
     canKill: false,
     canExport: false,
-    queueIndex: 1
+    queueIndex: 1,
+    statisticsAreaTip: '[ 预测结果统计数据展示区域 ]'
 }
 
 
@@ -10,16 +11,16 @@ var app = new Vue({
     el:'#app',
     data:{
         sequence1:'',
-        sequence2:'',
-        sequence3:'',
-        sequence4:'',
-        sumValue: null,
+        // sequence2:'',
+        // sequence3:'',
+        // sequence4:'',
+        // sumValue: null,
         boldCodeSeq: null,
-        gossipCodeSeq: null,
-        inverseCodeSeq: null,
+        // gossipCodeSeq: null,
+        // inverseCodeSeq: null,
         kdSeq: null,
         wCodes: null,
-        wyfMessage:'这一行是统计数据展示区域',
+        wyfMessage:global_config.statisticsAreaTip,
         config: global_config,
         cacheQueue: new Array(),
         compItems: [],
@@ -29,27 +30,27 @@ var app = new Vue({
     created: function(){
         this.export_format = 0;
     },
-    mounted: function(){
-        axios.get("/api/3d/draw/notice?", {
-            params: {
-                name: '3d',
-                issueCount: 1
-            }
-        }).then(function (resp) {
-            this.drawNotice = resp.data.data;
-            var latestDrawRet = this.drawNotice.result[0];
-            var desc = "开奖期数: 【" + latestDrawRet.code
-                + " 】（" + latestDrawRet.date + "），中奖号码: 【"
-                + latestDrawRet.red + "】";
-
-            app.drawNoticeOverview = desc;
-
-        }).catch(function (reason) {
-            console.log("3d resp error:" + JSON.stringify(reason));
-        });
-    },
+    // mounted: function(){
+    //     axios.get("/api/3d/draw/notice?", {
+    //         params: {
+    //             name: '3d',
+    //             issueCount: 1
+    //         }
+    //     }).then(function (resp) {
+    //         this.drawNotice = resp.data.data;
+    //         var latestDrawRet = this.drawNotice.result[0];
+    //         var desc = "开奖期数: 【" + latestDrawRet.code
+    //             + " 】（" + latestDrawRet.date + "），中奖号码: 【"
+    //             + latestDrawRet.red + "】";
+    //
+    //         app.drawNoticeOverview = desc;
+    //
+    //     }).catch(function (reason) {
+    //         console.log("3d resp error:" + JSON.stringify(reason));
+    //     });
+    // },
     methods:{
-        doPermutate: function () {
+        composeCode: function () {
 
             var paramArray = [];
             paramArray.push(this.sequence1);
@@ -72,26 +73,27 @@ var app = new Vue({
 
         },
 
-        handle2DCodeResponse: function (data, msg) {
+        handle2DCodeResponse: function (data, action) {
             this.wCodes = data.wCodes;
             if(data.freqSeted) {
                 this.freqSeted = data.freqSeted;
             }
             this.config.isPredict = true;
-            this.wyfMessage =  msg + " : "  + this.wCodes.length + " 注" ;
+            this.wyfMessage =  action + " : "  + this.wCodes.length + " 注" ;
         },
 
         resetInput: function () {
             this.config.isPredict = false;
             this.sequence1 ='',
-            this.sequence2 ='',
-            this.sequence3 ='',
-            this.sequence4 ='',
-            this.sumValue = null,
+            // this.sequence2 ='',
+            // this.sequence3 ='',
+            // this.sequence4 ='',
+            // this.sumValue = null,
             this.boldCodeSeq = null,
-            this.gossipCodeSeq = null,
-            this.inverseCodeSeq = null,
-            this.wyfMessage = '这一行是统计数据展示区域',
+                this.kdSeq = null,
+            // this.gossipCodeSeq = null,
+            // this.inverseCodeSeq = null,
+            this.wyfMessage = global_config.statisticsAreaTip,
             this.wCodes = null
 
         },
@@ -128,8 +130,8 @@ var app = new Vue({
                     this.wCodes = this.wCodes.concat(this.cacheQueue[this.compItems[idx]]);
                 }
             }
-            this.wyfMessage = '已选择队列【' + this.compItems + '】共计 ' + count + ' 注二码.';
-            console.log('Item(index='+this.compItems+' in the cache queue was selected.');
+            this.wyfMessage = '已选择队列【' + this.compItemsTips + '】共计 ' + count + ' 注二码.';
+            console.log('Item(index='+this.compItemsTips+' in the cache queue was selected.');
         },
 
         compSelect: function () {
@@ -156,7 +158,7 @@ var app = new Vue({
                 "xCodePairs": selectedQueues
                 // "arrayIndexes": this.compItems
             };
-            console.log("compArgs:" + JSON.stringify(args));
+            // console.log("compArgs:" + JSON.stringify(args));
             this.wyfMessage = "正在计算...";
             axios({
                 method: 'post',
@@ -171,9 +173,6 @@ var app = new Vue({
                 .catch(function(error){
                     console.log(error)
                 });
-
-
-
         },
 
         handleDownload: function(data) {
@@ -193,10 +192,10 @@ var app = new Vue({
 
             var args = {
                 "wCodes": this.wCodes,
-                "sumTailValues": this.sumValue,
+                // "sumTailValues": this.sumValue,
                 "boldCodeSeq": this.boldCodeSeq,
-                "inverseCodeSeq": this.inverseCodeSeq,
-                "gossipCodeSeq": this.gossipCodeSeq,
+                // "inverseCodeSeq": this.inverseCodeSeq,
+                // "gossipCodeSeq": this.gossipCodeSeq,
                 "kdSeq": this.kdSeq
             };
 
@@ -248,32 +247,6 @@ var app = new Vue({
             });
         },
 
-        exportCodesHalfPage: function(){
-            if(!this.config.isP5){
-                this.handleException("请先完成排5");
-                return;
-            }
-
-            var args = {
-                wCodes: this.welfareCode
-            };
-
-            // console.log(JSON.stringify($rootScope.welfareCode, null, 2));
-            axios({
-                method:"POST",
-                url:"/api/p5/codes/export/half",
-                data: JSON.stringify(args),
-                headers:{
-                    "Content-Type": "application/json; charset=UTF-8"
-                }
-            }).then(function(response) {
-                app.handleDownload(response.data.data);
-            }).catch(function(reason) {
-                console.log(reason);
-                app.handleException("导出请求失败!");
-            });
-        },
-
         handleException: function (msg) {
             alert(msg);
         }
@@ -284,7 +257,6 @@ var app = new Vue({
             var printCodes = [];
             for( idx in this.wCodes){
                 code = this.wCodes[idx];
-                // code.codes.reverse();
                 var codeString = code.codes.join("");
                 if(this.freqSeted){
                     codeString = '[' + code.freq + ']' + codeString;
@@ -292,6 +264,13 @@ var app = new Vue({
                 printCodes.push(codeString);
             }
             return printCodes;
+        },
+        compItemsTips: function convert (){
+            var items = [];
+            for (var idx in this.compItems){
+                items.push(this.compItems[idx] + 1);
+            }
+            return items;
         },
         drawNoticeDesc: function(){
 

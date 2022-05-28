@@ -132,14 +132,14 @@ public class XCodeServiceImpl implements XCodeService {
     }
 
     @Override
-    public List<WCode> compSelectCodes(XCodeReq req) {
+    public List<WCode> compSelectCodes(List<XCodePair> xCodePairs) {
 
-        if(Objects.isNull(req) || CollectionUtils.isEmpty(req.getxCodePairs())){
+        if(CollectionUtils.isEmpty(xCodePairs)){
             return Collections.emptyList();
         }
 
         List<List<WCode>> wCodesArray = new ArrayList<>();
-        for(XCodePair pair : req.getxCodePairs()){
+        for(XCodePair pair : xCodePairs){
             wCodesArray.add(pair.getwCodes());
         }
 

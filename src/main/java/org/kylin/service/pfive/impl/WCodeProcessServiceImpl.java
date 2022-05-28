@@ -141,7 +141,7 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
 
 
     @Override
-    public Optional<String> exportWCodeToFile(WCodeReq wCodeReq) throws IOException{
+    public Optional<String> exportWCodeToFile(WCodeReq wCodeReq){
 
         Optional<ExportPatternEnum> ep = ExportPatternEnum.getById(wCodeReq.getExportFormat());
         if(!ep.isPresent()){
@@ -149,16 +149,17 @@ public class WCodeProcessServiceImpl implements WCodeProcessService{
         }
         // 策略导出
         Optional<IDocExportTool> iDocExportToolOptional =  exportToolSelector.getByExportPattern(ep.get());
-
-        if(iDocExportToolOptional.isPresent()) {
+        return iDocExportToolOptional.map(tool -> {
             DocHolder docHolder = new DocHolder();
-            iDocExportToolOptional.get().writeTitleAsDefaultFormat(docHolder, ep.get().getTitle());
-            iDocExportToolOptional.get().writeContentToDoc(docHolder, wCodeReq);
-            String fileName = iDocExportToolOptional.get().exportDocAsFile(docHolder);
-            return Optional.of(fileName);
-        }else{
-            log.error("没有查询到对应的导出工具 exportPattern:{}", ep.get());
-            return Optional.empty();
-        }
+            tool.writeTitleAsDefaultFormat(docHolder, ep.get().getTitle());
+            tool.writeContentToDoc(docHolder, wCodeReq);
+            try {
+                String fileName = tool.exportDocAsFile(docHolder);
+                return Optional.of(fileName);
+            }catch (Exception e){
+                log.error("导出文件异常", e);
+                return Optional.of("");
+            }
+        }).orElse(Optional.empty());
     }
 }
