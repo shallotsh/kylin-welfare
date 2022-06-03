@@ -29,8 +29,12 @@ public class SdDrawApiController {
     @RequestMapping(value = "/draw/notice", method = RequestMethod.GET)
     public WyfResponse findDrawNotice(String name, Integer issueCount){
 
-        if(StringUtils.isBlank(name)) name = "3d";
-        if(issueCount == null || issueCount <= 0) issueCount = 1;
+        if(StringUtils.isBlank(name)) {
+            name = "3d";
+        }
+        if(issueCount == null || issueCount <= 0) {
+            issueCount = 1;
+        }
 
         String key = name + issueCount;
         String issueName = name;
@@ -43,7 +47,11 @@ public class SdDrawApiController {
                     .map(ret -> new WyfDataResponse<>(ret))
                     .orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                             "查询开奖错误"));
-        }finally {
+        } catch (Exception e){
+            log.error("查询开奖信息报错", e);
+            return new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "查询开奖错误");
+        } finally {
             log.info("查询开奖结果 result:{}", Optional.ofNullable(result).map(ret -> ret));
         }
     }
