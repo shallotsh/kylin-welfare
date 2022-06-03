@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/api/2d")
@@ -48,8 +47,13 @@ public class KylinLocate2DApiController {
             return WyfErrorResponse.buildErrorResponse();
         }
 
-        List<Integer> riddles = TransferUtil.toIntegerList(req.getSequences().get(0));
-        List<WCode> ret = xCodeService.expertEncode(riddles);
+        List<List<Integer>> riddles = TransferUtil.toMultiList(req.getSequences().get(0));
+        if(CollectionUtils.isEmpty(riddles)){
+            log.warn("参数错误");
+            return WyfErrorResponse.buildErrorResponse();
+        }
+
+        List<WCode> ret = xCodeService.composeCodesWithMultiRiddles(riddles);
 
         log.info("shuffle ret: {}", ret);
 

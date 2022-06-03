@@ -92,6 +92,27 @@ public class TransferUtil {
         return ret;
     }
 
+    public static List<List<Integer>> toMultiList(String seq){
+        if(StringUtils.isBlank(seq.trim())){
+            return Collections.emptyList();
+        }
+
+        List<List<Integer>> list = new ArrayList<>();
+        String[] seqs = seq.trim().split(" |,|#");
+        for(String s: seqs) {
+            List<Integer> tmp = new ArrayList<>();
+            for (char ch : s.toCharArray()) {
+                if (ch >= '0' && ch <= '9') {
+                    tmp.add(ch - '0');
+                }
+            }
+            list.add(tmp);
+        }
+
+        return list;
+    }
+
+
 
     public static List<Integer> toIntegerList(String seq){
         if(StringUtils.isBlank(seq)){

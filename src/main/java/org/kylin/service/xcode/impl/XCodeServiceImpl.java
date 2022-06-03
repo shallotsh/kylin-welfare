@@ -44,16 +44,17 @@ public class XCodeServiceImpl implements XCodeService {
             for(int j=i+1; j<riddles.size(); j++){
                 Set<Integer> aSet = riddles.get(i);
                 Set<Integer> bSet = riddles.get(j);
-                for(Integer a: aSet)
-                    for(Integer b: bSet){
+                for(Integer a: aSet) {
+                    for (Integer b : bSet) {
                         int max = Math.max(a, b);
                         int min = Math.min(a, b);
                         int idx = min * 10 + max;
-                        if(stat[idx] == 0){
+                        if (stat[idx] == 0) {
                             wCodes.add(new WCode(2, min, max).setFreq(1));
                             stat[idx] = 1;
                         }
                     }
+                }
             }
         }
 
@@ -64,7 +65,7 @@ public class XCodeServiceImpl implements XCodeService {
 
 
     @Override
-    public List<WCode> expertEncode(List<Integer> riddleSeq) {
+    public List<WCode> composeCodes(List<Integer> riddleSeq) {
         if(CollectionUtils.size(riddleSeq) < 2){
             return Collections.emptyList();
         }
@@ -81,6 +82,18 @@ public class XCodeServiceImpl implements XCodeService {
         List<WCode> wCodes = new ArrayList<>(wCodeSet);
         Collections.sort(wCodes);
 
+        return wCodes;
+    }
+
+    @Override
+    public List<WCode> composeCodesWithMultiRiddles(List<List<Integer>> riddleArray) {
+
+        Set<WCode> wCodeSets = new HashSet<>();
+        for(List<Integer> riddles : riddleArray){
+            wCodeSets.addAll(composeCodes(riddles));
+        }
+        List<WCode> wCodes = new ArrayList<>(wCodeSets);
+        Collections.sort(wCodes);
         return wCodes;
     }
 
@@ -148,19 +161,6 @@ public class XCodeServiceImpl implements XCodeService {
         return ret;
     }
 
-    public static void main(String[] args) {
-        List<Set<Integer>> params = new ArrayList<>();
-        params.add(new HashSet<>(Arrays.asList(1)));
-        params.add(new HashSet<>(Arrays.asList(2)));
-        params.add(new HashSet<>(Arrays.asList(3)));
-        params.add(new HashSet<>(Arrays.asList(4)));
-
-        List<WCode> wCodes = new XCodeServiceImpl().quibinaryEncode(params);
-
-        for(WCode wCode : wCodes){
-            System.out.println(wCode);
-        }
-    }
 
     @Override
     public Optional<String> exportWCodeToFile(XCodeReq xCodeReq) throws IOException{

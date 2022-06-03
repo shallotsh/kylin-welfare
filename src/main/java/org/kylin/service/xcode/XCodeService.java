@@ -17,6 +17,7 @@ public interface XCodeService {
      * @param riddles
      * @return
      */
+    @Deprecated
     List<WCode> quibinaryEncode(List<Set<Integer>> riddles);
 
 
@@ -26,7 +27,15 @@ public interface XCodeService {
      * @param riddles
      * @return
      */
-    List<WCode> expertEncode(List<Integer> riddles);
+    List<WCode> composeCodes(List<Integer> riddles);
+
+    /**
+     * 多组组码
+     *
+     * @param riddleArray
+     * @return
+     */
+    List<WCode> composeCodesWithMultiRiddles(List<List<Integer>> riddleArray);
 
     /**
      * 杀码
