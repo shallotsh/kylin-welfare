@@ -79,7 +79,6 @@ public class ExpertCodeServiceImpl implements ExpertCodeService {
             count = CollectionUtils.size(target);
         }
 
-
         if(CollectionUtils.isNotEmpty(target) && StringUtils.isNotBlank(req.getSumTailValues())){
             target = new SumTailCodeFilter().filter(target, req.getSumTailValues());
             log.info("和尾杀 {} 住3D", (count - CollectionUtils.size(target)));
@@ -91,6 +90,12 @@ public class ExpertCodeServiceImpl implements ExpertCodeService {
                 && StringUtils.isNotBlank(req.getKdSeq())){
             target = new KdSimpleFilter().filter(target, req.getKdSeq());
             log.info("跨度杀 {} 注3D", (count - CollectionUtils.size(target)));
+            count = CollectionUtils.size(target);
+        }
+
+        if(CollectionUtils.isNotEmpty(target) && StringUtils.isNotBlank(req.getSeqKill())){
+            target = new SeqKillFilter().filter(target, req.getSeqKill());
+            log.info("顺序杀 {} 注3D", (count - CollectionUtils.size(target)));
             count = CollectionUtils.size(target);
         }
 

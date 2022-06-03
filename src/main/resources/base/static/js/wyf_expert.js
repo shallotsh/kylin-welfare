@@ -15,6 +15,7 @@ var app = new Vue({
         inverseCodeSeq: null,
         sumValue:null,
         kdSeq: null,
+        seqKill: null,
         wCodes: null,
         wyfMessage:'这一行是统计数据展示区域',
         config: global_config,
@@ -90,6 +91,7 @@ var app = new Vue({
             this.gossipCodeSeq = null,
             this.inverseCodeSeq = null,
                 this.kdSeq = null,
+                this.seqKill = null,
             this.wyfMessage = '这一行是统计数据展示区域',
             this.wCodes = null,
                 this.pairCount = null,
@@ -186,19 +188,11 @@ var app = new Vue({
             window.location = "/api/welfare/download?fileName=" + data;
         },
 
-        killCode: function () {
+        killCode: function (args) {
             if(!this.config.isPredict){
                 this.handleException("请先完成预测");
                 return;
             }
-
-            var args = {
-                "wCodes": this.wCodes,
-                "boldCodeSeq": this.boldCodeSeq,
-                "sumTailValues": this.sumValue,
-                "kdSeq": this.kdSeq
-            };
-
             console.log('args' + JSON.stringify(args));
 
             var count = this.wCodes.length;
@@ -219,6 +213,25 @@ var app = new Vue({
                 app.handleException("杀码请求失败!");
             });
 
+        },
+
+        filterBySeq: function (){
+
+            var args = {
+                "wCodes": this.wCodes,
+                "seqKill": this.seqKill
+            };
+            this.killCode(args);
+        },
+
+        filterCodes: function (){
+            var args = {
+                "wCodes": this.wCodes,
+                "boldCodeSeq": this.boldCodeSeq,
+                "sumTailValues": this.sumValue,
+                "kdSeq": this.kdSeq
+            };
+            this.killCode(args);
         },
 
         exportCodes: function(){

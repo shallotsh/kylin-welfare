@@ -18,6 +18,7 @@ public class BaseCodeReq {
     private String gossipCodeSeq;
     private String sumTailValues;
     private String kdSeq;
+    private String seqKill;
     private List<WCode> wCodes;
     private Boolean freqSeted;
 

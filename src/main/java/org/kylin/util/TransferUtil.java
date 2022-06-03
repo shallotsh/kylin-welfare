@@ -98,7 +98,7 @@ public class TransferUtil {
         }
 
         List<List<Integer>> list = new ArrayList<>();
-        String[] seqs = seq.trim().split(" |,|#");
+        String[] seqs = seq.trim().split(" |,|#| |，");
         for(String s: seqs) {
             List<Integer> tmp = new ArrayList<>();
             for (char ch : s.toCharArray()) {

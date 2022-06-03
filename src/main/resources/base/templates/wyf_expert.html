@@ -131,11 +131,19 @@
 
                 <div class=" form-inline col-sm-4">
                     <div class="col-sm-4" style="padding-right: 0px">
-                        <button type="button" @click="killCode" :disabled="config.isP5" class="btn btn-primary fill_parent"> 杀 码 </button>
+                        <button type="button" @click="filterCodes" :disabled="config.isP5" class="btn btn-primary fill_parent"> 杀 码 </button>
                     </div>
                     <div class="col-sm-4" style="padding-right: 0px">
                         <button type="button" @click="resetInput" class="btn btn-info fill_parent"> 重置输入 </button>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-7">
+                    <input type="text" class="form-control" v-model="seqKill" placeholder="顺序数组" />
+                </div>
+                <div class="col-sm-2 col-sm-push-1">
+                    <button type="button" class="btn btn-primary fill_parent" @click="filterBySeq"> 顺序杀 </button>
                 </div>
             </div>
 
@@ -236,7 +244,7 @@
 
 <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
 
-<script src="js/wyf_expert.js?v=4"></script>
+<script src="js/wyf_expert.js?v=5"></script>
 
 
 </body>
