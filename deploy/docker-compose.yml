@@ -1,0 +1,23 @@
+version: "3.3"
+# 注意，使用该脚本启动服务，需要先用`deploy_with_docker.sh`构建好启动所需的镜像 `kylin/welfare`
+services:
+  welfare_1:
+    image: kylin/welfare:latest
+    volumes:
+      - wyf_attachment:/var/attachment
+    restart: always
+    environment:
+      WELFARE_VAR: echo
+    ports:
+      - "8081:8080"
+  welfare_2:
+    image: kylin/welfare:latest
+    volumes:
+      - wyf_attachment:/var/attachment
+    restart: always
+    environment:
+      WELFARE_VAR: echo
+    ports:
+      - "8082:8080"
+volumes:
+  wyf_attachment: {}
