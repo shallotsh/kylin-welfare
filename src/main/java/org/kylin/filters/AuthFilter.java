@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.kylin.constant.Constants;
 import org.kylin.util.CommonUtils;
+import org.kylin.util.RequestFilterUtil;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -12,27 +13,13 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Slf4j
 @Component
 @WebFilter(urlPatterns = "/*")
 @Order(1)
 public class AuthFilter implements Filter {
-
-    private static final Set<String> nofilterPrefixPath = new HashSet<>();
-
-    {
-        nofilterPrefixPath.add("/css");
-//        nofilterPrefixPath.add("/js");
-        nofilterPrefixPath.add("/images");
-        nofilterPrefixPath.add("/html");
-        nofilterPrefixPath.add("/fonts");
-        nofilterPrefixPath.add("/favicon");
-        nofilterPrefixPath.add("/login");
-    }
 
 
     @Override
@@ -44,7 +31,7 @@ public class AuthFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req=(HttpServletRequest) request;
         String servletPath = req.getServletPath();
-        log.info("servletPath: "+servletPath);
+        log.debug("servletPath:{}", servletPath);
 
         Object token = req.getSession().getAttribute(Constants.LOGIN_STATUS_KEY);
         if(Objects.equals(token, Constants.LOGIN_SUCCESS) || isIgnoreAuthPath(req.getRequestURI())){
@@ -74,14 +61,6 @@ public class AuthFilter implements Filter {
         if(StringUtils.isBlank(servletPath)){
             return false;
         }
-
-        for(String prefix : nofilterPrefixPath){
-            if(servletPath.startsWith(prefix)){
-                log.info("免认证URL:{}", servletPath);
-                return true;
-            }
-        }
-
-        return false;
+        return RequestFilterUtil.isStaticResourceRequest(servletPath);
     }
 }

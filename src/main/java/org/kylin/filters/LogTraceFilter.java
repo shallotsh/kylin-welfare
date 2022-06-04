@@ -3,6 +3,7 @@ package org.kylin.filters;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.kylin.util.CommonUtils;
+import org.kylin.util.RequestFilterUtil;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -27,11 +28,19 @@ public class LogTraceFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
+        HttpServletRequest req=(HttpServletRequest) request;
+        String servletPath = req.getServletPath();
+        if(RequestFilterUtil.isStaticResourceRequest(servletPath)){
+            chain.doFilter(request, response);
+            return;
+        }
+
         StopWatch watch = new StopWatch();
         watch.start();
 
         if(request instanceof HttpServletRequest) {
-            String requestId = String.valueOf(System.currentTimeMillis() / 1000 + RandomStringUtils.randomNumeric(4));
+            String requestId = System.currentTimeMillis() / 1000 + RandomStringUtils.randomNumeric(4);
             MDC.put("requestId", requestId);
             recordDetailLog(request);
         }
