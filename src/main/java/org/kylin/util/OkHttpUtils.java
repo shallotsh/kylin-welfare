@@ -12,13 +12,14 @@ import org.kylin.exception.NeedRetryExcetpion;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
 public class OkHttpUtils {
 
-    private static final String DRAW_NOTICE_URL_TPL = "http://www.cwl.gov.cn/cwl_admin/kjxx/findDrawNotice?name={0}&issueCount={1}";
+    private static final String DRAW_NOTICE_URL_TPL = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=3d&issueCount=&issueStart=&issueEnd=&dayStart={0}&dayEnd={1}";
 
 
 
@@ -29,8 +30,11 @@ public class OkHttpUtils {
 
         Request request = new Request.Builder()
                 .url(url)
-                .addHeader("referer", "http://www.cwl.gov.cn/kjxx/fc3d/kjgg/")
+                .addHeader("cookie", "HMF_CI=42185cefd9722e8900c2652100e4a935ad5a0f6744b15039d39bbe2d657aef2428; 21_vq=1; _dd_s=logs=1&id=4facbb46-605c-4c35-9cd9-608c7c66c2fa&created=1654343603149")
+                .addHeader("host", "www.cwl.gov.cn")
+                .addHeader("referer", "http://www.cwl.gov.cn/ygkj/wqkjgg/fc3d/")
                 .addHeader("content-type", "application/json")
+                .addHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36")
                 .build();
 
         Response response = null;
@@ -52,9 +56,10 @@ public class OkHttpUtils {
     }
 
 
-    public static Optional<SdDrawNoticeResult> getSdDrawNoticeResult(String name, Integer issueCount){
+    public static Optional<SdDrawNoticeResult> getSdDrawNoticeResult(LocalDate beginDate, LocalDate endDate){
 
-        String url = MessageFormat.format(DRAW_NOTICE_URL_TPL, name, issueCount);
+
+        String url = MessageFormat.format(DRAW_NOTICE_URL_TPL, beginDate.toString(), endDate.toString());
 
         Retryer<Optional<String>> retryer = RetryUtils.build(200L, 3);
         Optional<String> retOpt = null;

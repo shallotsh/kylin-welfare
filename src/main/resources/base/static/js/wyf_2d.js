@@ -31,25 +31,25 @@ var app = new Vue({
     created: function(){
         this.export_format = 0;
     },
-    // mounted: function(){
-    //     axios.get("/api/3d/draw/notice?", {
-    //         params: {
-    //             name: '3d',
-    //             issueCount: 1
-    //         }
-    //     }).then(function (resp) {
-    //         this.drawNotice = resp.data.data;
-    //         var latestDrawRet = this.drawNotice.result[0];
-    //         var desc = "开奖期数: 【" + latestDrawRet.code
-    //             + " 】（" + latestDrawRet.date + "），中奖号码: 【"
-    //             + latestDrawRet.red + "】";
-    //
-    //         app.drawNoticeOverview = desc;
-    //
-    //     }).catch(function (reason) {
-    //         console.log("3d resp error:" + JSON.stringify(reason));
-    //     });
-    // },
+    mounted: function(){
+        axios.get("/api/3d/draw/notice?", {
+            params: {
+                name: '3d',
+                issueCount: 1
+            }
+        }).then(function (resp) {
+            this.drawNotice = resp.data.data;
+            var latestDrawRet = this.drawNotice.result[0];
+            var desc = "开奖期数: 【" + latestDrawRet.code
+                + " 】（" + latestDrawRet.date + "），中奖号码: 【"
+                + latestDrawRet.red + "】";
+
+            app.drawNoticeOverview = desc;
+
+        }).catch(function (reason) {
+            console.log("3d resp error:" + JSON.stringify(reason));
+        });
+    },
     methods:{
         composeCode: function () {
 

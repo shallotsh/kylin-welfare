@@ -6,6 +6,7 @@ import org.kylin.bean.WyfDataResponse;
 import org.kylin.bean.WyfErrorResponse;
 import org.kylin.bean.WyfResponse;
 import org.kylin.bean.sd.SdDrawNoticeResult;
+import org.kylin.util.MyDateUtil;
 import org.kylin.util.OkHttpUtils;
 import org.kylin.wrapper.GuavaCacheWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -36,13 +39,12 @@ public class SdDrawApiController {
             issueCount = 1;
         }
 
-        String key = name + issueCount;
-        String issueName = name;
-        Integer iCount = issueCount;
+        LocalDate drawDate = MyDateUtil.getLatestDrawDate();
+        String key = "3D_"+drawDate;
 
         SdDrawNoticeResult result = null;
         try {
-            result = cacheWrapper.get(key, () -> OkHttpUtils.getSdDrawNoticeResult(issueName, iCount).orElse(null));
+            result = cacheWrapper.get(key, () -> OkHttpUtils.getSdDrawNoticeResult(drawDate, drawDate).orElse(null));
             return Optional.ofNullable(result)
                     .map(ret -> new WyfDataResponse<>(ret))
                     .orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),

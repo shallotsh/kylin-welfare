@@ -41,8 +41,16 @@ public class GuavaCacheWrapper<T> {
 
     public T get(String key, Supplier<T> supplier){
         try {
-            return cache.get(key, supplier::get);
-        } catch (ExecutionException e) {
+            T val = cache.getIfPresent(key);
+            if(val != null){
+                return val;
+            }
+            val = supplier.get();
+            if(val != null){
+                cache.put(key, val);
+            }
+            return val;
+        } catch (Exception e) {
             log.error("guava get error. key:{}", key, e);
             return supplier.get();
         }
