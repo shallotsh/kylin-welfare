@@ -189,10 +189,10 @@
                     <maintainer>${docker.maintainer}</maintainer>
                     <volumes>/tmp</volumes>
                     <baseImage>openjdk:8-jdk-alpine</baseImage>
-                    <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+                    <entryPoint>["java", "-jar", "/app/${project.build.finalName}.jar"]</entryPoint>
                     <resources>
                         <resource>
-                            <targetPath>/</targetPath>
+                            <targetPath>/app</targetPath>
                             <directory>${project.build.directory}</directory>
                             <include>${project.build.finalName}.jar</include>
                         </resource>
