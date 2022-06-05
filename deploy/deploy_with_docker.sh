@@ -48,6 +48,6 @@ mvn package docker:build -DskipTests
 
 cd ${deploy_dir}
 
-docker-compose up -d
+docker-compose up --force-recreate -d
 
 echo "complete."

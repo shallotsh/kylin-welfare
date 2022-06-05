@@ -61,6 +61,6 @@ public class AuthFilter implements Filter {
         if(StringUtils.isBlank(servletPath)){
             return false;
         }
-        return RequestFilterUtil.isStaticResourceRequest(servletPath);
+        return RequestFilterUtil.isNoAuthRequest(servletPath);
     }
 }

@@ -30,7 +30,7 @@ public class LogTraceFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest req=(HttpServletRequest) request;
-        String servletPath = req.getServletPath();
+        String servletPath = req.getRequestURI();
         if(RequestFilterUtil.isStaticResourceRequest(servletPath)){
             chain.doFilter(request, response);
             return;

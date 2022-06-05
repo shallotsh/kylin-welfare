@@ -21,7 +21,7 @@ public class CacheUpdateTask {
     @Autowired
     private GuavaCacheWrapper<SdDrawNoticeResult> cacheWrapper;
 
-    @Scheduled(cron = "0 15,20,25,30,35 * * * ?")
+    @Scheduled(cron = "0 15,16,20,30 21 * * ?")
     public void updateTask(){
 
 
