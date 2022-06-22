@@ -46,7 +46,7 @@ public class SeqKillFilter implements SimpleFilter {
             return list.indexOf(pair.getLeft()) != list.lastIndexOf(pair.getRight());
         }
         int leftIndex = list.indexOf(pair.getLeft());
-        return leftIndex != -1 && list.indexOf(pair.getRight()) > leftIndex;
+        return leftIndex != -1 && list.lastIndexOf(pair.getRight()) > leftIndex;
     }
 
 
