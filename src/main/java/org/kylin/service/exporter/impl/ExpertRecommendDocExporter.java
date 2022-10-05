@@ -1,6 +1,5 @@
 package org.kylin.service.exporter.impl;
 
-import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
@@ -14,6 +13,7 @@ import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.exporter.AbstractDocumentExporter;
 import org.kylin.service.exporter.DocHolder;
 import org.kylin.util.TransferUtil;
+import org.kylin.util.WCodeUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -33,6 +33,24 @@ public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
 
         List<WCode> wCodes = data.getWCodes();
         Collections.sort(wCodes);
+
+        if(data.getFreqSeted()){
+            // 调用新新逻辑输出
+            List<WCode> all = new ArrayList<>();
+            all.addAll(wCodes);
+            all.addAll(data.getDeletedCodes().stream().flatMap(x -> x.getData().stream()).collect(Collectors.toList()));
+            // 导出对子
+            List<WCode> pairCodes = WCodeUtils.filterPairCodes(all);
+            String title = String.format("对子: (%d 注)", pairCodes.size());
+            saveCodesWithFreq(docHolder.getDocument().createParagraph(), pairCodes, title);
+
+            // 导出非对子
+            List<WCode> nonPairCodes = WCodeUtils.filterNonPairCodes(all);
+            title = String.format("非对子: (%d 注)", nonPairCodes.size());
+            saveCodesWithFreq(docHolder.getDocument().createParagraph(), nonPairCodes, title);
+            return ;
+        }
+
 
         List<W3DCode> w3DCodes = wCodes.stream().map(this::from).collect(Collectors.toList());
         List<W3DCode> pairCodes = TransferUtil.getPairCodes(w3DCodes);
@@ -132,6 +150,41 @@ public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
                 wCode.getCodes().get(2));
     }
 
+    // =============================== 以下是基于WCode导出数据===========================
+
+    private void saveCodesWithFreq(XWPFParagraph paragraph, List<WCode> wCodes, String title){
+
+        if(CollectionUtils.isEmpty(wCodes)){
+            return;
+        }
+
+        paragraph.setAlignment(ParagraphAlignment.LEFT);
+        XWPFRun titleRun = paragraph.createRun();
+        titleRun.setFontSize(16);
+        titleRun.setBold(true);
+        titleRun.setText(title);
+        titleRun.addBreak();
+
+        Map<Integer, List<WCode>> freqToCodes = wCodes.stream().collect(Collectors.groupingBy(WCode::getFreq));
+
+        List<Map.Entry<Integer, List<WCode>>> entries = freqToCodes.entrySet().stream().collect(Collectors.toList());
+        Collections.sort(entries, Comparator.comparing(Map.Entry::getKey));
+
+        for(Map.Entry<Integer, List<WCode>> entry : entries){
+            XWPFRun content = paragraph.createRun();
+            content.setFontSize(14);
+            paragraph.setAlignment(ParagraphAlignment.LEFT);
+            content.setTextPosition(20);
+
+            String subtitle =  "        【" + entry.getKey() + " 次】     ";
+            content.setText(subtitle);
+            for(WCode wCode: entry.getValue()){
+                content.setText(wCode.getString(false) + "        ");
+            }
+            content.addBreak();
+
+        }
+    }
 
     @Override
     public List<ExportPatternEnum> getSupportedExportPatterns() {

@@ -3,6 +3,8 @@ package org.kylin.constant;
 /**
  * @author shallotsh
  * @date 2017/9/17 下午10:28.
+ *
+ * W3DCode的位序
  */
 public interface BitConstant {
     /**

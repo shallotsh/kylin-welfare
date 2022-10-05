@@ -1,6 +1,7 @@
 package org.kylin.bean;
 
 import lombok.*;
+import org.kylin.bean.p3.BitUnitDTO;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
 
@@ -21,6 +22,7 @@ public class BaseCodeReq {
     private String seqKill;
     private List<WCode> wCodes;
     private Boolean freqSeted;
+    private BitUnitDTO bitUnitDTO;
 
     public List<WCode> getwCodes() {
         return wCodes;

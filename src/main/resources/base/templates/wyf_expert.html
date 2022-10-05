@@ -147,6 +147,26 @@
                 </div>
             </div>
 
+            <div class="row border-dashed-vertical">
+                <div class="form-inline col-sm-2">
+                    <label for="hundred" class="control-label">百</label>
+                    <input type="text" size="11" v-model="hundred"  class="form-control" id="hundred" placeholder="百位">
+                </div>
+
+                <div class="form-inline col-sm-2">
+                    <label for="decade" class="control-label">十</label>
+                    <input type="text" size="11" v-model="decade"  class="form-control" id="decade" placeholder="十位">
+                </div>
+                <div class="form-inline col-sm-2">
+                    <label for="unit" class="control-label">个</label>
+                    <input type="text" size="11" v-model="unit"  class="form-control" id="unit" placeholder="个位">
+                </div>
+
+                <div class="form-inline col-sm-2 col-sm-push-1">
+                    <button type="button" class="btn btn-primary fill_parent" @click="filterByBit"> 位选 </button>
+                </div>
+            </div>
+
             <!-- coperate for 3code -->
             <div class="row " >
                 <div class="col-sm-3 content_align_center">

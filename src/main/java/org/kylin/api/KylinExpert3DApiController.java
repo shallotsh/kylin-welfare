@@ -2,6 +2,7 @@ package org.kylin.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.kylin.bean.LabelValue;
 import org.kylin.bean.WyfDataResponse;
 import org.kylin.bean.WyfErrorResponse;
 import org.kylin.bean.WyfResponse;
@@ -23,18 +24,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api/expert/3d")
 @Slf4j
 public class KylinExpert3DApiController {
-
-    @Autowired
-    private XCodeService xCodeService;
 
     @Autowired
     private ExpertCodeService expertCodeService;
@@ -79,13 +75,21 @@ public class KylinExpert3DApiController {
             return WyfErrorResponse.buildErrorResponse();
         }
 
-        List<WCode> ret = expertCodeService.killCode(req);
+        List<WCode> allRet = expertCodeService.killCode(req);
+        boolean freqSeted = allRet.stream().anyMatch(wCode -> wCode.getFreq()>0);
+        if(freqSeted){
+            Collections.sort(allRet);
+        }
 
+        List<WCode> ret = allRet.stream().filter(wCode -> !wCode.isBeDeleted()).collect(Collectors.toList());
+        List<LabelValue<List<WCode>>> deletedCodes = Arrays.asList(new LabelValue<>("", allRet.stream().filter(wCode -> wCode.isBeDeleted()).collect(Collectors.toList())));
         log.info("expert kill code ret: {}", ret);
 
         Integer pairCount = WCodeUtils.getPairCodeCount(ret);
         WCodeSummarise summarise = new WCodeSummarise();
         summarise.setwCodes(ret);
+        summarise.setFreqSeted(freqSeted);
+        summarise.setDeletedCodes(deletedCodes);
         summarise.setPairCodes(pairCount);
         summarise.setNonPairCodes(CollectionUtils.size(ret) - pairCount);
 

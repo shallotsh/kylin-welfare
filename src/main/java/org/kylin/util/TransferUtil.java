@@ -312,9 +312,9 @@ public class TransferUtil {
             return false;
         }
 
-        return w3DCode.getCodes()[0] == w3DCode.getCodes()[1]
-                || w3DCode.getCodes()[2] == w3DCode.getCodes()[1]
-                || w3DCode.getCodes()[2] == w3DCode.getCodes()[0];
+        return Objects.equals(w3DCode.getCodes()[0],w3DCode.getCodes()[1])
+                || Objects.equals(w3DCode.getCodes()[2], w3DCode.getCodes()[1])
+                || Objects.equals(w3DCode.getCodes()[2], w3DCode.getCodes()[0]);
     }
 
     public static List<W3DCode> getPairCodes(List<W3DCode> w3DCodes){

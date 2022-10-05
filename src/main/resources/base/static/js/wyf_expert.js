@@ -17,6 +17,7 @@ var app = new Vue({
         kdSeq: null,
         seqKill: null,
         wCodes: null,
+        deletedCodesPair: null,
         wyfMessage:'这一行是统计数据展示区域',
         config: global_config,
         cacheQueue: new Array(),
@@ -24,7 +25,10 @@ var app = new Vue({
         drawNotice: null,
         drawNoticeOverview: '',
         pairCount:null,
-        nonPairCount:null
+        nonPairCount:null,
+        hundred: null,
+        decade: null,
+        unit: null
     },
     created: function(){
         this.export_format = 0;
@@ -77,6 +81,7 @@ var app = new Vue({
             this.wCodes = data.wCodes;
             this.pairCount = data.pairCodes;
             this.nonPairCount = data.nonPairCodes;
+            this.deletedCodesPair = data.deletedCodes;
             if(data.freqSeted) {
                 this.freqSeted = data.freqSeted;
             }
@@ -92,8 +97,12 @@ var app = new Vue({
             this.inverseCodeSeq = null,
                 this.kdSeq = null,
                 this.seqKill = null,
+                this.hundred = null,
+                this.decade = null,
+                this.unit = null,
             this.wyfMessage = '这一行是统计数据展示区域',
             this.wCodes = null,
+                this.deletedCodesPair= null,
                 this.pairCount = null,
                 this.nonPairCount = null
 
@@ -224,6 +233,19 @@ var app = new Vue({
             this.killCode(args);
         },
 
+        filterByBit: function (){
+            var bitUnitDTO = {
+                "hundredSeq": this.hundred,
+                "decadeSeq": this.decade,
+                "unitSeq": this.unit
+            }
+            var args = {
+                "wCodes": this.wCodes,
+                "bitUnitDTO": bitUnitDTO
+            }
+            console.log('bitSelect' + JSON.stringify(args))
+            this.killCode(args);
+        },
         filterCodes: function (){
             var args = {
                 "wCodes": this.wCodes,
@@ -252,6 +274,7 @@ var app = new Vue({
 
             var args = {
                 wCodes: exportCodes,
+                deletedCodes: this.deletedCodesPair,
                 freqSeted: this.freqSeted
             };
 
@@ -307,6 +330,10 @@ var app = new Vue({
             var printCodes = [];
             for( idx in this.wCodes){
                 code = this.wCodes[idx];
+                if(code.beDeleted){
+                    console.log('被删除code不展示' + JSON.stringify(code));
+                    continue;
+                }
                 // code.codes.reverse();
                 var codeString = code.codes.join("");
                 if(this.freqSeted){
