@@ -41,7 +41,7 @@ public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
             all.addAll(data.getDeletedCodes().stream().flatMap(x -> x.getData().stream()).collect(Collectors.toList()));
             // 导出对子
             List<WCode> pairCodes = WCodeUtils.filterPairCodes(all);
-            String title = String.format("对子: (%d 注)", pairCodes.size());
+            String title = String.format("    对子: (%d 注)", pairCodes.size());
             saveCodesWithFreq(docHolder.getDocument().createParagraph(), pairCodes, title);
 
             // 导出非对子
@@ -171,12 +171,15 @@ public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
         Collections.sort(entries, Comparator.comparing(Map.Entry::getKey));
 
         for(Map.Entry<Integer, List<WCode>> entry : entries){
+            if(CollectionUtils.isEmpty(entry.getValue())){
+                continue;
+            }
             XWPFRun content = paragraph.createRun();
             content.setFontSize(14);
             paragraph.setAlignment(ParagraphAlignment.LEFT);
             content.setTextPosition(20);
-
-            String subtitle =  "        【" + entry.getKey() + " 次】     ";
+            int size = entry.getValue().size();
+            String subtitle =  "      " + entry.getKey() + " 次("+ (size < 10? "  "+size: ""+size) +"注):  ";
             content.setText(subtitle);
             for(WCode wCode: entry.getValue()){
                 content.setText(wCode.getString(false) + "        ");
