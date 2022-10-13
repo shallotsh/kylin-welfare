@@ -74,6 +74,8 @@ public class KylinExpert3DApiController {
 
         WCodeSummarise summarise = new WCodeSummarise();
         summarise.setwCodes(groupCodes);
+        summarise.setFreqSeted(req.getFreqSeted() == null ? false: req.getFreqSeted());
+        summarise.setDeletedCodes(req.getDeletedCodes());
         summarise.setPairCodes(pairCount);
         summarise.setNonPairCodes(CollectionUtils.size(groupCodes) - pairCount);
 

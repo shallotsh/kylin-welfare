@@ -34,7 +34,7 @@ public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
         List<WCode> wCodes = data.getWCodes();
         Collections.sort(wCodes);
 
-        if(data.getFreqSeted()){
+        if(Objects.equals(Boolean.TRUE, data.getFreqSeted())){
             // 调用新新逻辑输出
             List<WCode> all = new ArrayList<>();
             all.addAll(wCodes);

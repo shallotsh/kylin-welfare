@@ -88,8 +88,11 @@ var app = new Vue({
                 return;
             }
             var args = {
-                "wCodes": this.wCodes
+                "wCodes": this.wCodes,
+                "deletedCodes": this.deletedCodesPair,
+                "freqSeted": this.freqSeted
             };
+            console.log("转换:" + JSON.stringify(args));
             var count = this.wCodes.length;
             axios({
                 method:"POST",
