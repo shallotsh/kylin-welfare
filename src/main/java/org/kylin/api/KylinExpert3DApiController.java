@@ -1,5 +1,6 @@
 package org.kylin.api;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.kylin.bean.LabelValue;
@@ -62,6 +63,23 @@ public class KylinExpert3DApiController {
 
         return new WyfDataResponse<>(summarise);
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/convert/group", method = RequestMethod.POST)
+    public WyfResponse convertGroupCodes(@RequestBody ExpertCodeReq req, HttpServletRequest request){
+        log.info("转组选 req={}", JSON.toJSONString(req));
+
+        List<WCode> groupCodes = expertCodeService.convertToGroupCodes(req);
+        Integer pairCount = WCodeUtils.getPairCodeCount(groupCodes);
+
+        WCodeSummarise summarise = new WCodeSummarise();
+        summarise.setwCodes(groupCodes);
+        summarise.setPairCodes(pairCount);
+        summarise.setNonPairCodes(CollectionUtils.size(groupCodes) - pairCount);
+
+        return  new WyfDataResponse<>(summarise);
+    }
+
 
 
     @ResponseBody

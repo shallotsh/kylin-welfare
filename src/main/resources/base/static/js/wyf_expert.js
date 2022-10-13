@@ -20,6 +20,7 @@ var app = new Vue({
         deletedCodesPair: null,
         wyfMessage:'这一行是统计数据展示区域',
         config: global_config,
+        isGroup: false,
         cacheQueue: new Array(),
         compItems: [],
         drawNotice: null,
@@ -69,11 +70,43 @@ var app = new Vue({
               data: args
             }).then(function(response) {
                     app.handle3DCodeResponse(response.data.data, '专家推荐法组码');
+                    app.isGroup = false;
                 })
                 .catch(function(error){
                     console.log(error)
                 });
 
+        },
+
+        convertToGroup: function (){
+            if(!this.config.isPredict){
+                this.handleException("请先完成预测");
+                return;
+            }
+            if(this.isGroup){
+                this.handleException("已转为组选");
+                return;
+            }
+            var args = {
+                "wCodes": this.wCodes
+            };
+            var count = this.wCodes.length;
+            axios({
+                method:"POST",
+                url:"/api/expert/3d/convert/group",
+                data: JSON.stringify(args),
+
+                headers:{
+                    "Content-Type": "application/json; charset=UTF-8"
+                }
+            }).then(function(response) {
+                app.handle3DCodeResponse(response.data.data, "转组选");
+                app.isGroup = true;
+                app.wyfMessage = "总计 " + count + " 注, 减少 " + (count - app.wCodes.length) + " 注, 余 " + app.wCodes.length + " 注(对子:" + app.pairCount + " 注,非对子:" + app.nonPairCount + " 注)" ;
+            }).catch(function(response) {
+                console.log("resp:" + JSON.stringify(response.data, null, 2));
+                app.handleException("杀码请求失败!");
+            });
         },
 
         handle3DCodeResponse: function (data, msg) {
@@ -100,6 +133,7 @@ var app = new Vue({
                 this.hundred = null,
                 this.decade = null,
                 this.unit = null,
+                this.isGroup = false,
             this.wyfMessage = '这一行是统计数据展示区域',
             this.wCodes = null,
                 this.deletedCodesPair= null,

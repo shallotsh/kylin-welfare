@@ -340,4 +340,15 @@ public class WCode implements Cloneable,Comparable,RandomKill{
     public boolean isBeDeleted() {
         return deleted;
     }
+
+    public boolean groupEqual(WCode wCode){
+        if(wCode == null || this.codes == null
+                || wCode.getCodes() == null || this.getDim() != wCode.getDim()){
+            return false;
+        }
+        Set<Integer> set1 = new HashSet<>(this.getCodes());
+        Set<Integer> set2 = new HashSet<>(wCode.getCodes());
+        return  CollectionUtils.isEmpty(Sets.difference(set1, set2))
+                    && CollectionUtils.isEmpty(Sets.difference(set2, set1));
+    }
 }

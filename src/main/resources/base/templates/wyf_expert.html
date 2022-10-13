@@ -97,11 +97,14 @@
         <div id="page-inner">
             <!-- input sequence -->
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-6">
                     <input type="text" class="form-control" v-model="sequence" placeholder="预测序列" />
                 </div>
                 <div class="col-sm-2 col-sm-push-1">
                     <button type="button" class="btn btn-primary fill_parent" @click="doPermutate"> 专家组码 </button>
+                </div>
+                <div class="col-sm-2 col-sm-push-1">
+                    <button type="button" class="btn btn-primary fill_parent" @click="convertToGroup"> 转组选 </button>
                 </div>
             </div>
 

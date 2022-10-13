@@ -11,6 +11,7 @@ import org.kylin.service.exporter.ExportToolSelector;
 import org.kylin.service.exporter.IDocExportTool;
 import org.kylin.service.p3.ExpertCodeService;
 import org.kylin.service.xcode.filters.impl.*;
+import org.kylin.util.WCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,21 @@ public class ExpertCodeServiceImpl implements ExpertCodeService {
         return ret;
     }
 
+
+    @Override
+    public List<WCode> convertToGroupCodes(ExpertCodeReq req) {
+        if(Objects.isNull(req)){
+            return Collections.emptyList();
+        }
+        List<WCode> target = req.getWCodes();
+        int count = CollectionUtils.size(target);
+
+        // 转组选
+        target = WCodeUtils.convertToGroup(target);
+        Collections.sort(target);
+        log.info("转组选：余 {} 注3D, 减少 {} 注 3D", target.size(), (count - target.size()));
+        return target;
+    }
 
     @Override
     public List<WCode> killCode(ExpertCodeReq req) {

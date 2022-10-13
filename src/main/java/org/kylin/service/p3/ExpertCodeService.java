@@ -16,6 +16,16 @@ public interface ExpertCodeService {
      */
     List<WCode> expertEncode(List<Integer> riddleSeq);
 
+
+    /**
+     * 转组选
+     *
+     * @param req
+     * @return
+     */
+    List<WCode> convertToGroupCodes(ExpertCodeReq req);
+
+
     /**
      * 常规杀码算法
      *
