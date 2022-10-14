@@ -52,11 +52,11 @@ public class ExpertCodeServiceImpl implements ExpertCodeService {
 
 
     @Override
-    public List<WCode> convertToGroupCodes(ExpertCodeReq req) {
-        if(Objects.isNull(req)){
+    public List<WCode> convertToGroupCodes(List<WCode> wCodes) {
+        if(CollectionUtils.isEmpty(wCodes)){
             return Collections.emptyList();
         }
-        List<WCode> target = req.getWCodes();
+        List<WCode> target = wCodes;
         int count = CollectionUtils.size(target);
 
         // 转组选

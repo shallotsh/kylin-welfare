@@ -69,13 +69,20 @@ public class KylinExpert3DApiController {
     public WyfResponse convertGroupCodes(@RequestBody ExpertCodeReq req, HttpServletRequest request){
         log.info("转组选 req={}", JSON.toJSONString(req));
 
-        List<WCode> groupCodes = expertCodeService.convertToGroupCodes(req);
+        List<WCode> groupCodes = expertCodeService.convertToGroupCodes(req.getWCodes());
         Integer pairCount = WCodeUtils.getPairCodeCount(groupCodes);
 
         WCodeSummarise summarise = new WCodeSummarise();
         summarise.setwCodes(groupCodes);
         summarise.setFreqSeted(req.getFreqSeted() == null ? false: req.getFreqSeted());
-        summarise.setDeletedCodes(req.getDeletedCodes());
+
+        List<LabelValue<List<WCode>>> deletedCodes = req.getDeletedCodes();
+        if(CollectionUtils.isNotEmpty(deletedCodes)) {
+            LabelValue<List<WCode>> labelValue = deletedCodes.get(0);
+            // 已删除编码也转组选
+            List<WCode> deleteCodes = expertCodeService.convertToGroupCodes(labelValue.getData());
+            summarise.setDeletedCodes(Arrays.asList(new LabelValue<>(labelValue.getLabel(), deleteCodes)));
+        }
         summarise.setPairCodes(pairCount);
         summarise.setNonPairCodes(CollectionUtils.size(groupCodes) - pairCount);
 

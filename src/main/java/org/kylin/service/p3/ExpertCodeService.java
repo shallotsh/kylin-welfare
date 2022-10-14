@@ -20,10 +20,10 @@ public interface ExpertCodeService {
     /**
      * 转组选
      *
-     * @param req
+     * @param wCodes
      * @return
      */
-    List<WCode> convertToGroupCodes(ExpertCodeReq req);
+    List<WCode> convertToGroupCodes(List<WCode> wCodes);
 
 
     /**
