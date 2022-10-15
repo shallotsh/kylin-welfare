@@ -69,8 +69,12 @@ var app = new Vue({
               url: '/api/expert/3d/shuffle',
               data: args
             }).then(function(response) {
+                    // 前置赋值
+                    app.freqSeted = false;
+                    // 处理结果
                     app.handle3DCodeResponse(response.data.data, '专家推荐法组码');
                     app.isGroup = false;
+                    app.config.isPredict = true;
                 })
                 .catch(function(error){
                     console.log(error)
@@ -121,7 +125,6 @@ var app = new Vue({
             if(data.freqSeted) {
                 this.freqSeted = data.freqSeted;
             }
-            this.config.isPredict = true;
             app.wyfMessage =  msg + " : "  + this.wCodes.length + " 注(对子:" + app.pairCount + " 注,非对子:" + app.nonPairCount + " 注)" ; ;
         },
 
