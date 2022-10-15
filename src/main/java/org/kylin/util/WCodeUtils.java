@@ -2,11 +2,10 @@ package org.kylin.util;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.kylin.algorithm.pattern.BitSeqEnum;
+import org.apache.commons.lang3.tuple.Pair;
 import org.kylin.bean.W3DCode;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;

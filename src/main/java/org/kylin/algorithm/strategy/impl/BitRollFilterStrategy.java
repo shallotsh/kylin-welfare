@@ -1,8 +1,8 @@
 package org.kylin.algorithm.strategy.impl;
 
-import javafx.util.Pair;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.kylin.algorithm.strategy.Strategy;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;

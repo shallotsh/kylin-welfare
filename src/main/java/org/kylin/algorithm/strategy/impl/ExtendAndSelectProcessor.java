@@ -1,12 +1,11 @@
 package org.kylin.algorithm.strategy.impl;
 
 import com.google.common.collect.Lists;
-import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.commons.lang3.time.StopWatch;
+import org.apache.commons.lang3.tuple.Pair;
 import org.kylin.algorithm.strategy.SequenceProcessor;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
@@ -58,7 +57,7 @@ public class ExtendAndSelectProcessor implements SequenceProcessor {
             return Optional.empty();
         }
 
-        return Optional.of(new Pair<>(NumberUtils.toInt(vals[0]), NumberUtils.toInt(vals[1])));
+        return Optional.of(Pair.of(NumberUtils.toInt(vals[0]), NumberUtils.toInt(vals[1])));
     }
 
 

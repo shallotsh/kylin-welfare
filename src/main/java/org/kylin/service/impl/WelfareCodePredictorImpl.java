@@ -1,9 +1,9 @@
 package org.kylin.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import javafx.util.Pair;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.kylin.algorithm.filter.CodeFilter;
 import org.kylin.bean.*;
 import org.kylin.constant.BitConstant;

@@ -1,7 +1,7 @@
 package org.kylin.service.xcode.filters.impl;
 
-import javafx.util.Pair;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.kylin.bean.p5.WCode;
 import org.kylin.service.xcode.filters.SimpleFilter;
 import org.kylin.util.TransferUtil;

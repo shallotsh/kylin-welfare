@@ -1,10 +1,10 @@
 package org.kylin.util;
 
-import javafx.util.Pair;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.kylin.bean.W3DCode;
 import org.kylin.bean.WelfareCode;
 import org.kylin.constant.CodeTypeEnum;
@@ -66,7 +66,7 @@ public class TransferUtil {
             List<Integer> list = toIntegerList(gos);
 
             if(!CollectionUtils.isEmpty(list) && list.size() == 2){
-                gossips.add(new Pair<>(list.get(0), list.get(1)));
+                gossips.add(Pair.of(list.get(0), list.get(1)));
             }
         }
 

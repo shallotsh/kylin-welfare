@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -43,5 +46,31 @@ public class ApiController {
         log.debug("return monitor.");
 
         return status;
+    }
+
+    @RequestMapping(value = "/monitor/mem", method = RequestMethod.GET)
+    public Map<String, String> checkMem() {
+        Map<String, String> mem = new HashMap<>();
+        //
+        Runtime run = Runtime.getRuntime();
+        double max = run.maxMemory() / 1024.0 / 1024.0;
+        double total = run.totalMemory() / 1024.0 / 1024.0;
+        double free = run.freeMemory() / 1024.0 / 1024.0;
+        double usable = max - total + free;
+        DecimalFormat format = new DecimalFormat("#.00");
+        mem.put("最大内存", format.format(max));
+        mem.put("总分配内存", format.format(total));
+        mem.put("未使用内存", format.format(free));
+        mem.put("可用内存", format.format(usable));
+
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            mem.put("hostAddress", addr.getHostAddress());
+            mem.put("hostName", addr.getHostName());
+        } catch (Exception e){
+
+        }
+
+        return mem;
     }
 }

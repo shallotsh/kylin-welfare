@@ -1,8 +1,8 @@
 package org.kylin.service.exporter.impl;
 
-import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -112,12 +112,12 @@ public class DeletedCodesExporter extends AbstractDocumentExporter {
             List<WCode> wCodes1 = wCodesArray.get(i);
             count += wCodes1.size();
             for(int j=0; j!=i && j<wCodesArray.size(); j++){
-                Pair<Integer, Integer> pair = new Pair<>(i, j);
+                Pair<Integer, Integer> pair = Pair.of(i, j);
                 if(pairs.contains(pair)){
                     continue;
                 }
                 pairs.add(pair);
-                pairs.add(new Pair<>(j,i));
+                pairs.add(Pair.of(j,i));
 
                 log.info("计算pair：left={}, right={}", i, j);
 
