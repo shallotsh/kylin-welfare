@@ -346,9 +346,16 @@ public class WCode implements Cloneable,Comparable,RandomKill{
                 || wCode.getCodes() == null || this.getDim() != wCode.getDim()){
             return false;
         }
-        Set<Integer> set1 = new HashSet<>(this.getCodes());
-        Set<Integer> set2 = new HashSet<>(wCode.getCodes());
-        return  CollectionUtils.isEmpty(Sets.difference(set1, set2))
-                    && CollectionUtils.isEmpty(Sets.difference(set2, set1));
+        List<Integer> list1 = new ArrayList<>(this.getCodes());
+        List<Integer> list2 = new ArrayList<>(wCode.getCodes());
+        Collections.sort(list1);
+        Collections.sort(list2);
+
+        for(int i=0; i<list1.size(); i++){
+            if(!Objects.equals(list1.get(i),list2.get(i))){
+                return false;
+            }
+        }
+        return true;
     }
 }
