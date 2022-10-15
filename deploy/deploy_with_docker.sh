@@ -6,7 +6,7 @@ branch=master
 workplace=${HOME}/workplace
 project_dir=${workplace}/kylin-welfare
 deploy_dir=${project_dir}/deploy
-app_dir=/app
+log_dir=/var/attachment/logs
 port=8080
 
 jvm_args="-server
@@ -20,7 +20,7 @@ jvm_args="-server
 	-XX:+PrintTenuringDistribution
 	-XX:+PrintGCApplicationStoppedTime
 	-XX:+PrintGCApplicationConcurrentTime
-	-Xloggc:${app_dir}/logs/${app_name}.gc.log.${NOW_DATE}"
+	-Xloggc:${log_dir}/logs/${app_name}.gc.log.${NOW_DATE}"
 
 if [ x$1 != x ];then
 	branch=$1
