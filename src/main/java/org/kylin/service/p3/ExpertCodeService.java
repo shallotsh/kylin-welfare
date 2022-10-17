@@ -23,7 +23,7 @@ public interface ExpertCodeService {
      * @param wCodes
      * @return
      */
-    List<WCode> convertToGroupCodes(List<WCode> wCodes);
+    List<WCode> convertToGroupCodesForEveryFreq(List<WCode> wCodes);
 
 
     /**

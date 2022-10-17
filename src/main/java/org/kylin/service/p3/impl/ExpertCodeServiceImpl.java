@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -52,17 +53,19 @@ public class ExpertCodeServiceImpl implements ExpertCodeService {
 
 
     @Override
-    public List<WCode> convertToGroupCodes(List<WCode> wCodes) {
+    public List<WCode> convertToGroupCodesForEveryFreq(List<WCode> wCodes) {
         if(CollectionUtils.isEmpty(wCodes)){
             return Collections.emptyList();
         }
-        List<WCode> target = wCodes;
-        int count = CollectionUtils.size(target);
+        int count = CollectionUtils.size(wCodes);
+        Map<Integer, List<WCode>> freqToCodes = wCodes.stream().collect(Collectors.groupingBy(WCode::getFreq));
 
-        // 转组选
-        target = WCodeUtils.convertToGroup(target);
+        List<WCode> target = new ArrayList<>();
+        // 按频次转组选
+        freqToCodes.forEach((freq, codes) -> target.addAll(WCodeUtils.convertToGroup(codes)));
+
         Collections.sort(target);
-        log.info("转组选：余 {} 注3D, 减少 {} 注 3D", target.size(), (count - target.size()));
+        log.info("按频次转组选：余 {} 注3D, 减少 {} 注 3D", target.size(), (count - target.size()));
         return target;
     }
 

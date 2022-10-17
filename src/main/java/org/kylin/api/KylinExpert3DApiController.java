@@ -7,12 +7,10 @@ import org.kylin.bean.LabelValue;
 import org.kylin.bean.WyfDataResponse;
 import org.kylin.bean.WyfErrorResponse;
 import org.kylin.bean.WyfResponse;
-import org.kylin.bean.p2.XCodeReq;
 import org.kylin.bean.p3.ExpertCodeReq;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeSummarise;
 import org.kylin.service.p3.ExpertCodeService;
-import org.kylin.service.xcode.XCodeService;
 import org.kylin.util.TransferUtil;
 import org.kylin.util.WCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +67,7 @@ public class KylinExpert3DApiController {
     public WyfResponse convertGroupCodes(@RequestBody ExpertCodeReq req, HttpServletRequest request){
         log.info("转组选 req={}", JSON.toJSONString(req));
 
-        List<WCode> groupCodes = expertCodeService.convertToGroupCodes(req.getWCodes());
+        List<WCode> groupCodes = expertCodeService.convertToGroupCodesForEveryFreq(req.getWCodes());
         Integer pairCount = WCodeUtils.getPairCodeCount(groupCodes);
 
         WCodeSummarise summarise = new WCodeSummarise();
@@ -80,7 +78,7 @@ public class KylinExpert3DApiController {
         if(CollectionUtils.isNotEmpty(deletedCodes)) {
             LabelValue<List<WCode>> labelValue = deletedCodes.get(0);
             // 已删除编码也转组选
-            List<WCode> deleteCodes = expertCodeService.convertToGroupCodes(labelValue.getData());
+            List<WCode> deleteCodes = expertCodeService.convertToGroupCodesForEveryFreq(labelValue.getData());
             summarise.setDeletedCodes(Arrays.asList(new LabelValue<>(labelValue.getLabel(), deleteCodes)));
         }
         summarise.setPairCodes(pairCount);
