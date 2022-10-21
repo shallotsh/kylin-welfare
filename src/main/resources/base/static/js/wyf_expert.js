@@ -21,6 +21,7 @@ var app = new Vue({
         wyfMessage:'这一行是统计数据展示区域',
         config: global_config,
         isGroup: false,
+        isTo2D: false,
         cacheQueue: new Array(),
         compItems: [],
         drawNotice: null,
@@ -74,6 +75,7 @@ var app = new Vue({
                     // 处理结果
                     app.handle3DCodeResponse(response.data.data, '专家推荐法组码');
                     app.isGroup = false;
+                    app.isTo2D = false;
                     app.config.isPredict = true;
                 })
                 .catch(function(error){
@@ -81,6 +83,46 @@ var app = new Vue({
                 });
 
         },
+        convertTo2D: function (){
+            if(!this.config.isPredict){
+                this.handleException("请先完成预测");
+                return;
+            }
+            if(this.isGroup){
+                this.handleException("组选不能转2D");
+                return;
+            }
+
+            if(this.isTo2D){
+                this.handleException("已经转为2D");
+                return;
+            }
+
+            var args = {
+                "wCodes": this.wCodes,
+                "deletedCodes": this.deletedCodesPair,
+                "freqSeted": this.freqSeted
+            };
+            console.log("转换2D:" + JSON.stringify(args));
+            var count = this.wCodes.length;
+            axios({
+                method:"POST",
+                url:"/api/expert/3d/convert/2d",
+                data: JSON.stringify(args),
+
+                headers:{
+                    "Content-Type": "application/json; charset=UTF-8"
+                }
+            }).then(function(response) {
+                app.handle3DCodeResponse(response.data.data, "转2D");
+                app.isTo2D = true;
+                app.wyfMessage = "总计 " + count + " 注, 减少 " + (count - app.wCodes.length) + " 注, 余 " + app.wCodes.length + " 注(对子:" + app.pairCount + " 注,非对子:" + app.nonPairCount + " 注)" ;
+            }).catch(function(response) {
+                console.log("resp:" + JSON.stringify(response.data, null, 2));
+                app.handleException("杀码请求失败!");
+            });
+        }
+        ,
 
         convertToGroup: function (){
             if(!this.config.isPredict){
@@ -89,6 +131,10 @@ var app = new Vue({
             }
             if(this.isGroup){
                 this.handleException("已转为组选");
+                return;
+            }
+            if(this.isTo2D){
+                this.handleException("已经转为2D，不能再转组选");
                 return;
             }
             var args = {
@@ -140,6 +186,7 @@ var app = new Vue({
                 this.decade = null,
                 this.unit = null,
                 this.isGroup = false,
+                this.isTo2D = false,
             this.wyfMessage = '这一行是统计数据展示区域',
             this.wCodes = null,
                 this.deletedCodesPair= null,

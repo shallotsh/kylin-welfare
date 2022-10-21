@@ -53,6 +53,24 @@ public class ExpertCodeServiceImpl implements ExpertCodeService {
 
 
     @Override
+    public List<WCode> convertTo2DCodesForEveryFreq(List<WCode> wCodes) {
+        if(CollectionUtils.isEmpty(wCodes)){
+            return Collections.emptyList();
+        }
+        int count = CollectionUtils.size(wCodes);
+
+        Map<Integer, List<WCode>> freqToCodes = wCodes.stream().collect(Collectors.groupingBy(WCode::getFreq));
+
+        List<WCode> target = new ArrayList<>();
+        // 按频次转组选
+        freqToCodes.forEach((freq, codes) -> target.addAll(WCodeUtils.convert3DTo2D(codes)));
+
+        Collections.sort(target);
+        log.info("按频次转2D：余 {} 注3D, 减少 {} 注 3D", target.size(), (count - target.size()));
+        return target;
+    }
+
+    @Override
     public List<WCode> convertToGroupCodesForEveryFreq(List<WCode> wCodes) {
         if(CollectionUtils.isEmpty(wCodes)){
             return Collections.emptyList();

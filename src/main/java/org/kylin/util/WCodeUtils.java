@@ -280,10 +280,14 @@ public class WCodeUtils {
         if(wCode == null){
             return false;
         }
-
-        return wCode.getCodes().get(1) == wCode.getCodes().get(2)
-                || wCode.getCodes().get(1) == wCode.getCodes().get(0)
-                || wCode.getCodes().get(0) == wCode.getCodes().get(2);
+        List<Integer> copyCodes = new ArrayList<>(wCode.getCodes());
+        Collections.sort(copyCodes);
+        for(int i=1; i<copyCodes.size(); i++){
+            if(Objects.equals(copyCodes.get(i-1), copyCodes.get(i))){
+                return true;
+            }
+        }
+        return false;
     }
 
     public static List<WCode> filterPairCodes(List<WCode> wCodes){
@@ -532,6 +536,43 @@ public class WCodeUtils {
 
         return result;
     }
+
+    public static List<WCode> convert3DTo2D(List<WCode> wCodes){
+        if(CollectionUtils.isEmpty(wCodes)){
+            return Collections.emptyList();
+        }
+        if(wCodes.get(0).getDim() != 3){
+            throw new RuntimeException("目标码不是3D");
+        }
+        List<WCode> targets = Lists.newArrayListWithExpectedSize(wCodes.size());
+        for(WCode wCode : wCodes){
+            List<Integer> codes = wCode.getCodes();
+            WCode target;
+            if(Objects.equals(codes.get(0), codes.get(1))){
+                target = new WCode(2, codes.get(0), codes.get(2));
+            }else{
+                target = new WCode(2, codes.get(0), codes.get(1));
+            }
+            copyExtraProperties(target, wCode);
+            boolean flag = true;
+            for(WCode code : targets){
+                if(code.equalTo(target)){
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag) {
+                targets.add(target);
+            }
+        }
+        return targets;
+    }
+
+    private static void copyExtraProperties(WCode target, WCode copyCode){
+        target.setBeDeleted(copyCode.isBeDeleted());
+        target.setFreq(copyCode.getFreq());
+    }
+
 
     public static List<WCode> convertToGroup(List<WCode> wCodes){
         if(CollectionUtils.isEmpty(wCodes)){

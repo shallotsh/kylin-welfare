@@ -162,11 +162,14 @@
                     <input type="text" size="11" v-model="unit"  class="form-control" id="unit" placeholder="个位">
                 </div>
 
-                <div class="form-inline col-sm-2 col-sm-push-1">
+                <div class="form-inline col-sm-1 col-sm-push-1">
                     <button type="button" class="btn btn-primary fill_parent" @click="filterByBit"> 位选 </button>
                 </div>
-                <div class="col-sm-2 col-sm-push-1">
-                    <button type="button" class="btn btn-primary fill_parent" @click="convertToGroup"> 转组选 </button>
+                <div class="col-sm-1 col-sm-push-1">
+                    <button type="button" class="btn btn-primary fill_parent" @click="convertTo2D" :disabled="(isGroup||isTo2D)"> 转2D </button>
+                </div>
+                <div class="col-sm-1 col-sm-push-1">
+                    <button type="button" class="btn btn-primary fill_parent" @click="convertToGroup" :disabled="(isGroup||isTo2D)"> 转组选 </button>
                 </div>
             </div>
 

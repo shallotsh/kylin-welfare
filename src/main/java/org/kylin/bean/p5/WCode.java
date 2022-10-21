@@ -341,6 +341,19 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         return deleted;
     }
 
+    public boolean equalTo(WCode wCode){
+        if(wCode == null || this.codes == null
+                || wCode.getCodes() == null || this.getDim() != wCode.getDim()){
+            return false;
+        }
+        for(int i=0; i<wCode.getDim(); i++){
+            if(!Objects.equals(wCode.getCodes().get(i), this.getCodes().get(i))){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean groupEqual(WCode wCode){
         if(wCode == null || this.codes == null
                 || wCode.getCodes() == null || this.getDim() != wCode.getDim()){

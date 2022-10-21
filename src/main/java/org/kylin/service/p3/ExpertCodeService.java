@@ -16,6 +16,12 @@ public interface ExpertCodeService {
      */
     List<WCode> expertEncode(List<Integer> riddleSeq);
 
+    /**
+     * 转2D
+     * @param wCodes
+     * @return
+     */
+    List<WCode> convertTo2DCodesForEveryFreq(List<WCode> wCodes);
 
     /**
      * 转组选

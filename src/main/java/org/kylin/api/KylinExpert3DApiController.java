@@ -63,6 +63,30 @@ public class KylinExpert3DApiController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/convert/2d", method = RequestMethod.POST)
+    public WyfResponse convertTo2DCodes(@RequestBody ExpertCodeReq req, HttpServletRequest request){
+        log.info("转2D req={}", JSON.toJSONString(req));
+        List<WCode> groupCodes = expertCodeService.convertTo2DCodesForEveryFreq(req.getWCodes());
+        Integer pairCount = WCodeUtils.getPairCodeCount(groupCodes);
+
+        WCodeSummarise summarise = new WCodeSummarise();
+        summarise.setwCodes(groupCodes);
+        summarise.setFreqSeted(req.getFreqSeted() == null ? false: req.getFreqSeted());
+
+        List<LabelValue<List<WCode>>> deletedCodes = req.getDeletedCodes();
+        if(CollectionUtils.isNotEmpty(deletedCodes)) {
+            LabelValue<List<WCode>> labelValue = deletedCodes.get(0);
+            // 已删除编码也转组选
+            List<WCode> deleteCodes = expertCodeService.convertTo2DCodesForEveryFreq(labelValue.getData());
+            summarise.setDeletedCodes(Arrays.asList(new LabelValue<>(labelValue.getLabel(), deleteCodes)));
+        }
+        summarise.setPairCodes(pairCount);
+        summarise.setNonPairCodes(CollectionUtils.size(groupCodes) - pairCount);
+
+        return  new WyfDataResponse<>(summarise);
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/convert/group", method = RequestMethod.POST)
     public WyfResponse convertGroupCodes(@RequestBody ExpertCodeReq req, HttpServletRequest request){
         log.info("转组选 req={}", JSON.toJSONString(req));
