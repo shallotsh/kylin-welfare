@@ -13,7 +13,7 @@ services:
       TZ: Asia/Shanghai
     ports:
       - "8081:8080"
-    entrypoint: java -jar /app/kylin-welfare.jar -server -XX:SurvivorRatio=8 -XX:NewRatio=4 -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=64m -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime -Xloggc:/var/attachment/logs/welfare-1.gc.log
+    entrypoint: java -jar -server -XX:SurvivorRatio=8 -XX:NewRatio=4 -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=64m -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime -Xloggc:/var/attachment/logs/welfare-1.gc.log /app/kylin-welfare.jar
   welfare_2:
     image: kylin/welfare:latest
     volumes:
@@ -26,6 +26,6 @@ services:
       TZ: Asia/Shanghai
     ports:
       - "8082:8080"
-    entrypoint: java -jar /app/kylin-welfare.jar -server -XX:SurvivorRatio=8 -XX:NewRatio=4 -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime -Xloggc:/var/attachment/logs/welfare-2.gc.log
+    entrypoint: java -jar -server -XX:SurvivorRatio=8 -XX:NewRatio=4 -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime -Xloggc:/var/attachment/logs/welfare-2.gc.log /app/kylin-welfare.jar
 volumes:
   wyf_attachment: {}
