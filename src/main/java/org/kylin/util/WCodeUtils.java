@@ -11,6 +11,7 @@ import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;
 import org.kylin.bean.p5.WCodeSummarise;
 import org.kylin.constant.BitConstant;
+import org.kylin.constant.EPair;
 import org.kylin.constant.FilterStrategyEnum;
 import org.kylin.constant.WelfareConfig;
 
@@ -280,6 +281,12 @@ public class WCodeUtils {
         if(wCode == null){
             return false;
         }
+        if(wCode.getPair() == EPair.NON_PAIR.getCode()){
+            return false;
+        }else if(wCode.getPair() == EPair.PAIR.getCode()){
+            return true;
+        }
+
         List<Integer> copyCodes = new ArrayList<>();
         for(int i=0; i<wCode.getDim() && i<3; i++){
             copyCodes.add(wCode.getCodes().get(i));
@@ -549,6 +556,8 @@ public class WCodeUtils {
         }
         List<WCode> targets = Lists.newArrayListWithExpectedSize(wCodes.size());
         for(WCode wCode : wCodes){
+            // 转2D前，设置对子标识
+            wCode.setPair(isPair(wCode) ? EPair.PAIR.getCode() : EPair.NON_PAIR.getCode());
             List<Integer> codes = wCode.getCodes();
             WCode target;
             if(Objects.equals(codes.get(0), codes.get(1))){
@@ -574,6 +583,7 @@ public class WCodeUtils {
     private static void copyExtraProperties(WCode target, WCode copyCode){
         target.setBeDeleted(copyCode.isBeDeleted());
         target.setFreq(copyCode.getFreq());
+        target.setPair(copyCode.getPair());
     }
 
 

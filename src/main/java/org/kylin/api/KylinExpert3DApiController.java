@@ -160,6 +160,7 @@ public class KylinExpert3DApiController {
         if(req == null){
             return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "导出数据错误");
         }
+        log.info("export req:{}", req);
 
         Optional<String> optFile = null;
         try {

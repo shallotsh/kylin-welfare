@@ -23,6 +23,8 @@ public class WCode implements Cloneable,Comparable,RandomKill{
     private boolean deleted;
     private int seqNo;
 
+    private int pair;
+
     public WCode() {
     }
 
@@ -92,7 +94,6 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         this.freq = freq;
         return this;
     }
-
     public int getSumTail() {
         return sumTail;
     }
@@ -122,6 +123,14 @@ public class WCode implements Cloneable,Comparable,RandomKill{
     public WCode setSeqNo(int seqNo) {
         this.seqNo = seqNo;
         return this;
+    }
+
+    public int getPair() {
+        return pair;
+    }
+
+    public void setPair(int pair) {
+        this.pair = pair;
     }
 
     public String getString(Boolean withFreq, Boolean withSeqNo){
