@@ -280,7 +280,10 @@ public class WCodeUtils {
         if(wCode == null){
             return false;
         }
-        List<Integer> copyCodes = new ArrayList<>(wCode.getCodes());
+        List<Integer> copyCodes = new ArrayList<>();
+        for(int i=0; i<wCode.getDim() && i<3; i++){
+            copyCodes.add(wCode.getCodes().get(i));
+        }
         Collections.sort(copyCodes);
         for(int i=1; i<copyCodes.size(); i++){
             if(Objects.equals(copyCodes.get(i-1), copyCodes.get(i))){
