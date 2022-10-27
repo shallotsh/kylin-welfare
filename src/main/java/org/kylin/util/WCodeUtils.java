@@ -35,20 +35,6 @@ public class WCodeUtils {
         return wCode;
     }
 
-
-    public static List<WCode> mockCodes(int dim, int count){
-        if(count <= 0 || dim <= 0){
-            return Collections.emptyList();
-        }
-
-        List<WCode> wCodes = new ArrayList<>();
-        for(int i=0; i<count; i++){
-            wCodes.add(mock(dim));
-        }
-
-        return wCodes;
-    }
-
     public static boolean validateCodes(List<WCode> wCodes){
         if(CollectionUtils.isEmpty(wCodes)){
             return true;
@@ -188,7 +174,7 @@ public class WCodeUtils {
         int size = CollectionUtils.size(wCode.getCodes()) > list.size() ? list.size(): CollectionUtils.size(wCode.getCodes());
 
         for(int i=0; i<size; i++){
-            if(wCode.getCodes().get(i) == list.get(i)){
+            if(Objects.equals(wCode.getCodes().get(i), list.get(i))){
                 return true;
             }
         }
@@ -252,9 +238,9 @@ public class WCodeUtils {
                 continue;
             }
 
-            if(codes[BitConstant.UNIT] == wCode.getCodes().get(dim - 1)
-                    && codes[BitConstant.DECADE] == wCode.getCodes().get(dim - 2)
-                    && codes[BitConstant.HUNDRED] == wCode.getCodes().get(dim - 3)){
+            if(Objects.equals(codes[BitConstant.UNIT], wCode.getCodes().get(dim - 1))
+                    && Objects.equals(codes[BitConstant.DECADE], wCode.getCodes().get(dim - 2))
+                    && Objects.equals(codes[BitConstant.HUNDRED], wCode.getCodes().get(dim - 3))){
                 return true;
             }
 
@@ -561,23 +547,30 @@ public class WCodeUtils {
             List<Integer> codes = wCode.getCodes();
             WCode target;
             if(Objects.equals(codes.get(0), codes.get(1))){
-                target = new WCode(2, codes.get(0), codes.get(2));
+                target = new WCode(2, codes.get(0), codes.get(1));
+                copyExtraProperties(target, wCode);
+                addToTarget(targets, target);
+
+                target = new WCode(2, codes.get(1), codes.get(2));
+                copyExtraProperties(target, wCode);
+                addToTarget(targets, target);
             }else{
                 target = new WCode(2, codes.get(0), codes.get(1));
-            }
-            copyExtraProperties(target, wCode);
-            boolean flag = true;
-            for(WCode code : targets){
-                if(code.equalTo(target)){
-                    flag = false;
-                    break;
-                }
-            }
-            if(flag) {
-                targets.add(target);
+                copyExtraProperties(target, wCode);
+                addToTarget(targets, target);
             }
         }
         return targets;
+    }
+
+    private static boolean addToTarget(List<WCode> targets, WCode candidate){
+        for(WCode code : targets){
+            if(code.equalTo(candidate)){
+                return false;
+            }
+        }
+        targets.add(candidate);
+        return true;
     }
 
     private static void copyExtraProperties(WCode target, WCode copyCode){
