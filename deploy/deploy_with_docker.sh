@@ -6,21 +6,6 @@ branch=master
 workplace=${HOME}/workplace
 project_dir=${workplace}/kylin-welfare
 deploy_dir=${project_dir}/deploy
-log_dir=/var/attachment/logs
-port=8080
-
-jvm_args="-server
-	-XX:SurvivorRatio=8
-	-XX:NewRatio=4
-	-XX:MetaspaceSize=128m
-	-XX:MaxMetaspaceSize=128m
-	-XX:+PrintGCDetails
-	-XX:+PrintGCTimeStamps
-	-XX:+PrintGCDateStamps
-	-XX:+PrintTenuringDistribution
-	-XX:+PrintGCApplicationStoppedTime
-	-XX:+PrintGCApplicationConcurrentTime
-	-Xloggc:${log_dir}/logs/${app_name}.gc.log.${NOW_DATE}"
 
 if [ x$1 != x ];then
 	branch=$1

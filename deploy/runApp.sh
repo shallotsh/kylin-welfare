@@ -8,33 +8,42 @@ project_dir=${workplace}/kylin-welfare
 app_dir=${workplace}/apps
 app_name=kylin-welfare.jar
 port=8080
+LOG_PATH=/var/attachment/logs
 
 jvm_args="-server
-	-XX:SurvivorRatio=8
-	-XX:NewRatio=4
-	-XX:MetaspaceSize=128m
-	-XX:MaxMetaspaceSize=128m
-	-XX:+PrintGCDetails
-	-XX:+PrintGCTimeStamps
-	-XX:+PrintGCDateStamps
-	-XX:+PrintTenuringDistribution
-	-XX:+PrintGCApplicationStoppedTime
-	-XX:+PrintGCApplicationConcurrentTime
-	-Xloggc:${app_dir}/logs/${app_name}.gc.log.${NOW_DATE}"
-
-if [ x$1 != x ];then
-	branch=$1
-fi
-
-if [ ! -d $workplace ]; then
-	  mkdir -p $workplace
-fi
-
-if [ ! -d $project_dir ]; then
-	cd $workplace
-	git clone git@github.com:shallotsh/kylin-welfare.git
-fi
-
+	 -XX:+UnlockDiagnosticVMOptions
+   -XX:+UnlockExperimentalVMOptions
+   -XX:-OmitStackTraceInFastThrow
+   -Xlog:gc*=debug:file=${LOG_PATH}/gc%t.log:utctime,level,tags:filecount=50,filesize=100M
+   -Xlog:jit+compilation=info:file=${LOG_PATH}/jit_compile%t.log:utctime,level,tags:filecount=10,filesize=10M
+   -Xlog:safepoint=debug:file=${LOG_PATH}/safepoint%t.log:utctime,level,tags:filecount=10,filesize=10M
+   -Dfile.encoding=UTF-8
+   -Djava.security.egd=file:/dev/./urandom
+   -Dnetworkaddress.cache.ttl=10 -Xms2048m -Xmx2048m -Xmn1280m -Xss512k
+   -XX:MaxDirectMemorySize=1024m
+   -XX:MetaspaceSize=384m
+    -XX:ReservedCodeCacheSize=256m
+    -XX:+DisableExplicitGC
+    -XX:MaxGCPauseMillis=50
+    -XX:-UseBiasedLocking
+    -XX:GuaranteedSafepointInterval=0
+    -XX:+UseCountedLoopSafepoints
+    -XX:StartFlightRecording=disk=true,maxsize=4096m,maxage=3d
+    -XX:FlightRecorderOptions=maxchunksize=128m --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.math=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.security=ALL-UNNAMED --add-opens java.base/java.text=ALL-UNNAMED --add-opens java.base/java.time=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/jdk.internal.access=ALL-UNNAMED --add-opens java.base/jdk.internal.misc=ALL-UNNAMED
+"
+#if [ x$1 != x ];then
+#	branch=$1
+#fi
+#
+#if [ ! -d $workplace ]; then
+#	  mkdir -p $workplace
+#fi
+#
+#if [ ! -d $project_dir ]; then
+#	cd $workplace
+#	git clone git@github.com:shallotsh/kylin-welfare.git
+#fi
+#
 if [ ! -d $app_dir ]; then
 	mkdir -p $app_dir
 fi
