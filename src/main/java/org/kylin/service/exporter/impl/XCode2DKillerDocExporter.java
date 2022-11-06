@@ -1,5 +1,6 @@
 package org.kylin.service.exporter.impl;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.*;
@@ -77,47 +78,63 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
         Collections.sort(wCodes);
         String span = "     ";
 
-        for(WCode code : wCodes) {
+        List<WCode> kDOne = wCodes.stream().filter(x -> x.getKd() > 0 && x.getKd()<5).collect(Collectors.toList());
+        List<WCode> kDTwo = wCodes.stream().filter(x -> x.getKd() == 0 || x.getKd() >=5 ).collect(Collectors.toList());
 
-            String printCode = "";
-            if("ab*".equals(pattern)) {
-                printCode =  ""+code.getCodes().get(0)+code.getCodes().get(1)+"*";
-            }else if("ba*".equals(pattern)){
-                printCode = ""+code.getCodes().get(1)+code.getCodes().get(0)+"*";
-            }else if("*ab".equals(pattern)){
-                printCode = ""+"*"+code.getCodes().get(0)+code.getCodes().get(1);
-            }else if("*ba".equals(pattern)){
-                printCode = "*"+code.getCodes().get(1)+code.getCodes().get(0);
-            }else if("a*b".equals(pattern)){
-                printCode = ""+code.getCodes().get(0)+"*"+code.getCodes().get(1);
-            }else if("b*a".equals(pattern)){
-                printCode = ""+code.getCodes().get(1)+"*"+code.getCodes().get(0);
+        if(CollectionUtils.isNotEmpty(kDOne)) {
+            content.setText("跨度一(" + kDOne.size() + "注)：");
+            List<String> codes = getOutputCodes(kDOne, pattern, freqSeted, exportPropertites);
+            for(String code : codes){
+                content.setText(code);
+                content.setText(span);
             }
-
-//            if(stat.get(code) > 1){
-//                printCode += "("+ stat.get(code) + ")" + "     ";
-//            }
-
-            if(freqSeted != null && freqSeted){
-                if(exportPropertites == null
-                        || code.getFreq() >= exportPropertites.getFreqLowLimitValue()) {
-                    content.setText(printCode);
-                    content.setText("(" + code.getFreq() + ")");
-                }else{
-                    continue;
-                }
-            }else{
-                content.setText(printCode);
-            }
-            content.setText(span);
-
+            content.addBreak();
         }
 
+        if(CollectionUtils.isNotEmpty(kDTwo)) {
+            content.setText("跨度二(" + kDTwo.size() + "注)：");
+            List<String> codes = getOutputCodes(kDTwo, pattern, freqSeted, exportPropertites);
+            for(String code : codes){
+                content.setText(code);
+                content.setText(span);
+            }
+            content.addBreak();
+        }
         content.addBreak();
         content.setTextPosition(20);
 
         XWPFRun sep = paragraph.createRun();
         sep.setTextPosition(50);
+    }
+
+
+    private List<String> getOutputCodes(List<WCode> wCodes, String pattern, Boolean freqSeted, ExportPropertites exportPropertites){
+        List<String> toBeExportedCodes = Lists.newArrayListWithExpectedSize(wCodes.size());
+        for(WCode code : wCodes) {
+
+            String printCode = "";
+            if ("ab*".equals(pattern)) {
+                printCode = "" + code.getCodes().get(0) + code.getCodes().get(1) + "*";
+            } else if ("ba*".equals(pattern)) {
+                printCode = "" + code.getCodes().get(1) + code.getCodes().get(0) + "*";
+            } else if ("*ab".equals(pattern)) {
+                printCode = "" + "*" + code.getCodes().get(0) + code.getCodes().get(1);
+            } else if ("*ba".equals(pattern)) {
+                printCode = "*" + code.getCodes().get(1) + code.getCodes().get(0);
+            } else if ("a*b".equals(pattern)) {
+                printCode = "" + code.getCodes().get(0) + "*" + code.getCodes().get(1);
+            } else if ("b*a".equals(pattern)) {
+                printCode = "" + code.getCodes().get(1) + "*" + code.getCodes().get(0);
+            }
+
+            if(freqSeted != null && freqSeted && (exportPropertites == null
+                        || code.getFreq() >= exportPropertites.getFreqLowLimitValue())) {
+                toBeExportedCodes.add(printCode + "(" + code.getFreq() + ")");
+            }else{
+                toBeExportedCodes.add(printCode);
+            }
+        }
+        return  toBeExportedCodes;
     }
 
     private Map<WCode, Integer> getXCodeIntStat(List<WCode> xCodes){

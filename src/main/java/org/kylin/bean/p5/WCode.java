@@ -299,6 +299,14 @@ public class WCode implements Cloneable,Comparable,RandomKill{
     }
 
 
+    /**
+     * 计算并返回跨度值
+     * @return
+     */
+    public int getKd(){
+        return Math.abs(getMax() - getMin());
+    }
+
     public boolean containsRepeatNumber(){
         Set<Integer> set = new HashSet<>();
         for(Integer e: codes){

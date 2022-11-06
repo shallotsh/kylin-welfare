@@ -321,6 +321,12 @@ var app = new Vue({
         },
 
         filterByBit: function (){
+
+            if(this.isTo2D){
+                this.handleException("已经转为2D，暂不支持位选");
+                return;
+            }
+
             var bitUnitDTO = {
                 "hundredSeq": this.hundred,
                 "decadeSeq": this.decade,
