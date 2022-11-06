@@ -127,12 +127,10 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
                 printCode = "" + code.getCodes().get(1) + "*" + code.getCodes().get(0);
             }
 
-            if(freqSeted != null && freqSeted && (exportPropertites == null
-                        || code.getFreq() >= exportPropertites.getFreqLowLimitValue())) {
-                toBeExportedCodes.add(printCode + "(" + code.getFreq() + ")");
-            }else{
-                toBeExportedCodes.add(printCode);
+            if(Objects.nonNull(exportPropertites) && code.getFreq() < exportPropertites.getFreqLowLimitValue()){
+                continue;
             }
+            toBeExportedCodes.add(printCode);
         }
         return  toBeExportedCodes;
     }
