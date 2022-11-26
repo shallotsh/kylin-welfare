@@ -27,7 +27,12 @@ public class Home {
 
     @RequestMapping("/origin")
     public String origin(){
-        return "v1";
+        return "3d_origin_vs";
+    }
+
+    @RequestMapping("/3d-freq")
+    public String wyf3DFreq(){
+        return "wyf_3d_2sum";
     }
 
     @RequestMapping("/2d")
