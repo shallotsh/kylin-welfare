@@ -1,9 +1,9 @@
-package org.kylin.service.strategy.impl;
+package org.kylin.service.origin3d.strategy.impl;
 
 import org.kylin.algorithm.strategy.Strategy;
 import org.kylin.bean.WelfareCode;
 import org.kylin.bean.WyfParam;
-import org.kylin.service.strategy.StrategyProvider;
+import org.kylin.service.origin3d.strategy.StrategyProvider;
 import org.springframework.stereotype.Service;
 
 /**

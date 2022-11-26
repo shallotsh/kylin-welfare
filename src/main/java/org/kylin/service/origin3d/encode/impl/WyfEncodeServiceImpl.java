@@ -1,9 +1,9 @@
-package org.kylin.service.encode.impl;
+package org.kylin.service.origin3d.encode.impl;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.collections4.CollectionUtils;
 import org.kylin.bean.WelfareCode;
-import org.kylin.service.encode.WyfEncodeService;
+import org.kylin.service.origin3d.encode.WyfEncodeService;
 import org.kylin.util.Encoders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

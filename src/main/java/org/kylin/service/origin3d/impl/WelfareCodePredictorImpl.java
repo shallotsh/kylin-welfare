@@ -1,4 +1,4 @@
-package org.kylin.service.impl;
+package org.kylin.service.origin3d.impl;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.collections4.CollectionUtils;
@@ -9,8 +9,8 @@ import org.kylin.bean.*;
 import org.kylin.constant.BitConstant;
 import org.kylin.constant.CodeTypeEnum;
 import org.kylin.constant.WelfareConfig;
-import org.kylin.service.WelfareCodePredictor;
-import org.kylin.service.encode.WyfEncodeService;
+import org.kylin.service.origin3d.WelfareCodePredictor;
+import org.kylin.service.origin3d.encode.WyfEncodeService;
 import org.kylin.util.Encoders;
 import org.kylin.util.TransferUtil;
 import org.kylin.util.WyfCollectionUtils;

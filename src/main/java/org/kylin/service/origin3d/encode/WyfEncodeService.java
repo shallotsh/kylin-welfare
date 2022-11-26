@@ -1,4 +1,4 @@
-package org.kylin.service.encode;
+package org.kylin.service.origin3d.encode;
 
 import org.kylin.bean.WelfareCode;
 

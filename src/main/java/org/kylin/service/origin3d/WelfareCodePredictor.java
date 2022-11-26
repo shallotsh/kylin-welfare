@@ -1,4 +1,4 @@
-package org.kylin.service;
+package org.kylin.service.origin3d;
 
 import org.kylin.bean.FilterParam;
 import org.kylin.bean.P3Param;

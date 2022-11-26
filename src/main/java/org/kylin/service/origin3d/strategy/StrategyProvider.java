@@ -1,4 +1,4 @@
-package org.kylin.service.strategy;
+package org.kylin.service.origin3d.strategy;
 
 import org.kylin.algorithm.strategy.Strategy;
 import org.kylin.bean.WelfareCode;

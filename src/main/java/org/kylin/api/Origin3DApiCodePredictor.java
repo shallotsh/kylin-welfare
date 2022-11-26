@@ -1,10 +1,10 @@
-package org.kylin.web;
+package org.kylin.api;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.collections4.CollectionUtils;
 import org.kylin.bean.*;
 import org.kylin.constant.CodeTypeEnum;
-import org.kylin.service.WelfareCodePredictor;
+import org.kylin.service.origin3d.WelfareCodePredictor;
 import org.kylin.util.CommonUtils;
 import org.kylin.util.DocUtils;
 import org.slf4j.Logger;
@@ -24,8 +24,8 @@ import java.io.*;
  */
 @Controller
 @RequestMapping("/api/welfare")
-public class ApiCodePredictor {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApiCodePredictor.class);
+public class Origin3DApiCodePredictor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Origin3DApiCodePredictor.class);
 
     @Resource
     private WelfareCodePredictor welfareCodePredictor;

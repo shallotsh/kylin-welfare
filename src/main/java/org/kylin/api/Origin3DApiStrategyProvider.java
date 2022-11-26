@@ -1,9 +1,9 @@
-package org.kylin.web;
+package org.kylin.api;
 
 import com.alibaba.fastjson.JSON;
 import org.kylin.algorithm.strategy.impl.IterationStrategy;
 import org.kylin.bean.*;
-import org.kylin.service.strategy.StrategyProvider;
+import org.kylin.service.origin3d.strategy.StrategyProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,8 +21,8 @@ import javax.annotation.Resource;
  */
 @Controller
 @RequestMapping("/api/strategy")
-public class ApiStrategyProvider {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApiStrategyProvider.class);
+public class Origin3DApiStrategyProvider {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Origin3DApiStrategyProvider.class);
 
     @Resource
     private StrategyProvider strategyProvider;
