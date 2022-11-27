@@ -600,4 +600,32 @@ public class WCodeUtils {
         return ret;
     }
 
+    public static Set<Integer> calcBinSumsOf3D(WCode wCode){
+        Set<Integer> binSets = new HashSet<>();
+        if(wCode == null || wCode.getDim() != 3){
+            return binSets;
+        }
+
+        if(WCodeUtils.isPair(wCode)){
+            List<Integer> codes = new ArrayList<>(wCode.getCodes());
+            Collections.sort(codes);
+            if(Objects.equals(codes.get(0),codes.get(1))){ // aab,aaa
+                binSets.add((wCode.getCodes().get(0) + wCode.getCodes().get(1))%10);
+                binSets.add((wCode.getCodes().get(0) + wCode.getCodes().get(2))%10);
+                binSets.add((wCode.getCodes().get(0) + wCode.getCodes().get(0) + wCode.getCodes().get(2))%10);
+            }else{ // abb
+                binSets.add((wCode.getCodes().get(0) + wCode.getCodes().get(1))%10);
+                binSets.add((wCode.getCodes().get(1) + wCode.getCodes().get(2))%10);
+                binSets.add((wCode.getCodes().get(0) + wCode.getCodes().get(2) + wCode.getCodes().get(2))%10);
+            }
+
+        }else{
+            binSets.add((wCode.getCodes().get(0) + wCode.getCodes().get(1))%10);
+            binSets.add((wCode.getCodes().get(0) + wCode.getCodes().get(2))%10);
+            binSets.add((wCode.getCodes().get(1) + wCode.getCodes().get(2))%10);
+        }
+        return binSets;
+    }
+
+
 }

@@ -387,32 +387,6 @@ var app = new Vue({
             });
         },
 
-        exportCodesHalfPage: function(){
-            if(!this.config.isP5){
-                this.handleException("请先完成排5");
-                return;
-            }
-
-            var args = {
-                wCodes: this.welfareCode
-            };
-
-            // console.log(JSON.stringify($rootScope.welfareCode, null, 2));
-            axios({
-                method:"POST",
-                url:"/api/p5/codes/export/half",
-                data: JSON.stringify(args),
-                headers:{
-                    "Content-Type": "application/json; charset=UTF-8"
-                }
-            }).then(function(response) {
-                app.handleDownload(response.data.data);
-            }).catch(function(reason) {
-                console.log(reason);
-                app.handleException("导出请求失败!");
-            });
-        },
-
         handleException: function (msg) {
             alert(msg);
         }
@@ -435,24 +409,25 @@ var app = new Vue({
                 printCodes.push(codeString);
             }
             return printCodes;
-        },
-        drawNoticeDesc: function(){
-
-            if(this.drawNotice == null
-                || this.drawNotice.state != 0
-                || this.drawNotice.result.length <= 0) {
-                console.log("参数问题");
-                return "";
-            }
-
-            var latestDrawRet = this.drawNotice.result[0];
-            var desc = "开奖期数: 【" + latestDrawRet.code
-                + " 】（" + latestDrawRet.date + "），中奖号码: 【"
-                + latestDrawRet.red + "】";
-
-            console.log("desc : " + desc);
-            return desc;
         }
+        // ,
+        // drawNoticeDesc: function(){
+        //
+        //     if(this.drawNotice == null
+        //         || this.drawNotice.state != 0
+        //         || this.drawNotice.result.length <= 0) {
+        //         console.log("参数问题");
+        //         return "";
+        //     }
+        //
+        //     var latestDrawRet = this.drawNotice.result[0];
+        //     var desc = "开奖期数: 【" + latestDrawRet.code
+        //         + " 】（" + latestDrawRet.date + "），中奖号码: 【"
+        //         + latestDrawRet.red + "】";
+        //
+        //     console.log("desc : " + desc);
+        //     return desc;
+        // }
     }
 });
 

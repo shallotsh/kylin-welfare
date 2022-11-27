@@ -4,6 +4,7 @@ package org.kylin.bean.p5;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections4.CollectionUtils;
 import org.kylin.algorithm.RandomKill;
+import org.kylin.util.WCodeUtils;
 
 import java.util.*;
 

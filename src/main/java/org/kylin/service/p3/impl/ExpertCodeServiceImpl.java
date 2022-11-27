@@ -15,6 +15,7 @@ import org.kylin.util.WCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ExpertCodeServiceImpl implements ExpertCodeService {
 
-    @Autowired
+    @Resource
     private ExportToolSelector exportToolSelector;
 
     @Override

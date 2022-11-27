@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
+public class W3DCommonDocExporter extends AbstractDocumentExporter{
 
     @Override
     public void writeContentToDoc(DocHolder docHolder, WCodeReq data) {
@@ -35,7 +35,9 @@ public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
             // 调用新新逻辑输出
             List<WCode> all = new ArrayList<>();
             all.addAll(wCodes);
-            all.addAll(data.getDeletedCodes().stream().flatMap(x -> x.getData().stream()).collect(Collectors.toList()));
+            if(CollectionUtils.isNotEmpty(data.getDeletedCodes())) {
+                all.addAll(data.getDeletedCodes().stream().flatMap(x -> x.getData().stream()).collect(Collectors.toList()));
+            }
             // 导出对子
             List<WCode> pairCodes = WCodeUtils.filterPairCodes(all);
             String title = String.format("    对子: (%d 注)", pairCodes.size());
@@ -150,6 +152,7 @@ public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
 
         List<Map.Entry<Integer, List<WCode>>> entries = freqToCodes.entrySet().stream().collect(Collectors.toList());
         Collections.sort(entries, Comparator.comparing(Map.Entry::getKey));
+        Collections.reverse(entries);
 
         for(Map.Entry<Integer, List<WCode>> entry : entries){
             if(CollectionUtils.isEmpty(entry.getValue())){
@@ -172,6 +175,6 @@ public class ExpertRecommendDocExporter extends AbstractDocumentExporter{
 
     @Override
     public List<ExportPatternEnum> getSupportedExportPatterns() {
-        return Arrays.asList(ExportPatternEnum.EXPERT_3D);
+        return Arrays.asList(ExportPatternEnum.EXPERT_3D, ExportPatternEnum.BIN_SUM_FREQ_3D);
     }
 }

@@ -26,6 +26,8 @@ public enum ExportPatternEnum {
 
     EXPERT_3D(204, "专家推荐法", null),
 
+    BIN_SUM_FREQ_3D(204, "3D二和频度法", null),
+
     ;
 
     private int id;

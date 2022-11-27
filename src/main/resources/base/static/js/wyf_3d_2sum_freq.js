@@ -2,8 +2,7 @@ var global_config = {
     isPredict: false,
     canKill: false,
     canExport: false,
-    isP5:false,
-    config3: {
+    config: {
         isGroup: true,
         isDirect: true
     }
@@ -18,41 +17,18 @@ var app = new Vue({
         sequence3:'',
         sequence4:'',
         sumValue:null,
-        boldCode:null,
-        binSumValue:null,
-        rangeCode:null,
+        boldCodeSeq: null,
+        binSumValues:null,
+        kdSeq:null,
 
-        // gossipCode:null,
+        freqSeted: false,
+        wCodes: null,
         wyfMessage:'这一行是统计数据展示区域',
         codesCount: 0,
-        wyfCodes:[],
         config:global_config,
-        welfareCode: null,
-        backupCode: null,
-        boldCodeFive: null,
-        myriabit: null,
-        kilobit: null,
-        hundred: null,
-        decade:null,
-        unit:null,
-        p3Code:null,
-        isRandomKill:null,
-        randomKillCodes:null,
-        // wyf_abc:null,
-        // wyf_acb:null,
-        // wyf_bac:null,
-        // wyf_bca:null,
-        // wyf_cab:null,
-        // wyf_cba:null,
-        // savePoint: null,
-        // bitAB:null,
-        // bitBC:null,
-        // bitCD:null,
-        // bitDE:null,
-        // export_format: null,
-        drawNoticeOverview: '',
-        extendCount: null,
-        // extendRatio: null
+        cacheQueue: new Array(),
+
+        drawNoticeOverview: ''
     },
     created: function(){
         this.export_format = 0;
@@ -83,44 +59,95 @@ var app = new Vue({
             paramArray.push(this.sequence2);
             paramArray.push(this.sequence3);
             paramArray.push(this.sequence4);
-            console.log('input:'+ JSON.stringify(paramArray));
+            // console.log('input:'+ JSON.stringify(paramArray));
             var args = {
-                "riddles": paramArray,
-                "targetCodeType": 3
+                "sequences": paramArray
             };
             this.wyfMessage = "正在计算...";
             axios({
               method: 'post',
-              url: '/api/welfare/codes/predict',
+              url: '/api/3d-2sum/shuffle',
               data: args
             }).then(function(response) {
-                    app.handleThreeCodeResponse(response.data.data);
+                    app.freqSeted = false;
+                    app.handle3DCodeResponse(response.data.data, "3D二和频度法");
+                    app.config.isPredict = true;
+                    app.isGroup = true;
                 })
                 .catch(function(error){
                     console.log(error)
                 });
 
         },
-        handleThreeCodeResponse:function (data) {
-            if(!data){
-                this.wyfMessage='远程服务返回数据为空';
-                console.log('请求数据为空');
+        handle3DCodeResponse: function (data, msg) {
+            console.log(JSON.stringify(data))
+            this.wCodes = data.wCodes;
+            this.pairCount = data.pairCodes;
+            this.nonPairCount = data.nonPairCodes;
+            this.deletedCodesPair = data.deletedCodes;
+            if(data.freqSeted) {
+                this.freqSeted = data.freqSeted;
+            }
+            app.wyfMessage =  msg + " : "  + this.wCodes.length + " 注(对子:" + app.pairCount + " 注,非对子:" + app.nonPairCount + " 注)" ; ;
+        },
+
+        resetInput: function () {
+            this.config.isPredict = false;
+            this.sequence ='',
+                this.boldCodeSeq = null,
+                this.gossipCodeSeq = null,
+                this.inverseCodeSeq = null,
+                this.kdSeq = null,
+                this.binSumValues = null,
+                this.isGroup = false,
+                this.wyfMessage = '这一行是统计数据展示区域',
+                this.wCodes = null,
+                this.deletedCodesPair= null,
+                this.pairCount = null,
+                this.nonPairCount = null
+
+        },
+        doKillCode: function () {
+            if(!this.config.isPredict){
+                this.handleException("请先完成预测");
                 return;
             }
-            this.welfareCode = data;
-            this.wyfCodes = this.welfareCode.codes;
-            this.config.isPredict=true;
-            this.config.canKill=true;
-            this.config.canExport=true;
-            if(this.welfareCode.codeTypeEnum == "DIRECT"){
-                this.config.config3.isGroup = false;
-                this.config.config3.isDirect = true;
-                this.wyfMessage = "本次直选预测3D码: " + this.welfareCode.w3DCodes.length + " 注";
-            }else {
-                this.config.config3.isGroup = true;
-                this.config.config3.isDirect = false;
-                this.wyfMessage = "本次组选预测3D码: " + this.welfareCode.w3DCodes.length + " 注";
+
+            var args = {
+                "wCodes": this.wCodes,
+                "boldCodeSeq": this.boldCodeSeq,
+                "sumTailValues": this.sumValue,
+                "kdSeq": this.kdSeq,
+                "binSumValues": this.binSumValues
+            };
+            this.killCode(args);
+        },
+
+        killCode: function (args) {
+            if(!this.config.isPredict){
+                this.handleException("请先完成预测");
+                return;
             }
+            console.log('args' + JSON.stringify(args));
+
+            var count = this.wCodes.length;
+
+            axios({
+                method:"POST",
+                url:"/api/3d-2sum/kill/code",
+                data: JSON.stringify(args),
+
+                headers:{
+                    "Content-Type": "application/json; charset=UTF-8"
+                }
+            }).then(function(response) {
+                app.handle3DCodeResponse(response.data.data, "专家推荐法杀码");
+                app.wyfMessage = "总计 " + count + " 注, 杀码 " + (count - app.wCodes.length) + " 注, 余 " + app.wCodes.length + " 注(对子:" + app.pairCount + " 注,非对子:" + app.nonPairCount + " 注)" ;
+            }).catch(function(response) {
+                console.log("resp:" + JSON.stringify(response.data, null, 2));
+                app.handleException("杀码请求失败!");
+            });
+
         },
 
         handleDownload: function(data) {
@@ -131,85 +158,32 @@ var app = new Vue({
             }
             window.location = "/api/welfare/download?fileName=" + data;
         },
-        killCode: function () {
-            if(!this.config.isPredict){
-                this.handleException("请先完成预测");
-                return;
-            }
-
-            var args = {
-                "welfareCode": this.welfareCode,
-                "sumValue": this.sumValue,
-                "boldCode": this.boldCode,
-                "range": this.rangeCode
-            };
-
-            var count = this.wyfCodes.length;
-
-            axios({
-                method:"POST",
-                url:"/api/welfare/codes/filter",
-                data: JSON.stringify(args),
-                headers:{
-                    "Content-Type": "application/json; charset=UTF-8"
-                }
-            }).then(function(response) {
-                app.handleThreeCodeResponse(response.data.data);
-                app.wyfMessage = "总计 " + count + " 注, 杀码 " + (count - app.welfareCode.w3DCodes.length) + " 注, 余 " + app.welfareCode.w3DCodes.length + " 注.";
-            }).catch(function(response) {
-                console.log("resp:" + JSON.stringify(response.data, null, 2));
-                app.handleException("杀码请求失败!");
-            });
-
-        },
-
         exportCodes: function(){
-            if(!this.config.isP5){
-                this.handleException("请先完成排5");
+            if(!this.config.isPredict){
+                this.handleException("请至少先完成一次预测");
                 return;
             }
 
+            var exportCodes = [];
+            if(this.cacheQueue.length > 0){
+                for(var idx=0; idx < this.cacheQueue.length; idx ++){
+                    exportCodes = exportCodes.concat(this.cacheQueue[idx]);
+                }
+            }else{
+                exportCodes = this.wCodes;
+            }
+
+
             var args = {
-                wCodes: this.welfareCode ,
-                randomCount: this.boldCodeFive,
-                randomKill: this.isRandomKill,
-                freqSeted : this.freqSeted,
-                exportFormat: this.export_format,
-                deletedCodesPair: this.deletedCodesPair,
-                savePoint: this.savePoint,
-                deletedCodes: this.deletedCodes
+                wCodes: exportCodes,
+                deletedCodes: this.deletedCodesPair,
+                freqSeted: this.freqSeted
             };
 
             // console.log('canshu:' + JSON.stringify(args, null, 2));
             axios({
                 method:"POST",
-                url:"/api/p5/codes/export",
-                data: JSON.stringify(args),
-                headers:{
-                    "Content-Type": "application/json; charset=UTF-8"
-                }
-            }).then(function(response) {
-                app.handleDownload(response.data.data);
-            }).catch(function(reason) {
-                console.log(reason);
-                app.handleException("导出请求失败!");
-            });
-        },
-
-        exportCodesHalfPage: function(){
-            if(!this.config.isP5){
-                this.handleException("请先完成排5");
-                return;
-            }
-
-            var args = {
-                wCodes: this.welfareCode
-            };
-
-            // console.log(JSON.stringify($rootScope.welfareCode, null, 2));
-            axios({
-                method:"POST",
-                url:"/api/p5/codes/export/half",
+                url:"/api/3d-2sum/codes/export",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
@@ -224,6 +198,26 @@ var app = new Vue({
 
         handleException: function (msg) {
             alert(msg);
+        }
+    },
+    computed: {
+        wyfCodes: function(){
+            var printCodes = [];
+            for( idx in this.wCodes){
+                console.log("wCodes变化");
+                code = this.wCodes[idx];
+                if(code.beDeleted){
+                    console.log('被删除code不展示' + JSON.stringify(code));
+                    continue;
+                }
+                // code.codes.reverse();
+                var codeString = code.codes.join("");
+                if(this.freqSeted){
+                    codeString = '[' + code.freq + ']' + codeString;
+                }
+                printCodes.push(codeString);
+            }
+            return printCodes;
         }
     }
 });

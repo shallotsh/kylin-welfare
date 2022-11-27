@@ -112,6 +112,25 @@ public class TransferUtil {
         return list;
     }
 
+    public static List<Set<Integer>> toMultiSet(String seq){
+        if(StringUtils.isBlank(seq.trim())){
+            return Collections.emptyList();
+        }
+
+        List<Set<Integer>> list = new ArrayList<>();
+        String[] seqs = seq.trim().split(" |,|#| |，");
+        for(String s: seqs) {
+            Set<Integer> tmp = new HashSet<>();
+            for (char ch : s.toCharArray()) {
+                if (ch >= '0' && ch <= '9') {
+                    tmp.add(ch - '0');
+                }
+            }
+            list.add(tmp);
+        }
+
+        return list;
+    }
 
 
     public static List<Integer> toIntegerList(String seq){
