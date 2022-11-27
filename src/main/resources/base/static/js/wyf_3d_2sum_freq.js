@@ -54,6 +54,15 @@ var app = new Vue({
     },
     methods:{
         doPermutate: function () {
+
+            if(isEmpty(this.sequence1)
+                && isEmpty(this.sequence2)
+                && isEmpty(this.sequence3)
+                && isEmpty(this.sequence4)){
+                this.handleException("请先输入预测码");
+                return;
+            }
+
             var paramArray = [];
             paramArray.push(this.sequence1);
             paramArray.push(this.sequence2);
@@ -221,4 +230,11 @@ var app = new Vue({
         }
     }
 });
+
+function isEmpty(str){
+    if(str == '' || str == null || str == undefined){
+        return true;
+    }
+    return false;
+}
 
