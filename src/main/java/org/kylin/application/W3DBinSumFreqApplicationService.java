@@ -3,7 +3,6 @@ package org.kylin.application;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.kylin.bean.p3.ExpertCodeReq;
 import org.kylin.bean.p3.W3D2SumCodeReq;
 import org.kylin.bean.p5.WCode;
 import org.kylin.constant.ExportPatternEnum;
@@ -12,9 +11,8 @@ import org.kylin.service.exporter.DocHolder;
 import org.kylin.service.exporter.ExportToolSelector;
 import org.kylin.service.exporter.IDocExportTool;
 import org.kylin.service.xcode.filters.impl.*;
+import org.kylin.util.ExporterControlUtil;
 import org.kylin.util.TransferUtil;
-import org.kylin.util.WCodeUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -40,15 +38,9 @@ public class W3DBinSumFreqApplicationService {
             log.info("预测序列不合法 riddles:{}", riddles);
             throw new RuntimeException("预测序列为空");
         }
-        List<WCode> wCodes = new ArrayList<>();
-        if(sets.size() == 3){
-            wCodes.addAll(iwCodeEncodeService.compositionEncode(sets));
-        }else if(sets.size() == 4){
-            for(int i=0; i<sets.size(); i++){
-                wCodes.addAll(iwCodeEncodeService.compositionEncode(Arrays.asList(sets.get(i%4), sets.get((i+1)%4), sets.get((i+2)%4))));
-            }
-        }
-        return WCodeUtils.convertToGroup(wCodes);
+        List<WCode> wCodes = iwCodeEncodeService.compositionWithQuibinaryEncode(sets);
+        log.info("组码结果 sets:{}, wCodes_size:{}", sets, CollectionUtils.size(wCodes));
+        return wCodes;
     }
 
     public List<WCode> doKill(W3D2SumCodeReq req){
@@ -96,17 +88,23 @@ public class W3DBinSumFreqApplicationService {
 
     public Optional<String> exportCodeToFile(W3D2SumCodeReq req) throws IOException {
 
-        // 策略导出
-        DocHolder docHolder = new DocHolder();
-        Optional<IDocExportTool> iDocExportTool = exportToolSelector.getByExportPattern(ExportPatternEnum.BIN_SUM_FREQ_3D);
+        ExporterControlUtil.setPatternType(ExportPatternEnum.BIN_SUM_FREQ_3D);
 
-        if(iDocExportTool.isPresent()) {
-            iDocExportTool.get().writeTitleAsDefaultFormat(docHolder, "我要发·" + ExportPatternEnum.BIN_SUM_FREQ_3D.getDesc());
-            iDocExportTool.get().writeContentToDoc(docHolder, req.adaptToWCodeReq());
-            String fileName = iDocExportTool.get().exportDocAsFile(docHolder);
-            return Optional.of(fileName);
-        }else{
-            return Optional.empty();
+        try {
+            // 策略导出
+            DocHolder docHolder = new DocHolder();
+            Optional<IDocExportTool> iDocExportTool = exportToolSelector.getByExportPattern(ExportPatternEnum.BIN_SUM_FREQ_3D);
+
+            if (iDocExportTool.isPresent()) {
+                iDocExportTool.get().writeTitleAsDefaultFormat(docHolder, "我要发·" + ExportPatternEnum.BIN_SUM_FREQ_3D.getDesc());
+                iDocExportTool.get().writeContentToDoc(docHolder, req.adaptToWCodeReq());
+                String fileName = iDocExportTool.get().exportDocAsFile(docHolder);
+                return Optional.of(fileName);
+            } else {
+                return Optional.empty();
+            }
+        } finally {
+            ExporterControlUtil.clearPatternType();
         }
     }
 }

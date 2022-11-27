@@ -18,4 +18,12 @@ public interface IWCodeEncodeService {
      */
     List<WCode> compositionEncode(List<Set<Integer>> riddles);
 
+    /**
+     * 二码法组码，直选组码
+     *
+     * @param riddles
+     * @return
+     */
+    List<WCode> compositionWithQuibinaryEncode(List<Set<Integer>> riddles);
+
 }

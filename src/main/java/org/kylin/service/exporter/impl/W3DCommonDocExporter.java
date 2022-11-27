@@ -10,6 +10,7 @@ import org.kylin.bean.p5.WCodeReq;
 import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.exporter.AbstractDocumentExporter;
 import org.kylin.service.exporter.DocHolder;
+import org.kylin.util.ExporterControlUtil;
 import org.kylin.util.WCodeUtils;
 import org.springframework.stereotype.Component;
 
@@ -151,8 +152,10 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
         Map<Integer, List<WCode>> freqToCodes = wCodes.stream().collect(Collectors.groupingBy(WCode::getFreq));
 
         List<Map.Entry<Integer, List<WCode>>> entries = freqToCodes.entrySet().stream().collect(Collectors.toList());
-        Collections.sort(entries, Comparator.comparing(Map.Entry::getKey));
-        Collections.reverse(entries);
+        Collections.sort(entries, Map.Entry.comparingByKey());
+        if(ExporterControlUtil.getPatternType() == ExportPatternEnum.BIN_SUM_FREQ_3D) {
+            Collections.reverse(entries);
+        }
 
         for(Map.Entry<Integer, List<WCode>> entry : entries){
             if(CollectionUtils.isEmpty(entry.getValue())){
@@ -164,6 +167,9 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
             content.setTextPosition(20);
             int size = entry.getValue().size();
             String subtitle =  "      " + entry.getKey() + " 次("+ (size < 10? "  "+size: ""+size) +"注):  ";
+            if(ExporterControlUtil.getPatternType() == ExportPatternEnum.BIN_SUM_FREQ_3D){
+                subtitle =  "     【" + entry.getKey() + "】("+ (size < 10? "  "+size: ""+size) +"注):  ";
+            }
             content.setText(subtitle);
             for(WCode wCode: entry.getValue()){
                 content.setText(wCode.getString(false) + "        ");
