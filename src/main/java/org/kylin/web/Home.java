@@ -50,6 +50,12 @@ public class Home {
         return "wyf_expert";
     }
 
+    @RequestMapping("/4d")
+    public String wyf4d(){
+        return "wyf_4d";
+    }
+
+
     @RequestMapping("/expert_inner")
     public String expertInner(){
         return "wyf_expert_inner";

@@ -7,9 +7,7 @@ import org.kylin.service.common.IWCodeEncodeService;
 import org.kylin.util.WCodeUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -63,5 +61,42 @@ public class WCodeEncodeServiceImpl implements IWCodeEncodeService {
             }
         }
         return wCodes;
+    }
+
+    @Override
+    public List<WCode> combine4Code(List<Integer> riddle) {
+        if(CollectionUtils.size(riddle) < 4){
+            return Collections.emptyList();
+        }
+        boolean[] flag = new boolean[riddle.size()];
+        List<List<Integer>> res = new ArrayList<>();
+        combineRefactor(riddle, 0, 4, flag, res);
+
+        List<WCode> wCodes = new ArrayList<>();
+        for(List<Integer> code : res){
+            wCodes.add(new WCode(4, code));
+        }
+        return WCodeUtils.convertToGroup(wCodes);
+    }
+
+    private void combineRefactor(List<Integer> riddle, int start, int count, boolean[] flag, List<List<Integer>> res){
+
+        if(count == 0){
+            List<Integer> tmp = new ArrayList<>();
+            for(int i=0; i<flag.length; i++){
+                if(flag[i]){
+                    tmp.add(riddle.get(i));
+                }
+            }
+            res.add(tmp);
+            return;
+        }
+        if(start == riddle.size()){
+            return;
+        }
+        flag[start] = true;
+        combineRefactor(riddle, start+1,  count - 1, flag, res);
+        flag[start] = false;
+        combineRefactor(riddle, start+1,  count, flag, res);
     }
 }

@@ -26,4 +26,13 @@ public interface IWCodeEncodeService {
      */
     List<WCode> compositionWithQuibinaryEncode(List<Set<Integer>> riddles);
 
+
+    /**
+     * 四码法组码
+     *
+     * @param riddle 一组数字
+     * @return  组码
+     */
+    List<WCode> combine4Code(List<Integer> riddle);
+
 }

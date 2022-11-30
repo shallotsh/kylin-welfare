@@ -34,6 +34,16 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         codes = new ArrayList<>();
     }
 
+    public WCode(Integer dim, List<Integer> code) {
+        Objects.requireNonNull(dim);
+        Objects.requireNonNull(CollectionUtils.isNotEmpty(code));
+        Objects.requireNonNull(Objects.equals(dim, CollectionUtils.size(code)));
+        this.dim = dim ;
+        codes = new ArrayList<>(code);
+        this.sumTail = sum() % 10;
+        this.freq = 0;
+    }
+
     public WCode(int dim, int m, int t, int h, int d, int u){
         codes = new ArrayList<>();
         codes.add(m);

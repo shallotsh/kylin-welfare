@@ -628,4 +628,11 @@ public class WCodeUtils {
     }
 
 
+    public static boolean hasRepeatNo(WCode wCode){
+        if(wCode == null || CollectionUtils.size(wCode.getCodes()) < 2){
+            return false;
+        }
+        HashSet<Integer> set = new HashSet<>(wCode.getCodes());
+        return set.size() != wCode.getCodes().size();
+    }
 }
