@@ -28,7 +28,7 @@ public enum ExportPatternEnum {
 
     BIN_SUM_FREQ_3D(205, "3D二和频度法", null),
 
-    WCODE_4D(206, "四码法", null),
+    WCODE_4D(206, "复式组选", null),
 
     ;
 

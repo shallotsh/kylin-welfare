@@ -28,7 +28,7 @@ public interface IWCodeEncodeService {
 
 
     /**
-     * 四码法组码
+     * 复式组选组码
      *
      * @param riddle 一组数字
      * @return  组码

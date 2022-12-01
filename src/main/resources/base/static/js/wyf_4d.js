@@ -68,7 +68,7 @@ var app = new Vue({
               data: args
             }).then(function(response) {
                     app.freqSeted = false;
-                    app.handle3DCodeResponse(response.data.data, "四码法");
+                    app.handle3DCodeResponse(response.data.data, "复式组选");
                     app.config.isPredict = true;
                     app.isGroup = true;
                 })
@@ -93,6 +93,7 @@ var app = new Vue({
             this.config.isPredict = false;
             this.sequence ='',
                 this.sequence = null,
+                this.boldCodeSeq = null,
                 this.sumValue = null,
                 this.kdSeq = null,
                 this.isGroup = false,
