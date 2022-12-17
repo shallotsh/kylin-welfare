@@ -1,7 +1,6 @@
 package org.kylin.service.common.impl;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.kylin.bean.W3DCode;
 import org.kylin.bean.p5.WCode;
 import org.kylin.service.common.IWCodeEncodeService;
 import org.kylin.util.WCodeUtils;
@@ -64,17 +63,17 @@ public class WCodeEncodeServiceImpl implements IWCodeEncodeService {
     }
 
     @Override
-    public List<WCode> combine4Code(List<Integer> riddle) {
-        if(CollectionUtils.size(riddle) < 4){
+    public List<WCode> combine4Code(List<Integer> riddle, int dimVal) {
+        if(dimVal <= 0 || CollectionUtils.size(riddle) < dimVal){
             return Collections.emptyList();
         }
         boolean[] flag = new boolean[riddle.size()];
         List<List<Integer>> res = new ArrayList<>();
-        combineRefactor(riddle, 0, 4, flag, res);
+        combineRefactor(riddle, 0, dimVal, flag, res);
 
         List<WCode> wCodes = new ArrayList<>();
         for(List<Integer> code : res){
-            wCodes.add(new WCode(4, code));
+            wCodes.add(new WCode(dimVal, code));
         }
         return WCodeUtils.convertToGroup(wCodes);
     }

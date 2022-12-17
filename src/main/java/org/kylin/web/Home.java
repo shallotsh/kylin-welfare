@@ -55,6 +55,11 @@ public class Home {
         return "wyf_4d";
     }
 
+    @RequestMapping("/tail-sum")
+    public String wyfTailSum(){
+        return "wyf_tail_sum";
+    }
+
 
     @RequestMapping("/expert_inner")
     public String expertInner(){

@@ -10,9 +10,7 @@ import org.kylin.service.common.IWCodeEncodeService;
 import org.kylin.service.exporter.DocHolder;
 import org.kylin.service.exporter.ExportToolSelector;
 import org.kylin.service.exporter.IDocExportTool;
-import org.kylin.service.xcode.filters.impl.BinSumFilter;
 import org.kylin.service.xcode.filters.impl.BoldCodeFilter;
-import org.kylin.service.xcode.filters.impl.KdSimpleFilter;
 import org.kylin.service.xcode.filters.impl.SumTailCodeFilter;
 import org.kylin.util.ExporterControlUtil;
 import org.kylin.util.TransferUtil;
@@ -43,7 +41,7 @@ public class W4DApplicationService {
             log.info("预测序列不合法 riddles:{}", riddles);
             throw new RuntimeException("预测序列为空");
         }
-        List<WCode> wCodes = iwCodeEncodeService.combine4Code(seq);
+        List<WCode> wCodes = iwCodeEncodeService.combine4Code(seq, 4);
         // 去除含重复数字的4d
         wCodes = wCodes.stream().filter(x -> !WCodeUtils.hasRepeatNo(x)).collect(Collectors.toList());
 
