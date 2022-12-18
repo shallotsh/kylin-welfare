@@ -121,7 +121,7 @@ var app = new Vue({
                 return "";
             }
             var intersect = this.w2dTailValues.filter(function (v){ return app.w3dTailValues.indexOf(v) > -1});
-            return intersect.join("");
+            return intersect.sort().join("");
         },
         complementValue: function (){
             if(this.w2dTailValues == null){
@@ -133,7 +133,7 @@ var app = new Vue({
             var complement = this.w2dTailValues.filter(function (v){ return !(app.w3dTailValues.indexOf(v) > -1) }).concat(
                 this.w3dTailValues.filter(function (v){ return !(app.w2dTailValues.indexOf(v) > -1) })
             );
-            return complement.join("");
+            return complement.sort().join("");
         }
 
     }
