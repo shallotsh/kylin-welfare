@@ -175,6 +175,12 @@
                             <div>
                                 <span style="line-height: 40px" v-show="config.isPredict" v-cloak>三码和尾：{{w3dTailValue}}</span>
                             </div>
+                            <div>
+                                <span style="line-height: 40px" v-show="config.isPredict" v-cloak>重叠：{{intersectValue}}</span>
+                            </div>
+                            <div>
+                                <span style="line-height: 40px" v-show="config.isPredict" v-cloak>不重叠：{{complementValue}}</span>
+                            </div>
 
 <!--                            <ul class="code-ul-style">-->
 <!--                                <li v-for="item in wyfCodes"style="display: inline;margin: 10px 10px;line-height: 40px;"><span style="display: inline-block;">{{item}}</span></li>-->

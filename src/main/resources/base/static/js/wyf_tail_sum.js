@@ -104,18 +104,38 @@ var app = new Vue({
     computed: {
         w3dTailValue: function (){
             if(this.w3dTailValues != null){
-                return this.w3dTailValues.join(",");
+                return this.w3dTailValues.join("");
             }else{
                 return "";
             }
         },
         w2dTailValue: function (){
             if(this.w2dTailValues != null){
-                return this.w2dTailValues.join(",");
+                return this.w2dTailValues.join("");
             }else{
                 return "";
             }
+        },
+        intersectValue: function (){
+            if(this.w2dTailValues == null || this.w3dTailValues == null){
+                return "";
+            }
+            var intersect = this.w2dTailValues.filter(function (v){ return app.w3dTailValues.indexOf(v) > -1});
+            return intersect.join("");
+        },
+        complementValue: function (){
+            if(this.w2dTailValues == null){
+                return this.w3dTailValues == null ? "": this.w3dTailValues.join("");
+            }
+            if(this.w3dTailValues == null){
+                return this.w2dTailValues == null ? "": this.w2dTailValues.join("");
+            }
+            var complement = this.w2dTailValues.filter(function (v){ return !(app.w3dTailValues.indexOf(v) > -1) }).concat(
+                this.w3dTailValues.filter(function (v){ return !(app.w2dTailValues.indexOf(v) > -1) })
+            );
+            return complement.join("");
         }
+
     }
 });
 
