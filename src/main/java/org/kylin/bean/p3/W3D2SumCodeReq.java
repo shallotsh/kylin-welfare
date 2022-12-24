@@ -8,6 +8,10 @@ import org.kylin.bean.BaseCodeReq;
 public class W3D2SumCodeReq extends BaseCodeReq {
 
     private String binSumValues;
+    /**
+     * 钓叟选码
+     */
+    private String fishManCode;
 
     @Override
     public String toString() {

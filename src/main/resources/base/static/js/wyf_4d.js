@@ -16,6 +16,7 @@ var app = new Vue({
         sumValue:null,
         boldCodeSeq: null,
         kdSeq:null,
+        fishManCode:null,
         freqSeted: false,
         wCodes: null,
         wyfMessage:'这一行是统计数据展示区域',
@@ -96,6 +97,7 @@ var app = new Vue({
                 this.boldCodeSeq = null,
                 this.sumValue = null,
                 this.kdSeq = null,
+                this.fishManCode = null,
                 this.isGroup = false,
                 this.wyfMessage = '这一行是统计数据展示区域',
                 this.wCodes = null,
@@ -113,7 +115,8 @@ var app = new Vue({
             var args = {
                 "wCodes": this.wCodes,
                 "boldCodeSeq": this.boldCodeSeq,
-                "sumTailValues": this.sumValue
+                "sumTailValues": this.sumValue,
+                "fishManCode": this.fishManCode
             };
             this.killCode(args);
         },

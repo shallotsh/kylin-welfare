@@ -11,6 +11,7 @@ import org.kylin.service.exporter.DocHolder;
 import org.kylin.service.exporter.ExportToolSelector;
 import org.kylin.service.exporter.IDocExportTool;
 import org.kylin.service.xcode.filters.impl.BoldCodeFilter;
+import org.kylin.service.xcode.filters.impl.FishManCodeFilter;
 import org.kylin.service.xcode.filters.impl.SumTailCodeFilter;
 import org.kylin.util.ExporterControlUtil;
 import org.kylin.util.TransferUtil;
@@ -72,6 +73,12 @@ public class W4DApplicationService {
             count = CollectionUtils.size(target);
         }
 
+
+        if(CollectionUtils.isNotEmpty(target) && StringUtils.isNotBlank(req.getFishManCode())){
+            target = new FishManCodeFilter().filter(target, req.getFishManCode());
+            log.info("钓叟选码 {} 住3D", (count - CollectionUtils.size(target)));
+            count = CollectionUtils.size(target);
+        }
 
 //        if(CollectionUtils.isNotEmpty(target)
 //                && StringUtils.isNotBlank(req.getKdSeq())){
