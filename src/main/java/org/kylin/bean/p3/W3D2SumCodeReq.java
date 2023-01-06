@@ -7,7 +7,17 @@ import org.kylin.bean.BaseCodeReq;
 @Data
 public class W3D2SumCodeReq extends BaseCodeReq {
 
+    /**
+     * 二和尾
+     */
     private String binSumValues;
+
+
+    /**
+     * 胆频选
+     */
+    private String boldFreqValues;
+
     /**
      * 钓叟选码
      */

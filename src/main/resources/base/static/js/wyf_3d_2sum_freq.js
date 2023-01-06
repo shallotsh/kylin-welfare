@@ -20,6 +20,7 @@ var app = new Vue({
         boldCodeSeq: null,
         binSumValues:null,
         kdSeq:null,
+        boldFreqValues:null,
 
         freqSeted: false,
         wCodes: null,
@@ -108,6 +109,7 @@ var app = new Vue({
                 this.inverseCodeSeq = null,
                 this.kdSeq = null,
                 this.binSumValues = null,
+                this.boldFreqValues = null,
                 this.isGroup = false,
                 this.wyfMessage = '这一行是统计数据展示区域',
                 this.wCodes = null,
@@ -127,7 +129,8 @@ var app = new Vue({
                 "boldCodeSeq": this.boldCodeSeq,
                 "sumTailValues": this.sumValue,
                 "kdSeq": this.kdSeq,
-                "binSumValues": this.binSumValues
+                "binSumValues": this.binSumValues,
+                "boldFreqValues": this.boldFreqValues
             };
             this.killCode(args);
         },

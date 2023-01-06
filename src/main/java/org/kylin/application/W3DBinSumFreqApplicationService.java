@@ -81,6 +81,13 @@ public class W3DBinSumFreqApplicationService {
             count = CollectionUtils.size(target);
         }
 
+        if(CollectionUtils.isNotEmpty(target)
+                && StringUtils.isNotBlank(req.getBoldFreqValues())){
+            target = new BoldFreqFilter().filter(target, req.getBoldFreqValues());
+            log.info("胆频杀 {} 注3D", (count - CollectionUtils.size(target)));
+            count = CollectionUtils.size(target);
+        }
+
         log.info("杀码后 {} 注3D", count);
         return target;
     }
