@@ -166,15 +166,18 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
             paragraph.setAlignment(ParagraphAlignment.LEFT);
             content.setTextPosition(20);
             int size = entry.getValue().size();
-            String subtitle =  "      " + entry.getKey() + " 次("+ (size < 10? "  "+size: ""+size) +"注):  ";
-            if(ExporterControlUtil.getPatternType() == ExportPatternEnum.BIN_SUM_FREQ_3D){
-                subtitle =  "     【" + entry.getKey() + "】("+ (size < 10? "  "+size: ""+size) +"注):  ";
+            if(ExporterControlUtil.getPatternType() != ExportPatternEnum.BIN_SUM_FREQ_3D) {
+                String subtitle = "      " + entry.getKey() + " 次(" + (size < 10 ? "  " + size : "" + size) + "注):  ";
+                content.setText(subtitle);
+                for(WCode wCode: entry.getValue()){
+                    content.setText(wCode.getString(false) + "        ");
+                }
+                content.addBreak();
+            }else{
+                for(WCode wCode: entry.getValue()){
+                    content.setText(wCode.getString(false) + "        ");
+                }
             }
-            content.setText(subtitle);
-            for(WCode wCode: entry.getValue()){
-                content.setText(wCode.getString(false) + "        ");
-            }
-            content.addBreak();
 
         }
     }
