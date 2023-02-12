@@ -94,6 +94,7 @@ public class KylinBinSumDictApiController {
         }
         try {
             Optional<String> optFile = w3DBinSumCommonApplicationService.exportCodeToFile(req, ExportPatternEnum.BIN_SUM_DICT_3D);
+            log.info("导出文件:{}", optFile.map(String::toString).orElse("未知"));
             return optFile.map(f -> new WyfDataResponse(f)).orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误"));
         } catch (IOException e) {
             log.error("导出文件错误", e);

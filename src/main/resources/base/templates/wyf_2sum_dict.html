@@ -16,7 +16,7 @@
     <link href="css/custom-styles.css" rel="stylesheet"/>
     <!-- Google Fonts-->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
-    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue/3.0.5/vue.global.js"></script>
     <style>
         [v-cloak] {
             display: none;
@@ -112,10 +112,10 @@
         <div id="page-inner">
             <!-- input sequence -->
             <div class="row border-dashed-bottom">
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" v-model="sequence" placeholder="二码和列表" />
+                <div class=" col-sm-2 col-sm-push-1">
+                    <input type="text" class="form-control fill_parent" v-model="sequence" placeholder="二码和列表" />
                 </div>
-                <div class="col-sm-2 col-sm-push-1">
+                <div class=" col-sm-2 col-sm-push-1">
                     <button type="button" class="btn btn-primary fill_parent" @click="doPermutate"> 运行 </button>
                 </div>
             </div>
@@ -230,7 +230,7 @@
 
 <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
 
-<script src="js/wyf_2sum_dict.js?v=1"></script>
+<script src="js/wyf_2sum_dict_vue3.js?v=1"></script>
 
 
 </body>
