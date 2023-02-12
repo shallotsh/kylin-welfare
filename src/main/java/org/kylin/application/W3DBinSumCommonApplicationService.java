@@ -21,7 +21,7 @@ import java.util.*;
 
 @Service
 @Slf4j
-public class W3DBinSumDictApplicationService {
+public class W3DBinSumCommonApplicationService {
 
     @Resource
     private IWCodeEncodeService iwCodeEncodeService;
@@ -30,6 +30,20 @@ public class W3DBinSumDictApplicationService {
     private ExportToolSelector exportToolSelector;
 
     public List<WCode> doComposition(List<String> riddles){
+        if(CollectionUtils.isEmpty(riddles) || CollectionUtils.size(riddles) <3 ){
+            return Collections.emptyList();
+        }
+        List<Set<Integer>> sets = TransferUtil.toIntegerSets(riddles);
+        if(CollectionUtils.isEmpty(sets) || sets.size() > 4 || sets.size() < 3){
+            log.info("预测序列不合法 riddles:{}", riddles);
+            throw new RuntimeException("预测序列为空");
+        }
+        List<WCode> wCodes = iwCodeEncodeService.compositionWithQuibinaryEncode(sets);
+        log.info("组码结果 sets:{}, wCodes_size:{}", sets, CollectionUtils.size(wCodes));
+        return wCodes;
+    }
+
+    public List<WCode> doCompositionByDict(List<String> riddles){
         if(CollectionUtils.isEmpty(riddles) || CollectionUtils.size(riddles) != 1 ){
             log.info("输入为空");
             return Collections.emptyList();
@@ -89,22 +103,28 @@ public class W3DBinSumDictApplicationService {
             count = CollectionUtils.size(target);
         }
 
+        if(CollectionUtils.isNotEmpty(target)
+            && Boolean.TRUE.equals(req.getKillAllOddAndEven())){
+            target = new KillAllOddAndEvenFilter().filter(target, Boolean.TRUE.toString());
+            log.info("全集全偶杀 {} 注3D", (count - CollectionUtils.size(target)));
+            count = CollectionUtils.size(target);
+        }
+
         log.info("杀码后 {} 注3D", count);
         return target;
     }
 
 
-    public Optional<String> exportCodeToFile(W3D2SumCodeReq req) throws IOException {
-
-        ExporterControlUtil.setPatternType(ExportPatternEnum.BIN_SUM_FREQ_3D);
+    public Optional<String> exportCodeToFile(W3D2SumCodeReq req, ExportPatternEnum exportPattern) throws IOException {
+        ExporterControlUtil.setPatternType(exportPattern);
 
         try {
             // 策略导出
             DocHolder docHolder = new DocHolder();
-            Optional<IDocExportTool> iDocExportTool = exportToolSelector.getByExportPattern(ExportPatternEnum.BIN_SUM_FREQ_3D);
+            Optional<IDocExportTool> iDocExportTool = exportToolSelector.getByExportPattern(exportPattern);
 
             if (iDocExportTool.isPresent()) {
-                iDocExportTool.get().writeTitleAsDefaultFormat(docHolder, "我要发·" + ExportPatternEnum.BIN_SUM_FREQ_3D.getDesc());
+                iDocExportTool.get().writeTitleAsDefaultFormat(docHolder, "我要发·" + exportPattern.getDesc());
                 iDocExportTool.get().writeContentToDoc(docHolder, req.adaptToWCodeReq());
                 String fileName = iDocExportTool.get().exportDocAsFile(docHolder);
                 return Optional.of(fileName);

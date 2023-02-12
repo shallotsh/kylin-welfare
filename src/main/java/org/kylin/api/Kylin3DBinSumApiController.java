@@ -2,15 +2,13 @@ package org.kylin.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.kylin.application.W3DBinSumFreqApplicationService;
+import org.kylin.application.W3DBinSumCommonApplicationService;
 import org.kylin.bean.*;
-import org.kylin.bean.p3.ExpertCodeReq;
 import org.kylin.bean.p3.W3D2SumCodeReq;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeSummarise;
-import org.kylin.service.p3.ExpertCodeService;
+import org.kylin.constant.ExportPatternEnum;
 import org.kylin.util.WCodeUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +28,7 @@ import java.util.stream.Collectors;
 public class Kylin3DBinSumApiController {
 
     @Resource
-    private W3DBinSumFreqApplicationService w3DBinSumFreqApplicationService;
+    private W3DBinSumCommonApplicationService w3DBinSumCommonApplicationService;
 
     @ResponseBody
     @RequestMapping(value = "/shuffle", method = RequestMethod.POST)
@@ -42,7 +40,7 @@ public class Kylin3DBinSumApiController {
             return WyfErrorResponse.buildErrorResponse();
         }
 
-        List<WCode> wCodes = w3DBinSumFreqApplicationService.doComposition(req.getSequences());
+        List<WCode> wCodes = w3DBinSumCommonApplicationService.doComposition(req.getSequences());
         log.info("2d 2sum shuffle ret: {}", wCodes);
         Integer pairCount = WCodeUtils.getPairCodeCount(wCodes);
 
@@ -64,7 +62,7 @@ public class Kylin3DBinSumApiController {
             return WyfErrorResponse.buildErrorResponse();
         }
 
-        List<WCode> allRet = w3DBinSumFreqApplicationService.doKill(req);
+        List<WCode> allRet = w3DBinSumCommonApplicationService.doKill(req);
 
         boolean freqSeted = allRet.stream().anyMatch(wCode -> wCode.getFreq()>0);
         if(freqSeted){
@@ -95,7 +93,7 @@ public class Kylin3DBinSumApiController {
             return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "导出数据错误");
         }
         try {
-            Optional<String> optFile = w3DBinSumFreqApplicationService.exportCodeToFile(req);
+            Optional<String> optFile = w3DBinSumCommonApplicationService.exportCodeToFile(req, ExportPatternEnum.BIN_SUM_FREQ_3D);
             return optFile.map(f -> new WyfDataResponse(f)).orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误"));
         } catch (IOException e) {
             log.error("导出文件错误", e);

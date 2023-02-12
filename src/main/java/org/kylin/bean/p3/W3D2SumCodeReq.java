@@ -23,6 +23,11 @@ public class W3D2SumCodeReq extends BaseCodeReq {
      */
     private String fishManCode;
 
+    /**
+     * 杀全集全偶
+     */
+    private Boolean killAllOddAndEven;
+
     @Override
     public String toString() {
         return JSON.toJSONString(this);

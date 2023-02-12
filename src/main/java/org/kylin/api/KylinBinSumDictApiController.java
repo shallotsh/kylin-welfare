@@ -2,12 +2,12 @@ package org.kylin.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.kylin.application.W3DBinSumDictApplicationService;
-import org.kylin.application.W3DBinSumFreqApplicationService;
+import org.kylin.application.W3DBinSumCommonApplicationService;
 import org.kylin.bean.*;
 import org.kylin.bean.p3.W3D2SumCodeReq;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeSummarise;
+import org.kylin.constant.ExportPatternEnum;
 import org.kylin.util.WCodeUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -28,10 +28,7 @@ import java.util.stream.Collectors;
 public class KylinBinSumDictApiController {
 
     @Resource
-    private W3DBinSumDictApplicationService w3DBinSumDictApplicationService;
-
-    @Resource
-    private W3DBinSumFreqApplicationService w3DBinSumFreqApplicationService;
+    private W3DBinSumCommonApplicationService w3DBinSumCommonApplicationService;
 
     @ResponseBody
     @RequestMapping(value = "/shuffle", method = RequestMethod.POST)
@@ -43,7 +40,7 @@ public class KylinBinSumDictApiController {
             return WyfErrorResponse.buildErrorResponse();
         }
 
-        List<WCode> wCodes = w3DBinSumDictApplicationService.doComposition(req.getSequences());
+        List<WCode> wCodes = w3DBinSumCommonApplicationService.doCompositionByDict(req.getSequences());
         log.info("2sum dict shuffle ret: {}", wCodes);
         Integer pairCount = WCodeUtils.getPairCodeCount(wCodes);
 
@@ -65,7 +62,7 @@ public class KylinBinSumDictApiController {
             return WyfErrorResponse.buildErrorResponse();
         }
 
-        List<WCode> allRet =  w3DBinSumFreqApplicationService.doKill(req);
+        List<WCode> allRet =  w3DBinSumCommonApplicationService.doKill(req);
 
         boolean freqSeted = allRet.stream().anyMatch(wCode -> wCode.getFreq()>0);
         if(freqSeted){
@@ -91,12 +88,12 @@ public class KylinBinSumDictApiController {
     @ResponseBody
     @RequestMapping(value = "/codes/export",  method = RequestMethod.POST)
     public WyfResponse exportCodes(@RequestBody W3D2SumCodeReq req) {
-        log.info("3d 2sum req:{}", req);
+        log.info("3d 2sum dict req:{}", req);
         if(req == null){
             return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "导出数据错误");
         }
         try {
-            Optional<String> optFile = w3DBinSumFreqApplicationService.exportCodeToFile(req);
+            Optional<String> optFile = w3DBinSumCommonApplicationService.exportCodeToFile(req, ExportPatternEnum.BIN_SUM_DICT_3D);
             return optFile.map(f -> new WyfDataResponse(f)).orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误"));
         } catch (IOException e) {
             log.error("导出文件错误", e);

@@ -12,12 +12,10 @@ var global_config = {
 var app = new Vue({
     el:'#app',
     data:{
-        sequence1:'',
+        sequence:'',
         sumValue:null,
         boldCodeSeq: null,
-        binSumValues:null,
         kdSeq:null,
-        boldFreqValues:null,
 
         freqSeted: false,
         wCodes: null,
@@ -53,13 +51,13 @@ var app = new Vue({
     methods:{
         doPermutate: function () {
 
-            if(isEmpty(this.sequence1)){
+            if(isEmpty(this.sequence)){
                 this.handleException("请先输入二码和");
                 return;
             }
 
             var paramArray = [];
-            paramArray.push(this.sequence1);
+            paramArray.push(this.sequence);
             // console.log('input:'+ JSON.stringify(paramArray));
             var args = {
                 "sequences": paramArray
@@ -99,7 +97,6 @@ var app = new Vue({
                 this.gossipCodeSeq = null,
                 this.inverseCodeSeq = null,
                 this.kdSeq = null,
-                this.boldFreqValues = null,
                 this.isGroup = false,
                 this.wyfMessage = '这一行是统计数据展示区域',
                 this.wCodes = null,
@@ -118,16 +115,27 @@ var app = new Vue({
                 "wCodes": this.wCodes,
                 "boldCodeSeq": this.boldCodeSeq,
                 "sumTailValues": this.sumValue,
-                "kdSeq": this.kdSeq,
-                "binSumValues": this.binSumValues,
-                "boldFreqValues": this.boldFreqValues
+                "kdSeq": this.kdSeq
+            };
+            this.killCode(args);
+        },
+        // 添加全集全偶
+        doKillCodeForOddAndEven: function () {
+            if(!this.config.isPredict){
+                this.handleException("请先完成组码");
+                return;
+            }
+
+            var args = {
+                "wCodes": this.wCodes,
+                "killAllOddAndEven": true
             };
             this.killCode(args);
         },
 
         killCode: function (args) {
             if(!this.config.isPredict){
-                this.handleException("请先完成预测");
+                this.handleException("请先完成组码");
                 return;
             }
             console.log('args' + JSON.stringify(args));
@@ -136,7 +144,7 @@ var app = new Vue({
 
             axios({
                 method:"POST",
-                url:"/api/3d-2sum/kill/code",
+                url:"/api/2sum-dict/kill/code",
                 data: JSON.stringify(args),
 
                 headers:{

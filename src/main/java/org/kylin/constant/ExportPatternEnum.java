@@ -30,6 +30,8 @@ public enum ExportPatternEnum {
 
     WCODE_4D(206, "复式组选", null),
 
+    BIN_SUM_DICT_3D(207, "二码字典法", null),
+
     ;
 
     private int id;

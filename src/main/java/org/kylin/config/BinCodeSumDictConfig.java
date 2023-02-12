@@ -36,13 +36,13 @@ public class BinCodeSumDictConfig {
 
         // 组码
         for(Integer sumCode : tempBinSumCodes){
-            wCodes.addAll(buildWCodes(DIM_3, dict.get(sumCode)));
+            wCodes.addAll(buildWCodes(sumCode, DIM_3, dict.get(sumCode)));
         }
-        // 去重，防御
-        return WCodeUtils.mergeCodes(wCodes, false);
+
+        return wCodes;
     }
 
-    private List<WCode> buildWCodes(int dim,List<String> codes){
+    private List<WCode> buildWCodes(int binSumValue, int dim,List<String> codes){
         if(CollectionUtils.isEmpty(codes)){
             return Collections.emptyList();
         }
@@ -51,8 +51,14 @@ public class BinCodeSumDictConfig {
         }
 
         return codes.stream()
-                .map(codeString -> new WCode(dim, TransferUtil.toIntegerList(codeString)))
+                .map(codeString -> buildCode(binSumValue, dim, codeString))
                 .collect(Collectors.toList());
 
+    }
+
+    private WCode buildCode(int binSumValue, int dim, String codeString){
+        WCode wCode = new WCode(dim, TransferUtil.toIntegerList(codeString));
+        wCode.setBinSumValue(binSumValue);
+        return wCode;
     }
 }

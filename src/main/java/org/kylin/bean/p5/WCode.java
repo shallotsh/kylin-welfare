@@ -26,6 +26,11 @@ public class WCode implements Cloneable,Comparable,RandomKill{
 
     private int pair;
 
+    /**
+     * 二码和，用于二码字典法
+     */
+    private int binSumValue;
+
     public WCode() {
     }
 
@@ -142,6 +147,14 @@ public class WCode implements Cloneable,Comparable,RandomKill{
 
     public void setPair(int pair) {
         this.pair = pair;
+    }
+
+    public int getBinSumValue() {
+        return binSumValue;
+    }
+
+    public void setBinSumValue(int binSumValue) {
+        this.binSumValue = binSumValue;
     }
 
     public String getString(Boolean withFreq, Boolean withSeqNo){
@@ -395,6 +408,24 @@ public class WCode implements Cloneable,Comparable,RandomKill{
 
         for(int i=0; i<list1.size(); i++){
             if(!Objects.equals(list1.get(i),list2.get(i))){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isAllOdd(){
+        for (Integer code : getCodes()){
+            if(code != null && (code % 2 == 0)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isAllEven(){
+        for (Integer code : getCodes()){
+            if(code != null && (code % 2 != 0)){
                 return false;
             }
         }
