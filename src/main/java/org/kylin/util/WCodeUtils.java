@@ -610,13 +610,13 @@ public class WCodeUtils {
             List<Integer> codes = new ArrayList<>(wCode.getCodes());
             Collections.sort(codes);
             if(Objects.equals(codes.get(0),codes.get(1))){ // aab,aaa
-                binSets.add((wCode.getCodes().get(0) + wCode.getCodes().get(1))%10);
-                binSets.add((wCode.getCodes().get(0) + wCode.getCodes().get(2))%10);
-                binSets.add((wCode.getCodes().get(0) + wCode.getCodes().get(0) + wCode.getCodes().get(2))%10);
+                binSets.add((codes.get(0) + codes.get(1))%10);
+                binSets.add((codes.get(0) + codes.get(2))%10);
+                binSets.add((codes.get(0) + codes.get(0) + codes.get(2))%10);
             }else{ // abb
-                binSets.add((wCode.getCodes().get(0) + wCode.getCodes().get(1))%10);
-                binSets.add((wCode.getCodes().get(1) + wCode.getCodes().get(2))%10);
-                binSets.add((wCode.getCodes().get(0) + wCode.getCodes().get(2) + wCode.getCodes().get(2))%10);
+                binSets.add((codes.get(0) + codes.get(1))%10);
+                binSets.add((codes.get(1) + codes.get(2))%10);
+                binSets.add((codes.get(0) + codes.get(2) + codes.get(2))%10);
             }
 
         }else{

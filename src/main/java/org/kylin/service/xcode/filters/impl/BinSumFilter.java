@@ -33,7 +33,7 @@ public class BinSumFilter implements SimpleFilter {
         for(Set<Integer> binSumValues: dicts){
             wCodesArray.add(filterByBinSum(target, binSumValues));
         }
-        return mergeWCodes(wCodesArray);
+        return mergeWCodesAndFilterFreq(wCodesArray, 3);
     }
 
 
@@ -57,12 +57,11 @@ public class BinSumFilter implements SimpleFilter {
      * @param wCodesArray
      * @return
      */
-    private List<WCode> mergeWCodes(List<List<WCode>> wCodesArray){
+    private List<WCode> mergeWCodesAndFilterFreq(List<List<WCode>> wCodesArray, int minFreqInclude){
         // 合并 & 设置频次
         List<WCode> ret = WCodeUtils.mergeCodes(wCodesArray.stream()
                 .flatMap(x -> x.stream()).collect(Collectors.toList()));
-
-        return ret;
+        return ret.stream().filter(x -> x.getFreq() >= minFreqInclude).collect(Collectors.toList());
     }
 
 
