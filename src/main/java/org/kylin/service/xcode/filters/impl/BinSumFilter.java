@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
  *   如A：234（二玛和567），911（二玛和012），输入数组123，比对A，则911留下
  *      因012中含有12
  * 2.合并不同组二和尾，统计频次。
+ * 2023-02-12 修改： 二和尾杀后，频度为2，1的要去掉，在此基础上再进行胆频选
  *
  */
 public class BinSumFilter implements SimpleFilter {
