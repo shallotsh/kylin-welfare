@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0.1"/>
     <meta content="" name="description"/>
     <meta content="shallotsh" name="author"/>
-    <title>我要发-福彩3D预测系统-3D二和频度法</title>
+    <title>我要发-福彩3D预测系统-二码和字典法</title>
     <!-- Bootstrap Styles-->
     <link href="css/bootstrap.min.css" rel="stylesheet"/>
     <!-- FontAwesome Styles-->
@@ -78,13 +78,12 @@
                 </li>
 
                 <li>
-                    <a class="active-menu" href="/3d-freq"><i class="fa fa-fw fa-cube"></i> 3D二和频度法</a>
+                    <a  href="/3d-freq"><i class="fa fa-fw fa-cube"></i> 3D二和频度法</a>
                 </li>
 
                 <li>
-                    <a href="/2sum-dict"><i class="fa fa-fw fa-cube"></i> 二码和字典法</a>
+                    <a class="active-menu" href="/2sum-dict"><i class="fa fa-fw fa-cube"></i> 二码和字典法</a>
                 </li>
-
 
                 <li>
                    <a href="/2d"><i class="fa fa-fw fa-cube"></i> 定位2D法[新]</a>
@@ -113,20 +112,11 @@
         <div id="page-inner">
             <!-- input sequence -->
             <div class="row border-dashed-bottom">
-                <div class="col-sm-2">
-                    <input type="text" class="form-control" v-model="sequence1" placeholder="序列1" />
-                </div>
-                <div class="col-sm-2">
-                    <input type="text" class="form-control" v-model="sequence2" placeholder="序列2"/>
-                </div>
-                <div class="col-sm-2">
-                    <input type="text" class="form-control" v-model="sequence3" placeholder="序列3"/>
-                </div>
-                <div class="col-sm-2">
-                    <input type="text" class="form-control" v-model="sequence4" placeholder="序列4"/>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" v-model="sequence1" placeholder="二码和列表" />
                 </div>
                 <div class="col-sm-2 col-sm-push-1">
-                    <button type="button" class="btn btn-primary fill_parent" @click="doPermutate"> 预测 </button>
+                    <button type="button" class="btn btn-primary fill_parent" @click="doPermutate"> 运行 </button>
                 </div>
             </div>
 
@@ -137,6 +127,11 @@
                     <input type="text" size="11" class="form-control fill_parent_50" v-model="boldCodeSeq" id="bold_code" placeholder="3码胆">
                 </div>
                 <div class=" form-inline col-sm-2">
+                    <label for="sum_code" class="control-label">和杀</label>
+                    <input type="text" size="11" class="form-control fill_parent_50" v-model="sumValue" id="sum_code" placeholder="和杀码">
+                </div>
+
+                <div class=" form-inline col-sm-2">
                     <label for="range_code" class="control-label">跨度</label>
                     <input type="text" size="11" class="form-control fill_parent_50" v-model="kdSeq" id="range_code" placeholder="跨度">
                 </div>
@@ -144,31 +139,38 @@
 <!--                    <label for="gossip_code" class="control-label">二码</label>-->
 <!--                    <input type="text" size="11" class="form-control fill_parent_50" v-model="gossipCode" id="gossip_code" placeholder="八卦二码">-->
 <!--                </div>-->
-                <div class=" form-inline col-sm-2">
-                    <label for="sum_code" class="control-label">三和尾</label>
-                    <input type="text" size="11" class="form-control fill_parent_50" v-model="sumValue" id="sum_code" placeholder="和杀码">
-                </div>
 
-            </div>
-            <div class="row border-dashed-bottom">
-                <div class="form-inline col-sm-4">
-                    <label for="bin_sum_codes" class="control-label">二和尾</label>
-                    <input type="text" size="32" class="form-control fill_parent" v-model="binSumValues" id="bin_sum_codes" placeholder="二和尾 用空格或者'#'分隔" />
-                </div>
-
-                <div class="form-inline col-sm-5">
-                    <label for="bold_freq_codes" class="control-label">胆频选</label>
-                    <input type="text" size="48" class="form-control fill_parent" v-model="boldFreqValues" id="bold_freq_codes" placeholder="胆频选 用空格或者'#'分隔" />
-
-                </div>
-                <div class="form-inline col-sm-3">
+                <div class="form-inline col-sm-2">
                     <button type="button" class="btn btn-primary fill_parent" @click="doKillCode"> 执行 </button>
                 </div>
 
-<!--                <div class="col-sm-2 col-sm-push-1">-->
-<!--                    -->
-<!--                </div>-->
+                <div class="form-inline col-sm-2">
+                    <button type="button" class="btn btn-primary fill_parent" @click="doKillCode"> 杀全奇全偶 </button>
+                </div>
+
+                <div class="form-inline col-sm-2">
+                    <button type="button" class="btn btn-primary fill_parent" @click="doKillCode"> 重置 </button>
+                </div>
+
+
             </div>
+<!--            <div class="row border-dashed-bottom">-->
+<!--                <div class="form-inline col-sm-4">-->
+<!--                    <label for="bin_sum_codes" class="control-label">二和尾</label>-->
+<!--                    <input type="text" size="32" class="form-control fill_parent" v-model="binSumValues" id="bin_sum_codes" placeholder="二和尾 用空格或者'#'分隔" />-->
+<!--                </div>-->
+
+<!--                <div class="form-inline col-sm-5">-->
+<!--                    <label for="bold_freq_codes" class="control-label">胆频选</label>-->
+<!--                    <input type="text" size="48" class="form-control fill_parent" v-model="boldFreqValues" id="bold_freq_codes" placeholder="胆频选 用空格或者'#'分隔" />-->
+
+<!--                </div>-->
+
+
+<!--&lt;!&ndash;                <div class="col-sm-2 col-sm-push-1">&ndash;&gt;-->
+<!--&lt;!&ndash;                    &ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--            </div>-->
 
 
 
@@ -228,7 +230,7 @@
 
 <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
 
-<script src="js/wyf_3d_2sum_freq.js?v=3"></script>
+<script src="js/wyf_2sum_dict.js?v=1"></script>
 
 
 </body>

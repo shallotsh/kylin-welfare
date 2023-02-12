@@ -35,6 +35,12 @@ public class Home {
         return "wyf_3d_2sum";
     }
 
+    @RequestMapping("/2sum-dict")
+    public String wyf3DDict(){
+        return "wyf_2sum_dict";
+    }
+
+
     @RequestMapping("/2d")
     public String wyf2d(){
         return "wyf_2d";

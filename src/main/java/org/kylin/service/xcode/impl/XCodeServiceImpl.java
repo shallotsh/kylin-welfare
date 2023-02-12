@@ -155,7 +155,7 @@ public class XCodeServiceImpl implements XCodeService {
         log.info("param:{}", JSON.toJSONString(xCodePairs));
         List<WCode> ret = WCodeUtils.mergeCodes(xCodePairs.stream()
                 .flatMap(x->x.getwCodes().stream())
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()), true);
         Collections.sort(ret);
         log.info("compSelect ret:{}", JSON.toJSONString(ret));
         return ret;

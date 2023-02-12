@@ -39,7 +39,7 @@ public class BitUnitCompositeFilter implements CompositeFilter {
         List<WCode> unitFilterRet = killByBit(target, 2, bitUnitDTO.getUnitSeq());
 
         List<WCode> ret = WCodeUtils.mergeCodes(Arrays.asList(hundredFilterRet, decadeFilterRet, unitFilterRet).stream()
-        .flatMap(x -> x.stream()).collect(Collectors.toList()));
+        .flatMap(x -> x.stream()).collect(Collectors.toList()), true);
 
         List<WCode> deletedCodes = WCodeUtils.minus(target, ret);
         if(CollectionUtils.isNotEmpty(deletedCodes)){
