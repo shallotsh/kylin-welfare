@@ -8,6 +8,7 @@ import org.kylin.bean.p5.WCode;
 import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.common.IWCodeEncodeService;
 import org.kylin.service.exporter.DocHolder;
+import org.kylin.service.exporter.ExportProperties;
 import org.kylin.service.exporter.ExportToolSelector;
 import org.kylin.service.exporter.IDocExportTool;
 import org.kylin.service.xcode.filters.impl.*;
@@ -120,6 +121,8 @@ public class W3DBinSumCommonApplicationService {
 
         try {
             // 策略导出
+//            ExportProperties properties = new ExportProperties();
+//            properties.setFileName(exportPattern.getDesc());
             DocHolder docHolder = new DocHolder();
             Optional<IDocExportTool> iDocExportTool = exportToolSelector.getByExportPattern(exportPattern);
 

@@ -1,6 +1,7 @@
 package org.kylin.bean.p5;
 
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections4.CollectionUtils;
 import org.kylin.algorithm.RandomKill;
@@ -193,6 +194,10 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         }
 
         return sb.toString();
+    }
+
+    public String getStringWithTailSum(){
+        return Joiner.on("").join(getCodes()) + "-" + getSumTail();
     }
 
     @Override

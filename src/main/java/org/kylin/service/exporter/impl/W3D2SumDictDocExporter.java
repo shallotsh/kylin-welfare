@@ -74,29 +74,8 @@ public class W3D2SumDictDocExporter extends AbstractDocumentExporter{
         title.setBold(true);
         title.setText(titleString);
         title.addBreak();
-//
-//        XWPFRun hr = paragraph.createRun();
-//        hr.setFontSize(10);
-//        hr.setText("----------------------------------------");
-//        hr.addBreak();
-
-//        paragraph.setWordWrap(true);
-
     }
 
-    private Map<WCode, Integer> getW3DCodeIntStatRefactor(List<WCode> wCodes){
-        if(CollectionUtils.isEmpty(wCodes)){
-            return Collections.emptyMap();
-        }
-
-        Map<WCode, Integer> statMap = new HashMap<>();
-        wCodes.forEach(code -> {
-            Integer count = statMap.getOrDefault(code, 0);
-            statMap.put(code, count + 1);
-        });
-
-        return statMap;
-    }
 
     // =============================== 以下是基于WCode导出数据===========================
 
@@ -118,11 +97,11 @@ public class W3D2SumDictDocExporter extends AbstractDocumentExporter{
 
         for(Integer binSumValue : binSumValues) {
             content.setBold(true);
-            content.setText("     " +  binSumValue + "   :  ");
+            content.setText("     " +  binSumValue + " :     ");
             content.setBold(false);
             List<WCode> wCodeList = binSumToWCodes.get(binSumValue);
             for(WCode wCode : wCodeList) {
-                content.setText(wCode.getString(false) + "       ");
+                content.setText(wCode.getStringWithTailSum() + "     ");
             }
             content.addBreak();
         }
@@ -134,55 +113,8 @@ public class W3D2SumDictDocExporter extends AbstractDocumentExporter{
         sep.setTextPosition(50);
     }
 
-
-    private void saveCodesWithFreq(XWPFParagraph paragraph, List<WCode> wCodes, String title){
-
-        if(CollectionUtils.isEmpty(wCodes)){
-            return;
-        }
-
-        paragraph.setAlignment(ParagraphAlignment.LEFT);
-        XWPFRun titleRun = paragraph.createRun();
-        titleRun.setFontSize(16);
-        titleRun.setBold(true);
-        titleRun.setText(title);
-        titleRun.addBreak();
-
-        Map<Integer, List<WCode>> freqToCodes = wCodes.stream().collect(Collectors.groupingBy(WCode::getFreq));
-
-        List<Map.Entry<Integer, List<WCode>>> entries = freqToCodes.entrySet().stream().collect(Collectors.toList());
-        Collections.sort(entries, Map.Entry.comparingByKey());
-        if(ExporterControlUtil.getPatternType() == ExportPatternEnum.BIN_SUM_FREQ_3D) {
-            Collections.reverse(entries);
-        }
-
-        for(Map.Entry<Integer, List<WCode>> entry : entries){
-            if(CollectionUtils.isEmpty(entry.getValue())){
-                continue;
-            }
-            XWPFRun content = paragraph.createRun();
-            content.setFontSize(14);
-            paragraph.setAlignment(ParagraphAlignment.LEFT);
-            content.setTextPosition(20);
-            int size = entry.getValue().size();
-            if(ExporterControlUtil.getPatternType() != ExportPatternEnum.BIN_SUM_FREQ_3D) {
-                String subtitle = "      " + entry.getKey() + " 次(" + (size < 10 ? "  " + size : "" + size) + "注):  ";
-                content.setText(subtitle);
-                for(WCode wCode: entry.getValue()){
-                    content.setText(wCode.getString(false) + "        ");
-                }
-                content.addBreak();
-            }else{
-                for(WCode wCode: entry.getValue()){
-                    content.setText(wCode.getString(false) + "        ");
-                }
-            }
-
-        }
-    }
-
     @Override
     public List<ExportPatternEnum> getSupportedExportPatterns() {
-        return Arrays.asList(ExportPatternEnum.BIN_SUM_FREQ_3D);
+        return Arrays.asList(ExportPatternEnum.BIN_SUM_DICT_3D);
     }
 }
