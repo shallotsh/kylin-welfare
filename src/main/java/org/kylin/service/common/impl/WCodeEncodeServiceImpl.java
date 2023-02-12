@@ -2,6 +2,7 @@ package org.kylin.service.common.impl;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.kylin.bean.p5.WCode;
+import org.kylin.config.BinCodeSumDictConfig;
 import org.kylin.service.common.IWCodeEncodeService;
 import org.kylin.util.WCodeUtils;
 import org.springframework.stereotype.Service;
@@ -97,5 +98,10 @@ public class WCodeEncodeServiceImpl implements IWCodeEncodeService {
         combineRefactor(riddle, start+1,  count - 1, flag, res);
         flag[start] = false;
         combineRefactor(riddle, start+1,  count, flag, res);
+    }
+
+    @Override
+    public List<WCode> combineUsingDict(List<Integer> riddle) {
+        return BinCodeSumDictConfig.getWCodesByBinCodes(riddle);
     }
 }

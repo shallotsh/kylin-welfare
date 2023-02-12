@@ -1,6 +1,7 @@
 package org.kylin.bean.p5;
 
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections4.CollectionUtils;
 import org.kylin.algorithm.RandomKill;
@@ -25,6 +26,11 @@ public class WCode implements Cloneable,Comparable,RandomKill{
     private int seqNo;
 
     private int pair;
+
+    /**
+     * 二码和，用于二码字典法
+     */
+    private int binSumValue;
 
     public WCode() {
     }
@@ -144,6 +150,14 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         this.pair = pair;
     }
 
+    public int getBinSumValue() {
+        return binSumValue;
+    }
+
+    public void setBinSumValue(int binSumValue) {
+        this.binSumValue = binSumValue;
+    }
+
     public String getString(Boolean withFreq, Boolean withSeqNo){
 
         if(withFreq == null || !withFreq){
@@ -180,6 +194,10 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         }
 
         return sb.toString();
+    }
+
+    public String getStringWithTailSum(){
+        return Joiner.on("").join(getCodes()) + "-" + getSumTail();
     }
 
     @Override
@@ -395,6 +413,24 @@ public class WCode implements Cloneable,Comparable,RandomKill{
 
         for(int i=0; i<list1.size(); i++){
             if(!Objects.equals(list1.get(i),list2.get(i))){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isAllOdd(){
+        for (Integer code : getCodes()){
+            if(code != null && (code % 2 == 0)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isAllEven(){
+        for (Integer code : getCodes()){
+            if(code != null && (code % 2 != 0)){
                 return false;
             }
         }

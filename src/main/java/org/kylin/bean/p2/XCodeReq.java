@@ -3,8 +3,7 @@ package org.kylin.bean.p2;
 import lombok.extern.slf4j.Slf4j;
 import org.kylin.bean.BaseCodeReq;
 import org.kylin.bean.p5.WCode;
-import org.kylin.bean.p5.WCodeReq;
-import org.kylin.service.exporter.ExportPropertites;
+import org.kylin.service.exporter.ExportProperties;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class XCodeReq extends BaseCodeReq {
     /**
      * 导出附加信息
      */
-    private ExportPropertites exportPropertites;
+    private ExportProperties exportProperties;
 
     public XCodeReq() {
     }
@@ -101,12 +100,12 @@ public class XCodeReq extends BaseCodeReq {
         return this;
     }
 
-    public ExportPropertites getExportPropertites() {
-        return exportPropertites;
+    public ExportProperties getExportPropertites() {
+        return exportProperties;
     }
 
-    public void setExportPropertites(ExportPropertites exportPropertites) {
-        this.exportPropertites = exportPropertites;
+    public void setExportPropertites(ExportProperties exportProperties) {
+        this.exportProperties = exportProperties;
     }
 
     //    @Override

@@ -23,25 +23,25 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/api/3d-2sum")
+@RequestMapping("/api/2sum-dict")
 @Slf4j
-public class Kylin3DBinSumApiController {
+public class KylinBinSumDictApiController {
 
     @Resource
     private W3DBinSumCommonApplicationService w3DBinSumCommonApplicationService;
 
     @ResponseBody
     @RequestMapping(value = "/shuffle", method = RequestMethod.POST)
-    public WyfResponse shuffle2d(@RequestBody BaseCodeReq req){
-        log.info("3d 2sum shuffle req:{}", req);
+    public WyfResponse shuffle3d(@RequestBody BaseCodeReq req){
+        log.info("2sum dict shuffle req:{}", req);
 
         if(Objects.isNull(req) || CollectionUtils.isEmpty(req.getSequences())){
             log.warn(" 参数错误");
             return WyfErrorResponse.buildErrorResponse();
         }
 
-        List<WCode> wCodes = w3DBinSumCommonApplicationService.doComposition(req.getSequences());
-        log.info("2d 2sum shuffle ret: {}", wCodes);
+        List<WCode> wCodes = w3DBinSumCommonApplicationService.doCompositionByDict(req.getSequences());
+        log.info("2sum dict shuffle ret: {}", wCodes);
         Integer pairCount = WCodeUtils.getPairCodeCount(wCodes);
 
         WCodeSummarise summarise = new WCodeSummarise();
@@ -62,7 +62,7 @@ public class Kylin3DBinSumApiController {
             return WyfErrorResponse.buildErrorResponse();
         }
 
-        List<WCode> allRet = w3DBinSumCommonApplicationService.doKill(req);
+        List<WCode> allRet =  w3DBinSumCommonApplicationService.doKill(req);
 
         boolean freqSeted = allRet.stream().anyMatch(wCode -> wCode.getFreq()>0);
         if(freqSeted){
@@ -88,12 +88,12 @@ public class Kylin3DBinSumApiController {
     @ResponseBody
     @RequestMapping(value = "/codes/export",  method = RequestMethod.POST)
     public WyfResponse exportCodes(@RequestBody W3D2SumCodeReq req) {
-        log.info("3d 2sum req:{}", req);
+        log.info("3d 2sum dict req:{}", req);
         if(req == null){
             return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "导出数据错误");
         }
         try {
-            Optional<String> optFile = w3DBinSumCommonApplicationService.exportCodeToFile(req, ExportPatternEnum.BIN_SUM_FREQ_3D);
+            Optional<String> optFile = w3DBinSumCommonApplicationService.exportCodeToFile(req, ExportPatternEnum.BIN_SUM_DICT_3D);
             return optFile.map(f -> new WyfDataResponse(f)).orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误"));
         } catch (IOException e) {
             log.error("导出文件错误", e);

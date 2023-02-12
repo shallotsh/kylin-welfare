@@ -36,4 +36,12 @@ public interface IWCodeEncodeService {
      */
     List<WCode> combine4Code(List<Integer> riddle, int dimVal);
 
+
+    /**
+     * 使用二码和字典进行组码
+     * @param riddle
+     * @return
+     */
+    List<WCode> combineUsingDict(List<Integer> riddle);
+
 }

@@ -1,9 +1,7 @@
 package org.kylin.service.exporter;
 
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.kylin.constant.ExportPatternEnum;
 
-import javax.print.Doc;
 import java.io.IOException;
 import java.util.List;
 
@@ -43,7 +41,11 @@ public interface IDocExportTool<T> {
      * @throws IOException
      */
     default String exportDocAsFile(DocHolder docHolder) throws IOException{
-        return exportDocAsFile(docHolder, null, null);
+        String fileName = null;
+        if(docHolder != null && docHolder.getExportProperties() != null){
+            fileName = docHolder.getExportProperties().getFileName();
+        }
+        return exportDocAsFile(docHolder, null, fileName);
     }
 
     /**

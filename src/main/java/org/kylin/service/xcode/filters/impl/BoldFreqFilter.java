@@ -59,7 +59,7 @@ public class BoldFreqFilter implements SimpleFilter {
         // 合并 & 设置频次 & 过滤频次
         List<WCode> ret = WCodeUtils.mergeCodes(wCodesArray.stream()
                 .flatMap(x -> x.stream())
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()), true);
 
         return ret.stream().filter(x -> x.getFreq() >= minFreqInclude).collect(Collectors.toList());
     }

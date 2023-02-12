@@ -9,7 +9,7 @@ import org.kylin.bean.p5.WCodeReq;
 import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.exporter.AbstractDocumentExporter;
 import org.kylin.service.exporter.DocHolder;
-import org.kylin.service.exporter.ExportPropertites;
+import org.kylin.service.exporter.ExportProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -33,17 +33,17 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
         XWPFDocument doc = docHolder.getDocument();
 
         // ab*
-        exportWCodes(doc, data.getwCodes(), "ab* ( " + count + " 注 )", null, freqSetted, "ab*", docHolder.getExportPropertites());
+        exportWCodes(doc, data.getwCodes(), "ab* ( " + count + " 注 )", null, freqSetted, "ab*", docHolder.getExportProperties());
 
         // a*b
-        exportWCodes(doc, data.getwCodes(), "a*b ( " + count + " 注 )", null, freqSetted, "a*b", docHolder.getExportPropertites());
+        exportWCodes(doc, data.getwCodes(), "a*b ( " + count + " 注 )", null, freqSetted, "a*b", docHolder.getExportProperties());
 
         // *ab
-        exportWCodes(doc, data.getwCodes(), "*ab ( " + count + " 注 )", null, freqSetted, "*ab", docHolder.getExportPropertites());
+        exportWCodes(doc, data.getwCodes(), "*ab ( " + count + " 注 )", null, freqSetted, "*ab", docHolder.getExportProperties());
 
     }
 
-    private  void exportWCodes(XWPFDocument doc, List<WCode> wCodes, String titleString, String separator, Boolean freqSeted, String pattern, ExportPropertites exportPropertites){
+    private  void exportWCodes(XWPFDocument doc, List<WCode> wCodes, String titleString, String separator, Boolean freqSeted, String pattern, ExportProperties exportProperties){
 
         if(CollectionUtils.isEmpty(wCodes)){
             return;
@@ -83,7 +83,7 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
 
         if(CollectionUtils.isNotEmpty(kDOne)) {
             content.setText("跨度一(" + kDOne.size() + "注)：");
-            List<String> codes = getOutputCodes(kDOne, pattern, freqSeted, exportPropertites);
+            List<String> codes = getOutputCodes(kDOne, pattern, freqSeted, exportProperties);
             for(String code : codes){
                 content.setText(code);
                 content.setText(span);
@@ -93,7 +93,7 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
 
         if(CollectionUtils.isNotEmpty(kDTwo)) {
             content.setText("跨度二(" + kDTwo.size() + "注)：");
-            List<String> codes = getOutputCodes(kDTwo, pattern, freqSeted, exportPropertites);
+            List<String> codes = getOutputCodes(kDTwo, pattern, freqSeted, exportProperties);
             for(String code : codes){
                 content.setText(code);
                 content.setText(span);
@@ -108,7 +108,7 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
     }
 
 
-    private List<String> getOutputCodes(List<WCode> wCodes, String pattern, Boolean freqSeted, ExportPropertites exportPropertites){
+    private List<String> getOutputCodes(List<WCode> wCodes, String pattern, Boolean freqSeted, ExportProperties exportProperties){
         List<String> toBeExportedCodes = Lists.newArrayListWithExpectedSize(wCodes.size());
         for(WCode code : wCodes) {
 
@@ -127,7 +127,7 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
                 printCode = "" + code.getCodes().get(1) + "*" + code.getCodes().get(0);
             }
 
-            if(Objects.nonNull(exportPropertites) && code.getFreq() < exportPropertites.getFreqLowLimitValue()){
+            if(Objects.nonNull(exportProperties) && code.getFreq() < exportProperties.getFreqLowLimitValue()){
                 continue;
             }
             toBeExportedCodes.add(printCode);
