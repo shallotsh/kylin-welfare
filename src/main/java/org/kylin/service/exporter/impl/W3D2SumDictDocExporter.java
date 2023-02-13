@@ -2,6 +2,8 @@ package org.kylin.service.exporter.impl;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.util.StringUtil;
+import org.apache.poi.wp.usermodel.HeaderFooterType;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -10,7 +12,6 @@ import org.kylin.bean.p5.WCodeReq;
 import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.exporter.AbstractDocumentExporter;
 import org.kylin.service.exporter.DocHolder;
-import org.kylin.util.ExporterControlUtil;
 import org.kylin.util.WCodeUtils;
 import org.springframework.stereotype.Component;
 
@@ -60,6 +61,24 @@ public class W3D2SumDictDocExporter extends AbstractDocumentExporter{
         title = String.format("非对子( %d 注 )：", nonPairCodesNew.size());
         writeWCodesRefactor(docHolder.getDocument().createParagraph(), nonPairCodesNew, title);
 
+
+        if(StringUtils.isNotBlank(titleLocal.get())) {
+            XWPFParagraph headerParagraph = docHolder.getDocument().createHeader(HeaderFooterType.DEFAULT).createParagraph();
+            XWPFRun run = headerParagraph.createRun();
+            run.setFontSize(8);
+            run.setText(titleLocal.get());
+        }
+
+        // 新增去重结果导出
+        List<WCode> distinctCodes = WCodeUtils.mergeCodes(wCodes, false);
+        List<WCode> distinctPairCodesNew = WCodeUtils.filterPairCodes(distinctCodes);
+        XWPFParagraph paragraph = docHolder.getDocument().createParagraph();
+        paragraph.setPageBreak(true);
+        title = String.format("对子( %d 注 , 已去重)：", distinctPairCodesNew.size());
+        writeWCodesRefactorWithoutBinCode(paragraph, distinctPairCodesNew, title);
+        List<WCode> distinctNonPairCodesNew = WCodeUtils.filterNonPairCodes(distinctCodes);
+        title = String.format("非对子( %d 注 , 已去重)：", distinctNonPairCodesNew.size());
+        writeWCodesRefactorWithoutBinCode(docHolder.getDocument().createParagraph(), distinctNonPairCodesNew, title);
     }
 
     public void writeSubTitle(XWPFParagraph paragraph, String titleString){
@@ -77,9 +96,46 @@ public class W3D2SumDictDocExporter extends AbstractDocumentExporter{
     }
 
 
-    // =============================== 以下是基于WCode导出数据===========================
+    /**
+     * 不按字典二码和输出
+     * @param paragraph
+     * @param wCodes
+     * @param title
+     */
+    public void writeWCodesRefactorWithoutBinCode( XWPFParagraph paragraph, List<WCode> wCodes, String title){
+        if(CollectionUtils.isEmpty(wCodes)){
+            return;
+        }
+        writeSubTitle(paragraph, title);
+
+        XWPFRun content = paragraph.createRun();
+        content.setFontSize(14);
+        paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+        Collections.sort(wCodes, (o1, o2) -> {
+            if(o1.getSumTail() != o2.getSumTail()){
+                if(o1.getSumTail() > o2.getSumTail()){
+                    return 1;
+                }else{
+                    return -1;
+                }
+            }else{
+                return o1.compareTo(o2);
+            }
+        });
+
+        for(WCode wCode : wCodes) {
+            content.setText(wCode.getStringWithTailSum() + "     ");
+        }
+        content.addBreak();
 
 
+        content.addBreak();
+        content.setTextPosition(20);
+
+        XWPFRun sep = paragraph.createRun();
+        sep.setTextPosition(50);
+    }
 
     public void
     writeWCodesRefactor( XWPFParagraph paragraph, List<WCode> wCodes, String title){
@@ -93,18 +149,30 @@ public class W3D2SumDictDocExporter extends AbstractDocumentExporter{
         paragraph.setAlignment(ParagraphAlignment.LEFT);
 
         Map<Integer, List<WCode>> binSumToWCodes = wCodes.stream().collect(Collectors.groupingBy(WCode::getBinSumValue));
-        List<Integer> binSumValues = new ArrayList<>(binSumToWCodes.keySet()).stream().sorted().collect(Collectors.toList());
-
-        for(Integer binSumValue : binSumValues) {
+        List<Map.Entry<Integer, List<WCode>>> entryList = binSumToWCodes.entrySet().stream().collect(Collectors.toList());
+        Collections.sort(entryList, Map.Entry.comparingByKey());
+        for(Map.Entry<Integer, List<WCode>> entry : entryList){
             content.setBold(true);
-            content.setText("     " +  binSumValue + " :     ");
+            content.setText("     " +  entry.getKey() + " :     ");
             content.setBold(false);
-            List<WCode> wCodeList = binSumToWCodes.get(binSumValue);
-            for(WCode wCode : wCodeList) {
+            for(WCode wCode : entry.getValue()) {
                 content.setText(wCode.getStringWithTailSum() + "     ");
             }
             content.addBreak();
         }
+
+//        List<Integer> binSumValues = new ArrayList<>(binSumToWCodes.keySet()).stream().sorted().collect(Collectors.toList());
+
+//        for(Integer binSumValue : binSumValues) {
+//            content.setBold(true);
+//            content.setText("     " +  binSumValue + " :     ");
+//            content.setBold(false);
+//            List<WCode> wCodeList = binSumToWCodes.get(binSumValue);
+//            for(WCode wCode : wCodeList) {
+//                content.setText(wCode.getStringWithTailSum() + "     ");
+//            }
+//            content.addBreak();
+//        }
 
         content.addBreak();
         content.setTextPosition(20);

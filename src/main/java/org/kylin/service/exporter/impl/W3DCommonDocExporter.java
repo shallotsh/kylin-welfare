@@ -174,8 +174,9 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
                 }
                 content.addBreak();
             }else{
+                // 3D二和频度法 输出
                 for(WCode wCode: entry.getValue()){
-                    content.setText(wCode.getString(false) + "        ");
+                    content.setText(wCode.getStringWithTailSum() + "        ");
                 }
             }
 
