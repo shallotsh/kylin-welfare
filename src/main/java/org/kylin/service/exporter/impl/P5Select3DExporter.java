@@ -3,6 +3,7 @@ package org.kylin.service.exporter.impl;
 import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xwpf.usermodel.LineSpacingRule;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -70,6 +71,7 @@ public class P5Select3DExporter extends AbstractDocumentExporter {
         }
 
         DocUtils.writeSubTitle(paragraph, title);
+        paragraph.setSpacingBetween(1.2, LineSpacingRule.AUTO);
 
         XWPFRun content = paragraph.createRun();
         content.setFontSize(14);

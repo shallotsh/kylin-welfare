@@ -38,7 +38,6 @@ public abstract class AbstractDocumentExporter implements IDocExportTool<WCodeRe
         hr1.setTextPosition(12);
         hr1.setFontSize(18);
         hr1.addBreak();
-
         titleLocal.set(printTitle);
     }
 

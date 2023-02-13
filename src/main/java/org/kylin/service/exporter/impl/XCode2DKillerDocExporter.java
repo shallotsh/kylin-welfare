@@ -69,6 +69,7 @@ public class XCode2DKillerDocExporter extends AbstractDocumentExporter{
         hr.addBreak();
 
 
+        paragraph.setSpacingBetween(1.2, LineSpacingRule.AUTO);
 
         XWPFRun content = paragraph.createRun();
         content.setFontSize(14);

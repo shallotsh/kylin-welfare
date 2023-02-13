@@ -2,6 +2,7 @@ package org.kylin.service.exporter.impl;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xwpf.usermodel.LineSpacingRule;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -49,6 +50,8 @@ public class W4DDocExporter extends AbstractDocumentExporter{
         if(CollectionUtils.isEmpty(wCodes)){
             return;
         }
+
+        paragraph.setSpacingBetween(1.2, LineSpacingRule.AUTO);
 
         paragraph.setAlignment(ParagraphAlignment.LEFT);
         XWPFRun titleRun = paragraph.createRun();

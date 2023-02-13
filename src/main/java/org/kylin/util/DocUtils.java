@@ -218,6 +218,7 @@ public class DocUtils {
             title.setText(toUTF8(titleString));
             title.addBreak();
         }
+        paragraph.setSpacingBetween(1.2, LineSpacingRule.AUTO);
 
         XWPFRun hr = paragraph.createRun();
         hr.setFontSize(10);
