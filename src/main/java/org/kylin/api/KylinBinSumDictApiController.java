@@ -55,7 +55,7 @@ public class KylinBinSumDictApiController {
     @ResponseBody
     @RequestMapping(value = "/kill/code", method = RequestMethod.POST)
     public WyfResponse killCode(@RequestBody W3D2SumCodeReq req, HttpServletRequest request){
-        log.info("3d 2sum kill : {}", req);
+        log.info("2sumDict杀码 : {}", req);
 
         if(Objects.isNull(req)){
             log.warn(" 参数错误");
@@ -88,13 +88,13 @@ public class KylinBinSumDictApiController {
     @ResponseBody
     @RequestMapping(value = "/codes/export",  method = RequestMethod.POST)
     public WyfResponse exportCodes(@RequestBody W3D2SumCodeReq req) {
-        log.info("3d 2sum dict req:{}", req);
+        log.info("2sumDict导出:{}", req);
         if(req == null){
             return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "导出数据错误");
         }
         try {
             Optional<String> optFile = w3DBinSumCommonApplicationService.exportCodeToFile(req, ExportPatternEnum.BIN_SUM_DICT_3D);
-            log.info("导出文件:{}", optFile.map(String::toString).orElse("未知"));
+            log.info("2sumDict导出文件:{}", optFile.map(String::toString).orElse("未知"));
             return optFile.map(f -> new WyfDataResponse(f)).orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误"));
         } catch (IOException e) {
             log.error("导出文件错误", e);
