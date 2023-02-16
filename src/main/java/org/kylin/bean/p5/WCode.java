@@ -436,4 +436,16 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         }
         return true;
     }
+
+    public static int compareByTailNo(WCode o1, WCode o2){
+            if(o1.getSumTail() != o2.getSumTail()){
+                if(o1.getSumTail() > o2.getSumTail()){
+                    return 1;
+                }else{
+                    return -1;
+                }
+            }else{
+                return o1.compareTo(o2);
+            }
+    }
 }

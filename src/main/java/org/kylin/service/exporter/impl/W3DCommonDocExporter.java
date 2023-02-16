@@ -120,7 +120,7 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
         Map<WCode, Integer> stat = getW3DCodeIntStatRefactor(wCodes);
 
         List<WCode> temp = new ArrayList<>(stat.keySet());
-        Collections.sort(temp);
+        Collections.sort(temp, WCode::compareByTailNo);
         for(WCode wCode : temp) {
             // 修改专家组码法输出
             String ct = wCode.getStringWithTailSum();
@@ -175,7 +175,9 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
             if(ExporterControlUtil.getPatternType() != ExportPatternEnum.BIN_SUM_FREQ_3D) {
                 String subtitle = "      " + entry.getKey() + " 次(" + (size < 10 ? "  " + size : "" + size) + "注):  ";
                 content.setText(subtitle);
-                for(WCode wCode: entry.getValue()){
+                List<WCode> tmp = entry.getValue();
+                Collections.sort(tmp,  WCode::compareByTailNo);
+                for(WCode wCode: tmp){
                     content.setText(wCode.getStringWithTailSum() + "        ");
                 }
                 content.addBreak();
