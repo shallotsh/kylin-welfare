@@ -34,7 +34,7 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
         Collections.sort(wCodes);
 
         if(Objects.equals(Boolean.TRUE, data.getFreqSeted())){
-            // 调用新新逻辑输出
+            // 调用新新逻辑输出，3d2和频度法
             List<WCode> all = new ArrayList<>();
             all.addAll(wCodes);
             if(CollectionUtils.isNotEmpty(data.getDeletedCodes())) {
@@ -122,7 +122,8 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
         List<WCode> temp = new ArrayList<>(stat.keySet());
         Collections.sort(temp);
         for(WCode wCode : temp) {
-            String ct = wCode.getString(printFreq, false);
+            // 修改专家组码法输出
+            String ct = wCode.getStringWithTailSum();
             if(stat.get(wCode) > 1){
                 ct += "("+ stat.get(wCode) +")    ";
             }else {
@@ -175,7 +176,7 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
                 String subtitle = "      " + entry.getKey() + " 次(" + (size < 10 ? "  " + size : "" + size) + "注):  ";
                 content.setText(subtitle);
                 for(WCode wCode: entry.getValue()){
-                    content.setText(wCode.getString(false) + "        ");
+                    content.setText(wCode.getStringWithTailSum() + "        ");
                 }
                 content.addBreak();
             }else{
