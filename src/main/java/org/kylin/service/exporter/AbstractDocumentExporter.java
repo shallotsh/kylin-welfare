@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Random;
 
 @Slf4j
 public abstract class AbstractDocumentExporter implements IDocExportTool<WCodeReq> {
@@ -47,7 +48,7 @@ public abstract class AbstractDocumentExporter implements IDocExportTool<WCodeRe
         String targetDirName = getTargetFilePath(fullPath);
         String subDirectory = CommonUtils.getCurrentTimeString().substring(0,6);
         String targetPath = CommonUtils.createIfNotExist(targetDirName, subDirectory);
-        fileName = (StringUtils.isBlank(fileName) ? CommonUtils.getCurrentTimeString() : (fileName )) + ".docx";
+        fileName = (StringUtils.isBlank(fileName) ? (CommonUtils.getCurrentTimeString() + "_" + new Random().nextInt(100)) : (fileName )) + ".docx";
         String exportFileName = targetPath + File.separator + fileName;
 
         // save data
