@@ -114,17 +114,7 @@ public class W3D2SumDictDocExporter extends AbstractDocumentExporter{
         content.setFontSize(14);
         paragraph.setAlignment(ParagraphAlignment.LEFT);
 
-        Collections.sort(wCodes, (o1, o2) -> {
-            if(o1.getSumTail() != o2.getSumTail()){
-                if(o1.getSumTail() > o2.getSumTail()){
-                    return 1;
-                }else{
-                    return -1;
-                }
-            }else{
-                return o1.compareTo(o2);
-            }
-        });
+        Collections.sort(wCodes, WCode::compareByTailNo);
 
         for(WCode wCode : wCodes) {
             content.setText(wCode.getStringWithTailSum() + "     ");
