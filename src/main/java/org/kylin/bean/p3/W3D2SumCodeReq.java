@@ -21,7 +21,13 @@ public class W3D2SumCodeReq extends BaseCodeReq {
     /**
      * 钓叟选码
      */
+    @Deprecated
     private String fishManCode;
+
+    /**
+     * 晚秋选码
+     */
+    private String lateAutumnCode;
 
     /**
      * 杀全集全偶

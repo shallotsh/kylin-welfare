@@ -12,6 +12,7 @@ import org.kylin.service.exporter.ExportToolSelector;
 import org.kylin.service.exporter.IDocExportTool;
 import org.kylin.service.xcode.filters.impl.BoldCodeFilter;
 import org.kylin.service.xcode.filters.impl.FishManCodeFilter;
+import org.kylin.service.xcode.filters.impl.LateAutumnCodeFilter;
 import org.kylin.service.xcode.filters.impl.SumTailCodeFilter;
 import org.kylin.util.ExporterControlUtil;
 import org.kylin.util.TransferUtil;
@@ -43,8 +44,8 @@ public class W4DApplicationService {
             throw new RuntimeException("预测序列为空");
         }
         List<WCode> wCodes = iwCodeEncodeService.combine4Code(seq, 4);
-        // 去除含重复数字的4d
-        wCodes = wCodes.stream().filter(x -> !WCodeUtils.hasRepeatNo(x)).collect(Collectors.toList());
+        // abcd中有一对重复的也留下，即aabc型留下，其余aabb型（a不等于b），aaab，aaaa型都去除
+        wCodes = wCodes.stream().filter(x -> WCodeUtils.meetConditionFor4D(x)).collect(Collectors.toList());
 
         log.info("组码结果 seq:{}, wCodes_size:{}", seq, CollectionUtils.size(wCodes));
         return wCodes;
@@ -74,9 +75,9 @@ public class W4DApplicationService {
         }
 
 
-        if(CollectionUtils.isNotEmpty(target) && StringUtils.isNotBlank(req.getFishManCode())){
-            target = new FishManCodeFilter().filter(target, req.getFishManCode());
-            log.info("钓叟选码 {} 住3D", (count - CollectionUtils.size(target)));
+        if(CollectionUtils.isNotEmpty(target) && StringUtils.isNotBlank(req.getLateAutumnCode())){
+            target = new LateAutumnCodeFilter().filter(target, req.getLateAutumnCode());
+            log.info("晚秋选码 {} 住3D", (count - CollectionUtils.size(target)));
             count = CollectionUtils.size(target);
         }
 

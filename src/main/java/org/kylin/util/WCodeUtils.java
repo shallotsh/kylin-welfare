@@ -630,11 +630,12 @@ public class WCodeUtils {
     }
 
 
-    public static boolean hasRepeatNo(WCode wCode){
+    public static boolean meetConditionFor4D(WCode wCode){
         if(wCode == null || CollectionUtils.size(wCode.getCodes()) < 2){
             return false;
         }
         HashSet<Integer> set = new HashSet<>(wCode.getCodes());
-        return set.size() != wCode.getCodes().size();
+        // abcd中有一对重复的也留下，即aabc型留下，其余aabb型（a不等于b），aaab，aaaa型都去除
+        return wCode.getCodes().size() - set.size() <= 1;
     }
 }
