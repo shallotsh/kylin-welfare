@@ -145,12 +145,14 @@ public class W4DTo3DDocExporter extends AbstractDocumentExporter{
         titleRun.setText(title);
         titleRun.addBreak();
 
+        Collections.sort(wCodes, WCode::compareByTailNo);
+
         XWPFRun content = paragraph.createRun();
         content.setFontSize(14);
         paragraph.setAlignment(ParagraphAlignment.LEFT);
         content.setTextPosition(20);
         for(WCode wCode: wCodes){
-            content.setText(StringUtils.join(wCode.getCodes().toArray(), "") + "        ");
+            content.setText(wCode.getStringWithTailSum() + "        ");
         }
     }
 
