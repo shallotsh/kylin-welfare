@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.kylin.application.W4DApplicationService;
 import org.kylin.bean.*;
-import org.kylin.bean.p3.W3D2SumCodeReq;
 import org.kylin.bean.p4.W3DCompoundCodeReq;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeSummarise;
@@ -88,25 +87,24 @@ public class Kylin4DApiController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/codes/transferAndExport",  method = RequestMethod.POST)
-    public WyfResponse transferAndExportCodes(@RequestBody W3DCompoundCodeReq req) {
+    @RequestMapping(value = "/codes/transferCode",  method = RequestMethod.POST)
+    public WyfResponse transferCode(@RequestBody W3DCompoundCodeReq req) {
 
         log.info("transfer and export req:{}", req);
         if(req == null){
             return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "转换错误");
         }
-        try {
-            // 转换
 
-            // 导出
-            ExporterControlUtil.setPatternType(ExportPatternEnum.WCODE_4D_TO_3D);
-            Optional<String> optFile = w4DApplicationService.exportCodeToFile(req);
-            return optFile.map(f -> new WyfDataResponse(f)).orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误"));
-        } catch (IOException e) {
-            log.error("导出文件错误", e);
-            return new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
-        }
+        List<WCode> ret = w4DApplicationService.transferToThreeCode(req.getWCodes());
+        log.info("四转三码 ret_size:{}", CollectionUtils.size(ret));
+        Integer pairCount = WCodeUtils.getPairCodeCount(ret);
+        WCodeSummarise summarise = new WCodeSummarise();
+        summarise.setwCodes(ret);
+        summarise.setFreqSeted(false);
+        summarise.setPairCodes(pairCount);
+        summarise.setNonPairCodes(CollectionUtils.size(ret) - pairCount);
 
+        return  new WyfDataResponse<>(summarise);
     }
 
     @ResponseBody
@@ -117,7 +115,12 @@ public class Kylin4DApiController {
             return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "导出数据错误");
         }
         try {
-            ExporterControlUtil.setPatternType(ExportPatternEnum.WCODE_4D);
+            // 导出上下文设置
+            if(Objects.equals(Boolean.TRUE, req.getFourToThreeCmd())){
+                ExporterControlUtil.setPatternType(ExportPatternEnum.WCODE_4D_TO_3D);
+            }else {
+                ExporterControlUtil.setPatternType(ExportPatternEnum.WCODE_4D);
+            }
             Optional<String> optFile = w4DApplicationService.exportCodeToFile(req);
             return optFile.map(f -> new WyfDataResponse(f)).orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误"));
         } catch (IOException e) {

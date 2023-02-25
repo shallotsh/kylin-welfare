@@ -4,16 +4,15 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.kylin.bean.p3.W3D2SumCodeReq;
 import org.kylin.bean.p4.W3DCompoundCodeReq;
 import org.kylin.bean.p5.WCode;
+import org.kylin.constant.EW4DClassify;
 import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.common.IWCodeEncodeService;
 import org.kylin.service.exporter.DocHolder;
 import org.kylin.service.exporter.ExportToolSelector;
 import org.kylin.service.exporter.IDocExportTool;
 import org.kylin.service.xcode.filters.impl.BoldCodeFilter;
-import org.kylin.service.xcode.filters.impl.FishManCodeFilter;
 import org.kylin.service.xcode.filters.impl.LateAutumnCodeFilter;
 import org.kylin.service.xcode.filters.impl.SumTailCodeFilter;
 import org.kylin.util.ExporterControlUtil;
@@ -24,6 +23,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -101,25 +102,96 @@ public class W4DApplicationService {
         return target;
     }
 
+    public List<WCode> transferToThreeCode(List<WCode> wCodes){
+        if(CollectionUtils.isEmpty(wCodes)){
+            return Collections.emptyList();
+        }
 
-//    public List<WCode> transferFourToThree(W3DCompoundCodeReq req){
-//        if(req == null || CollectionUtils.isEmpty(req.getWCodes())){
-//            log.info("入参数据为空");
-//            return Collections.emptyList();
-//        }
-//        List<WCode> wCodes = req.getwCodes();
-//
-//
-//
-//
-//
-//        return Collections.emptyList();
-//    }
-//
-//
-//    private List<WCode> getDecomposeCodes
-//
-//
+        List<WCode> ret = new ArrayList<>();
+        ret.addAll(getDecomposeCodes(wCodes));
+        ret.addAll(getAABCCodesForPair(wCodes));
+        ret.addAll(getAABCCodesForNonPair(wCodes));
+        return ret;
+    }
+
+    private List<WCode> getDecomposeCodes(List<WCode> wCodes){
+        if(CollectionUtils.isEmpty(wCodes)){
+            return Collections.emptyList();
+        }
+
+        List<WCode> ret = generateGroupCodes(wCodes, this::isAllDiff, this::decompose);
+        ret.stream().forEach(x -> x.setClassify(EW4DClassify.FOUR_DECOMPOSE.getId()));
+        return ret;
+    }
+
+    private List<WCode> getAABCCodesForPair(List<WCode> wCodes){
+        List<WCode> ret = generateGroupCodes(wCodes, this::isAABC, this::buildPairCodesForAABC);
+        ret.forEach(x -> x.setClassify(EW4DClassify.FOUR_PAIR_CODE.getId()));
+        return ret;
+    }
+
+    private List<WCode> getAABCCodesForNonPair(List<WCode> wCodes){
+        List<WCode> ret = generateGroupCodes(wCodes, this::isAABC, this::buildNonPairCodesForAABC);
+        ret.forEach(x -> x.setClassify(EW4DClassify.FOUR_NON_PAIR_CODE.getId()));
+        return ret;
+    }
+
+    private List<WCode> generateGroupCodes(List<WCode> wCodes, Predicate<List<Integer>> judge, Function<List<Integer>,List<WCode>> func){
+        if(CollectionUtils.isEmpty(wCodes)){
+            return Collections.emptyList();
+        }
+        List<WCode> ret = new ArrayList<>();
+        for(WCode wCode : wCodes){
+            if(!judge.test(wCode.getCodes())){
+                continue;
+            }
+            ret.addAll(func.apply(wCode.getCodes()));
+        }
+
+        return WCodeUtils.convertToGroup(ret);
+    }
+
+    private List<WCode> buildPairCodesForAABC(List<Integer> codes){
+        List<WCode> wCodes = new ArrayList<>();
+        Map<Integer, Long> codeToCount = codes.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        List<Map.Entry<Integer, Long>> entries = codeToCount.entrySet().stream().collect(Collectors.toList());
+        Collections.sort(entries, Map.Entry.comparingByValue());
+
+        wCodes.add(new WCode(3, entries.get(2).getKey(), entries.get(2).getKey(), entries.get(0).getKey()));
+        wCodes.add(new WCode(3, entries.get(2).getKey(), entries.get(2).getKey(), entries.get(1).getKey()));
+        wCodes.add(new WCode(3, codes.get(0), codes.get(0), codes.get(3)));
+        return wCodes;
+    }
+
+    private List<WCode> buildNonPairCodesForAABC(List<Integer> codes){
+        List<WCode> wCodes = new ArrayList<>();
+        Map<Integer, Long> codeToCount = codes.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        List<Map.Entry<Integer, Long>> entries = codeToCount.entrySet().stream().collect(Collectors.toList());
+        Collections.sort(entries, Map.Entry.comparingByValue());
+        wCodes.add(new WCode(3, entries.get(2).getKey(), entries.get(1).getKey(), entries.get(0).getKey()));
+        return wCodes;
+    }
+
+    private boolean isAABC(List<Integer> codes){
+        if(CollectionUtils.isEmpty(codes) || codes.size() != 4){
+            return false;
+        }
+        return new HashSet<>(codes).size() == 3;
+    }
+
+    private boolean isAllDiff(List<Integer> codes){
+        if(CollectionUtils.isEmpty(codes) || codes.size() != 4){
+            return false;
+        }
+        return new HashSet<>(codes).size() == 4;
+    }
+
+    private List<WCode> decompose(List<Integer> codes){
+        List<WCode> ret = new ArrayList<>();
+        ret.add(new WCode(3, codes.get(0), codes.get(1), codes.get(2)));
+        ret.add(new WCode(3, codes.get(1), codes.get(2), codes.get(3)));
+        return ret;
+    }
 
 
 

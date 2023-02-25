@@ -25,7 +25,8 @@ var app = new Vue({
         config:global_config,
         cacheQueue: new Array(),
 
-        drawNoticeOverview: ''
+        drawNoticeOverview: '',
+        fourToThree: false
     },
     created: function(){
         this.export_format = 0;
@@ -73,6 +74,7 @@ var app = new Vue({
                     app.handle3DCodeResponse(response.data.data, "复式组选");
                     app.config.isPredict = true;
                     app.isGroup = true;
+                    app.fourToThree = false;
                 })
                 .catch(function(error){
                     console.log(error)
@@ -80,7 +82,6 @@ var app = new Vue({
 
         },
         handle3DCodeResponse: function (data, msg) {
-            console.log(JSON.stringify(data))
             this.wCodes = data.wCodes;
             this.pairCount = data.pairCodes;
             this.nonPairCount = data.nonPairCodes;
@@ -105,7 +106,8 @@ var app = new Vue({
                 this.wCodes = null,
                 this.deletedCodesPair= null,
                 this.pairCount = null,
-                this.nonPairCount = null
+                this.nonPairCount = null,
+                this.fourToThree = false
 
         },
         doKillCode: function () {
@@ -118,7 +120,8 @@ var app = new Vue({
                 "wCodes": this.wCodes,
                 "boldCodeSeq": this.boldCodeSeq,
                 "sumTailValues": this.sumValue,
-                "lateAutumnCode": this.lateAutumn
+                "lateAutumnCode": this.lateAutumn,
+                "fourToThreeCmd": this.fourToThree
             };
             this.killCode(args);
         },
@@ -141,7 +144,7 @@ var app = new Vue({
                     "Content-Type": "application/json; charset=UTF-8"
                 }
             }).then(function(response) {
-                app.handle3DCodeResponse(response.data.data, "专家推荐法杀码");
+                app.handle3DCodeResponse(response.data.data, "复式组选杀码");
                 app.wyfMessage = "总计 " + count + " 注, 杀码 " + (count - app.wCodes.length) + " 注, 余 " + app.wCodes.length + " 注"; // (对子:" + app.pairCount + " 注,非对子:" + app.nonPairCount + " 注)" ;
             }).catch(function(response) {
                 console.log("resp:" + JSON.stringify(response.data, null, 2));
@@ -159,7 +162,7 @@ var app = new Vue({
             window.location = "/api/welfare/download?fileName=" + data;
         },
 
-        transferCodeAndExport: function() {
+        transferCode: function() {
             if(!this.config.isPredict){
                 this.handleException("请先完成组码");
                 return;
@@ -168,18 +171,22 @@ var app = new Vue({
                 "wCodes": this.wCodes,
                 "fourToThreeCmd": true
             };
+            // console.log('请求参数:' + JSON.stringify(args));
             axios({
                 method:"POST",
-                url:"/api/4d/codes/transferAndExport",
+                url:"/api/4d/codes/transferCode",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
                 }
             }).then(function(response) {
-                app.handleDownload(response.data.data);
-            }).catch(function(reason) {
-                console.log(reason);
-                app.handleException("导出请求失败!");
+                app.handle3DCodeResponse(response.data.data, "四转三码");
+                app.fourToThree = true;
+                console.log('fourToThree:' + app.fourToThree)
+                app.wyfMessage = "总计 " + app.wCodes.length + " 注 "+ " (对子:" + app.pairCount + " 注,非对子:" + app.nonPairCount + " 注)" ;
+            }).catch(function(response) {
+                // console.log("respxx:" + JSON.stringify(response.data, null, 2));
+                app.handleException("四码转换请求失败!");
             });
         },
 
@@ -202,7 +209,8 @@ var app = new Vue({
             var args = {
                 wCodes: exportCodes,
                 deletedCodes: this.deletedCodesPair,
-                freqSeted: this.freqSeted
+                freqSeted: this.freqSeted,
+                fourToThreeCmd: this.fourToThree
             };
 
             // console.log('canshu:' + JSON.stringify(args, null, 2));
