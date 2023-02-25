@@ -114,7 +114,7 @@ var app = new Vue({
                 return;
             }
 
-            var args = {
+            let args = {
                 "wCodes": this.wCodes,
                 "boldCodeSeq": this.boldCodeSeq,
                 "sumTailValues": this.sumValue,
@@ -158,6 +158,31 @@ var app = new Vue({
             }
             window.location = "/api/welfare/download?fileName=" + data;
         },
+
+        transferCodeAndExport: function() {
+            if(!this.config.isPredict){
+                this.handleException("请先完成组码");
+                return;
+            }
+            let args = {
+                "wCodes": this.wCodes,
+                "fourToThreeCmd": true
+            };
+            axios({
+                method:"POST",
+                url:"/api/4d/codes/transferAndExport",
+                data: JSON.stringify(args),
+                headers:{
+                    "Content-Type": "application/json; charset=UTF-8"
+                }
+            }).then(function(response) {
+                app.handleDownload(response.data.data);
+            }).catch(function(reason) {
+                console.log(reason);
+                app.handleException("导出请求失败!");
+            });
+        },
+
         exportCodes: function(){
             if(!this.config.isPredict){
                 this.handleException("请至少先完成一次预测");

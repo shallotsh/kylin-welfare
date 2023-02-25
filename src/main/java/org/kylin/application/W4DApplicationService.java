@@ -1,9 +1,11 @@
 package org.kylin.application;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.kylin.bean.p3.W3D2SumCodeReq;
+import org.kylin.bean.p4.W3DCompoundCodeReq;
 import org.kylin.bean.p5.WCode;
 import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.common.IWCodeEncodeService;
@@ -51,7 +53,7 @@ public class W4DApplicationService {
         return wCodes;
     }
 
-    public List<WCode> doKill(W3D2SumCodeReq req){
+    public List<WCode> doKill(W3DCompoundCodeReq req){
 
         if(Objects.isNull(req)){
             return Collections.emptyList();
@@ -100,17 +102,44 @@ public class W4DApplicationService {
     }
 
 
-    public Optional<String> exportCodeToFile(W3D2SumCodeReq req) throws IOException {
+//    public List<WCode> transferFourToThree(W3DCompoundCodeReq req){
+//        if(req == null || CollectionUtils.isEmpty(req.getWCodes())){
+//            log.info("入参数据为空");
+//            return Collections.emptyList();
+//        }
+//        List<WCode> wCodes = req.getwCodes();
+//
+//
+//
+//
+//
+//        return Collections.emptyList();
+//    }
+//
+//
+//    private List<WCode> getDecomposeCodes
+//
+//
 
-        ExporterControlUtil.setPatternType(ExportPatternEnum.WCODE_4D);
+
+
+
+
+
+    public Optional<String> exportCodeToFile(W3DCompoundCodeReq req) throws IOException {
 
         try {
+            ExportPatternEnum exportPatternEnum = ExporterControlUtil.getPatternType();
+            if(exportPatternEnum == null){
+                log.info("导出模式获取为空，导出失败 req:{}", JSON.toJSONString(req));
+                return Optional.empty();
+            }
             // 策略导出
             DocHolder docHolder = new DocHolder();
-            Optional<IDocExportTool> iDocExportTool = exportToolSelector.getByExportPattern(ExportPatternEnum.WCODE_4D);
+            Optional<IDocExportTool> iDocExportTool = exportToolSelector.getByExportPattern(exportPatternEnum);
 
             if (iDocExportTool.isPresent()) {
-                iDocExportTool.get().writeTitleAsDefaultFormat(docHolder, "我要发·" + ExportPatternEnum.WCODE_4D.getDesc());
+                iDocExportTool.get().writeTitleAsDefaultFormat(docHolder, "我要发·" + exportPatternEnum.getDesc());
                 iDocExportTool.get().writeContentToDoc(docHolder, req.adaptToWCodeReq());
                 String fileName = iDocExportTool.get().exportDocAsFile(docHolder);
                 return Optional.of(fileName);

@@ -5,8 +5,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.kylin.application.W4DApplicationService;
 import org.kylin.bean.*;
 import org.kylin.bean.p3.W3D2SumCodeReq;
+import org.kylin.bean.p4.W3DCompoundCodeReq;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeSummarise;
+import org.kylin.constant.ExportPatternEnum;
+import org.kylin.util.ExporterControlUtil;
 import org.kylin.util.WCodeUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -53,7 +56,7 @@ public class Kylin4DApiController {
 
     @ResponseBody
     @RequestMapping(value = "/kill/code", method = RequestMethod.POST)
-    public WyfResponse killCode(@RequestBody W3D2SumCodeReq req, HttpServletRequest request){
+    public WyfResponse killCode(@RequestBody W3DCompoundCodeReq req, HttpServletRequest request){
         log.info("4d kill : {}", req);
 
         if(Objects.isNull(req)){
@@ -85,13 +88,36 @@ public class Kylin4DApiController {
 
 
     @ResponseBody
+    @RequestMapping(value = "/codes/transferAndExport",  method = RequestMethod.POST)
+    public WyfResponse transferAndExportCodes(@RequestBody W3DCompoundCodeReq req) {
+
+        log.info("transfer and export req:{}", req);
+        if(req == null){
+            return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "转换错误");
+        }
+        try {
+            // 转换
+
+            // 导出
+            ExporterControlUtil.setPatternType(ExportPatternEnum.WCODE_4D_TO_3D);
+            Optional<String> optFile = w4DApplicationService.exportCodeToFile(req);
+            return optFile.map(f -> new WyfDataResponse(f)).orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误"));
+        } catch (IOException e) {
+            log.error("导出文件错误", e);
+            return new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
+        }
+
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/codes/export",  method = RequestMethod.POST)
-    public WyfResponse exportCodes(@RequestBody W3D2SumCodeReq req) {
-        log.info("3d 2sum req:{}", req);
+    public WyfResponse exportCodes(@RequestBody W3DCompoundCodeReq req) {
+        log.info("4d export req:{}", req);
         if(req == null){
             return new WyfErrorResponse(HttpStatus.BAD_REQUEST.value(), "导出数据错误");
         }
         try {
+            ExporterControlUtil.setPatternType(ExportPatternEnum.WCODE_4D);
             Optional<String> optFile = w4DApplicationService.exportCodeToFile(req);
             return optFile.map(f -> new WyfDataResponse(f)).orElse(new WyfErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误"));
         } catch (IOException e) {
