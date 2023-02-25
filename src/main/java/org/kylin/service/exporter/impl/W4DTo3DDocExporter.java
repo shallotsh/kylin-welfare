@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * 四码转三键导出，按特定格式转换输出
@@ -39,7 +40,7 @@ public class W4DTo3DDocExporter extends AbstractDocumentExporter{
         // 导出四码分解
         List<WCode> fourCodeDecomposes = getDecomposeCodes(wCodes);
         String title = String.format("四码分解 %d 注:",fourCodeDecomposes.size());
-        exportCodes(docHolder.getDocument().createParagraph(), fourCodeDecomposes, title);
+        exportCodes(docHolder.getDocument().createParagraph(),  fourCodeDecomposes, title);
 
         // 导出aabc
         // 对子
@@ -56,14 +57,14 @@ public class W4DTo3DDocExporter extends AbstractDocumentExporter{
 
 
     private List<WCode> getAABCCodesForPair(List<WCode> wCodes){
-        return generateCodes(wCodes, this::isAABC, this::buildPairCodes);
+        return generateGroupCodes(wCodes, this::isAABC, this::buildPairCodesForAABC);
     }
 
     private List<WCode> getAABCCodesForNonPair(List<WCode> wCodes){
-        return generateCodes(wCodes, this::isAABC, this::buildNonPairCodes);
+        return generateGroupCodes(wCodes, this::isAABC, this::buildNonPairCodesForAABC);
     }
 
-    private List<WCode> generateCodes(List<WCode> wCodes, Predicate<List<Integer>> judge, Function<List<Integer>,List<WCode>> func){
+    private List<WCode> generateGroupCodes(List<WCode> wCodes, Predicate<List<Integer>> judge, Function<List<Integer>,List<WCode>> func){
         if(CollectionUtils.isEmpty(wCodes)){
             return Collections.emptyList();
         }
@@ -75,19 +76,27 @@ public class W4DTo3DDocExporter extends AbstractDocumentExporter{
             ret.addAll(func.apply(wCode.getCodes()));
         }
 
-        return ret;
+        return WCodeUtils.convertToGroup(ret);
     }
 
-    private List<WCode> buildPairCodes(List<Integer> codes){
+    private List<WCode> buildPairCodesForAABC(List<Integer> codes){
         List<WCode> wCodes = new ArrayList<>();
-        wCodes.add(new WCode(3, codes.get(0), codes.get(0), codes.get(2)));
+        Map<Integer, Long> codeToCount = codes.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        List<Map.Entry<Integer, Long>> entries = codeToCount.entrySet().stream().collect(Collectors.toList());
+        Collections.sort(entries, Map.Entry.comparingByValue());
+
+        wCodes.add(new WCode(3, entries.get(2).getKey(), entries.get(2).getKey(), entries.get(0).getKey()));
+        wCodes.add(new WCode(3, entries.get(2).getKey(), entries.get(2).getKey(), entries.get(1).getKey()));
         wCodes.add(new WCode(3, codes.get(0), codes.get(0), codes.get(3)));
         return wCodes;
     }
 
-    private List<WCode> buildNonPairCodes(List<Integer> codes){
+    private List<WCode> buildNonPairCodesForAABC(List<Integer> codes){
         List<WCode> wCodes = new ArrayList<>();
-        wCodes.add(new WCode(3, codes.get(0), codes.get(2), codes.get(3)));
+        Map<Integer, Long> codeToCount = codes.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        List<Map.Entry<Integer, Long>> entries = codeToCount.entrySet().stream().collect(Collectors.toList());
+        Collections.sort(entries, Map.Entry.comparingByValue());
+        wCodes.add(new WCode(3, entries.get(2).getKey(), entries.get(1).getKey(), entries.get(0).getKey()));
         return wCodes;
     }
 
@@ -95,10 +104,7 @@ public class W4DTo3DDocExporter extends AbstractDocumentExporter{
         if(CollectionUtils.isEmpty(codes) || codes.size() != 4){
             return false;
         }
-        return Objects.equals(codes.get(0), codes.get(1))
-                && !Objects.equals(codes.get(0), codes.get(2))
-                && !Objects.equals(codes.get(0), codes.get(3))
-                && !Objects.equals(codes.get(2), codes.get(3));
+        return new HashSet<>(codes).size() == 3;
     }
 
 
@@ -107,7 +113,7 @@ public class W4DTo3DDocExporter extends AbstractDocumentExporter{
             return Collections.emptyList();
         }
 
-        return generateCodes(wCodes, this::isAllDiff, this::decompose);
+        return generateGroupCodes(wCodes, this::isAllDiff, this::decompose);
     }
 
     private boolean isAllDiff(List<Integer> codes){
