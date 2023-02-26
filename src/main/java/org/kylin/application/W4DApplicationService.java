@@ -108,7 +108,8 @@ public class W4DApplicationService {
         }
 
         List<WCode> ret = new ArrayList<>();
-        ret.addAll(getDecomposeCodes(wCodes));
+        // 先取消四码分解
+//        ret.addAll(getDecomposeCodes(wCodes));
         ret.addAll(getAABCCodesForPair(wCodes));
         ret.addAll(getAABCCodesForNonPair(wCodes));
         return ret;

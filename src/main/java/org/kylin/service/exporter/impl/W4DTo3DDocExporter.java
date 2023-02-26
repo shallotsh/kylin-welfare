@@ -42,18 +42,18 @@ public class W4DTo3DDocExporter extends AbstractDocumentExporter{
 
         // 导出四码分解
         List<WCode> fourCodeDecomposes = classifyToCodes.get(EW4DClassify.FOUR_DECOMPOSE.getId());
-        String title = String.format("四码分解 %d 注:",fourCodeDecomposes.size());
+        String title = String.format("四码分解 %d 注:",CollectionUtils.size(fourCodeDecomposes));
         exportCodes(docHolder.getDocument().createParagraph(),  fourCodeDecomposes, title);
 
         // 导出aabc
         // 对子
         List<WCode> pairCodes = classifyToCodes.get(EW4DClassify.FOUR_PAIR_CODE.getId());
-        title = String.format("对子（%d 注）:", pairCodes.size());
+        title = String.format("对子（%d 注）:", CollectionUtils.size(pairCodes));
         exportCodes(docHolder.getDocument().createParagraph(), pairCodes, title);
 
         // 非对子
         List<WCode> nonPairCodes = classifyToCodes.get(EW4DClassify.FOUR_NON_PAIR_CODE.getId());
-        title = String.format("非对子（%d 注）:", nonPairCodes.size());
+        title = String.format("非对子（%d 注）:", CollectionUtils.size(nonPairCodes));
         exportCodes(docHolder.getDocument().createParagraph(), nonPairCodes, title);
 
     }
