@@ -347,7 +347,7 @@ var app = new Vue({
             // console.log("ddddd:" + JSON.stringify(args, null, 2));
 
             var count = this.wyfCodes.length;
-            this.wyfMessage = "正在进行胆码杀...";
+            this.wyfMessage = "正在计算...";
             axios({
                 method:"POST",
                 url:"/api/p5/sequence/process",
@@ -370,7 +370,7 @@ var app = new Vue({
                 }
             }).catch(function(reason) {
                 console.log(reason);
-                app.handleException("杀码请求失败!");
+                app.handleException("处理失败!");
             });
         },
         bitsProcess: function(){

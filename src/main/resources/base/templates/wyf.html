@@ -181,6 +181,19 @@
                                 <input type="text" v-model.trim="boldCodeFive" class="form-control fill_parent" id="bold_code_five" placeholder="码胆或者钓叟(#,/等分割)">
                             </div>
                         </div>
+
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <button type="button" @click="boldProcess(19)" class="btn btn-primary fill_parent"> 频度杀 </button>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <button type="button" @click="boldProcess(25)" class="btn btn-primary fill_parent"> 坐标杀 </button>
+                            </div>
+
+                        </div>
+
                         <div class="row">
                             <div class="col-sm-6">
                                 <button type="button" @click="constProcess(1)" class="btn btn-info fill_parent"> 小和杀 </button>
@@ -290,14 +303,6 @@
 
                             <div class="col-sm-6">
                                 <button type="button" @click="boldProcess(21)" class="btn btn-primary fill_parent"> 扩库选码 </button>
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-
-                            <div class="col-sm-6">
-                                <button type="button" @click="boldProcess(19)" class="btn btn-primary fill_parent"> 频度杀 </button>
                             </div>
 
                         </div>
@@ -467,7 +472,7 @@
 
 <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
 
-<script src="js/wyf.js?v=15"></script>
+<script src="js/wyf.js?v=1"></script>
 
 
 </body>

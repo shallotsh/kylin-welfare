@@ -53,6 +53,8 @@ public class StrategyFactory {
                 return new GroupHeaderProcessor();
             case ROW_SELECT_CODE:
                 return new RowSelectProcessor();
+            case COORD_KILL:
+                return new CoordKillProcessor();
                 default:
                     return null;
         }

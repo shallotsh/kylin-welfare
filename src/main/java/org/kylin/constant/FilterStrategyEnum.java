@@ -30,6 +30,8 @@ public enum FilterStrategyEnum {
     BOLD_FILTER_IN_2D(100, "2D杀码"),
     INVERSE_SELECT_FILTER_IN_2D(101, "2D筛选"),
     GOSSIP_FILTER_IN_2D(102, "2D二码"),
+
+    COORD_KILL(25, "坐标杀"),
     ;
     private Integer id;
     private String desc;
