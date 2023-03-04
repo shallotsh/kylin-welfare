@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 
 /**
  * 晚秋选码，当前仅用于复式选码
- * 晚秋选码是将输入的四组数与1390先后对比，如四组数中任意一组含有1390的2个数或2个数以上则留下1390，否则去掉1390
+ * v1:晚秋选码是将输入的四组数与1390先后对比，如四组数中任意一组含有1390的2个数或2个数以上则留下1390，否则去掉1390
+ * v2:(当前) 将四码组选码mnop与输入的几组数如abcde比对，若mnop含有abcde中的3个或4个相同数字，则将mnop这组四码组去掉
  */
 public class LateAutumnCodeFilter implements SimpleFilter{
 
@@ -50,10 +51,10 @@ public class LateAutumnCodeFilter implements SimpleFilter{
                     count++;
                 }
             }
-            if(count >= 2){
-                return true;
+            if(count > 2){
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }
