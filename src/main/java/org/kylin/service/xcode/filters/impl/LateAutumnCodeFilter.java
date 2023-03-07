@@ -5,6 +5,7 @@ import org.kylin.bean.p5.WCode;
 import org.kylin.service.xcode.filters.SimpleFilter;
 import org.kylin.util.TransferUtil;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
  * 晚秋选码，当前仅用于复式选码
  * v1:晚秋选码是将输入的四组数与1390先后对比，如四组数中任意一组含有1390的2个数或2个数以上则留下1390，否则去掉1390
  * v2:(当前) 将四码组选码mnop与输入的几组数如abcde比对，若mnop含有abcde中的3个或4个相同数字，则将mnop这组四码组去掉
+ * v2.1: 复式组选法中进行晚秋选玛时如出现有重码的情况，如0155，则请定义为5只算一个，即如往框中输入025，则0155要保留，而不是去掉。原定义中含3，4个则去掉，这里有重复者只算含了一个
  */
 public class LateAutumnCodeFilter implements SimpleFilter{
 
@@ -46,7 +48,8 @@ public class LateAutumnCodeFilter implements SimpleFilter{
         }
         for(Set<Integer> set : lateAutumnCodeSets){
             int count = 0;
-            for(Integer code : wCode.getCodes()){
+            Set<Integer> codes = new HashSet<>(wCode.getCodes());
+            for(Integer code : codes){
                 if(set.contains(code)){
                     count++;
                 }

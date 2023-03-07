@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
  *  m: 表示每行按m列计算，如果不输入m或者m输入错误（m需要大于5），则默认m=18
  * 生成规则：按m进行分组成矩阵，然后基于列序，循环匹配bcdefg，每位匹配码随机取5行的P5码，再将每行选择的P5码往后选取5个作为结果返回
  *
+ * v1.1: 请设计坐标杀为可反复进行，每次杀都以第一次杀前的库为基础，而不是杀后剩下的库
+ *
  */
 @Slf4j
 public class CoordKillProcessor implements SequenceProcessor {

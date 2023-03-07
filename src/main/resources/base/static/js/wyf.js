@@ -50,7 +50,8 @@ var app = new Vue({
         export_format: null,
         drawNoticeOverview: '',
         extendCount: null,
-        extendRatio: null
+        extendRatio: null,
+        backupForCoordKillCodes: null
     },
     created: function(){
         this.export_format = 0;
@@ -111,6 +112,7 @@ var app = new Vue({
             this.config.canKill=true;
             this.config.canExport=true;
             app.config.isP5 = false;
+            this.backupForCoordKillCodes = null,
             console.log('isP5:' + this.config.isP5);
             if(this.welfareCode.codeTypeEnum == "DIRECT"){
                 this.config.config3.isGroup = false;
@@ -341,6 +343,20 @@ var app = new Vue({
                 }
                 if(this.extendRatio){
                     args.extendRatio = this.extendRatio;
+                }
+            }
+
+
+            // coordkill process
+            if(processorId == 25){
+
+                if(this.backupForCoordKillCodes == null){
+                    console.log('保存对象');
+                    this.backupForCoordKillCodes = JSON.parse(JSON.stringify(this.welfareCode));
+                    console.log('保存对象, 转换后:' + JSON.stringify(this.backupForCoordKillCodes));
+                } else {
+                    console.log('替换参数');
+                    args.wCodes = this.backupForCoordKillCodes;
                 }
             }
 
