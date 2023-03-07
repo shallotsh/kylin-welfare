@@ -51,7 +51,9 @@ var app = new Vue({
         drawNoticeOverview: '',
         extendCount: null,
         extendRatio: null,
-        backupForCoordKillCodes: null
+        // for coord kill
+        backupForCoordKillCodes: null,
+        lastProcessId: null
     },
     created: function(){
         this.export_format = 0;
@@ -126,6 +128,7 @@ var app = new Vue({
         },
 
         handleFiveCodeResponse: function (data, msg, processId) {
+            this.lastProcessId = processId;
             this.config.isP5 = true;
             this.welfareCode = data.wCodes;
             if(this.savePoint) {
@@ -146,7 +149,10 @@ var app = new Vue({
             for (idx in this.welfareCode) {
                 code = this.welfareCode[idx];
                 // code.codes.reverse();
-                var codeString = code.codes.join("");
+                let codeString = code.codes.join("");
+                if(this.lastProcessId == 25){ // coord kill ， transfer to 3d
+                    codeString = codeString.slice(0, 3);
+                }
                 if (this.isRandomKill || this.freqSeted) {
                     codeString = '[' + code.freq + ']' + codeString;
                 }
