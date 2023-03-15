@@ -75,7 +75,7 @@ public class W3D2SumDictDocExporter extends AbstractDocumentExporter{
         List<WCode> distinctPairCodesNew = WCodeUtils.filterPairCodes(distinctCodes);
         XWPFParagraph paragraph = docHolder.getDocument().createParagraph();
         paragraph.setPageBreak(true);
-        title = String.format("对子( %d 注 )：", distinctPairCodesNew.size());
+        String title = String.format("对子( %d 注 )：", distinctPairCodesNew.size());
         writeWCodesRefactorWithoutBinCode(paragraph, distinctPairCodesNew, title);
         List<WCode> distinctNonPairCodesNew = WCodeUtils.filterNonPairCodes(distinctCodes);
         title = String.format("非对子( %d 注 )：", distinctNonPairCodesNew.size());
