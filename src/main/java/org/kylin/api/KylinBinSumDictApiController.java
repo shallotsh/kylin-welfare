@@ -63,6 +63,7 @@ public class KylinBinSumDictApiController {
         }
 
         List<WCode> allRet =  w3DBinSumCommonApplicationService.doKill(req);
+        allRet =  WCodeUtils.mergeCodes(allRet, false);
 
         boolean freqSeted = allRet.stream().anyMatch(wCode -> wCode.getFreq()>0);
         if(freqSeted){
