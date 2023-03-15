@@ -145,21 +145,14 @@ var app = new Vue({
                 this.freqSeted = data.freqSeted;
             }
 
-            var printCodes = [];
-            for (idx in this.welfareCode) {
-                code = this.welfareCode[idx];
-                // code.codes.reverse();
-                let codeString = code.codes.join("");
-                if(this.lastProcessId == 25){ // coord kill ， transfer to 3d
-                    codeString = codeString.slice(0, 3);
-                }
-                if (this.isRandomKill || this.freqSeted) {
-                    codeString = '[' + code.freq + ']' + codeString;
-                }
-
-                printCodes.push(codeString);
+            if(processId == 25){
+                this.wyfCodes = this.coordKillPrintCodes(this.welfareCode);
+                msg = "排5坐标杀" + " 生成:" + this.welfareCode.length + " 注, 去重后 "+ this.wyfCodes.length + '注(对子:' + this.getPairCount(this.wyfCodes) + ' 注, 非对子:' + this.getNonPairCount(this.wyfCodes) + ' 注)';
+                console.log('msg111:' + msg);
+            }else{
+                this.wyfCodes = this.customPrintCodes(this.welfareCode, this.isRandomKill || this.freqSeted);
             }
-            this.wyfCodes = printCodes;
+
             if (processId == 21 || processId == 22) {
                 if (data.extendCount) {
                     this.extendCount = data.extendCount;
@@ -170,12 +163,47 @@ var app = new Vue({
                 msg = "基数 " + this.backupCode.length + " 注, 倍数"+ this.extendRatio +"，扩库（非对子）后" + this.extendCount + "注 ";
             }
 
-            if (processId != 22) {
+            if (processId != 22 && processId != 21 && processId != 25) {
                 this.wyfMessage = "排5 " + msg + " 生成:" + this.wyfCodes.length + " 注" + '(对子:' + data.pairCodes + ' 注, 非对子:' + data.nonPairCodes + ' 注)';
             }else{
+                console.log('msg:' + msg);
                 this.wyfMessage = msg;
             }
 
+        },
+
+        customPrintCodes: function (data, hasFreq) {
+            let printCodes = [];
+            for (idx in data) {
+                code = data[idx];
+                // code.codes.reverse();
+                let codeString = code.codes.join("");
+                if (hasFreq) {
+                    codeString = '[' + code.freq + ']' + codeString;
+                }
+
+                printCodes.push(codeString);
+            }
+            return printCodes;
+        },
+        // 坐标杀输出
+        coordKillPrintCodes: function (data){
+            let printCodes = [];
+            const dict = {};
+            for (idx in data) {
+                code = data[idx];
+                // code.codes.reverse();
+                let codeString = code.codes.join("").slice(0, 3);
+                if(dict.hasOwnProperty(codeString)){
+                    dict[codeString] = dict[codeString] + 1;
+                }else{
+                    dict[codeString] = 1;
+                }
+            }
+            for( idx in dict) {
+                printCodes.push(idx + "(" + dict[idx] + ")");
+            }
+            return printCodes;
         },
 
         handleDownload: function(data) {
@@ -357,11 +385,9 @@ var app = new Vue({
             if(processorId == 25){
 
                 if(this.backupForCoordKillCodes == null){
-                    console.log('保存对象');
                     this.backupForCoordKillCodes = JSON.parse(JSON.stringify(this.welfareCode));
-                    console.log('保存对象, 转换后:' + JSON.stringify(this.backupForCoordKillCodes));
+                    // console.log('保存对象, 转换后:' + JSON.stringify(this.backupForCoordKillCodes));
                 } else {
-                    console.log('替换参数');
                     args.wCodes = this.backupForCoordKillCodes;
                 }
             }
@@ -386,7 +412,7 @@ var app = new Vue({
                 if(processorId == 14){
                     app.wyfMessage = "总计 " + count + " 注, 随机杀 " + args.randomCount + " 注, 保留码 " + response.data.data.remainedCodesCount + "注，频度+1"
                         + '( 含对子: ' + response.data.data.pairCodes + ' 注，非对子: ' + response.data.data.nonPairCodes + ' 注)';
-                } else if(processorId != 21 && processorId != 22) {
+                } else if(processorId != 21 && processorId != 22 && processorId != 25) {
                     app.wyfMessage = "总计 " + count + " 注, 杀码 " + (count - app.wyfCodes.length) + " 注, 余 " + app.wyfCodes.length + " 注."
                         + '(对子: ' + response.data.data.pairCodes + ' 注，非对子: ' + response.data.data.nonPairCodes + ' 注)';
                 }
@@ -512,6 +538,26 @@ var app = new Vue({
 
         handleException: function (msg) {
             alert(msg);
+        },
+
+        getPairCount: function (codes){
+            if(!codes || codes.length == 0){
+                return 0;
+            }
+            let count = 0;
+            for(let idx in codes){
+                let code = codes[idx];
+                if(code[0] == code[1] || code[1] == code[2] || code[0] == code[2]){
+                    count++;
+                }
+            }
+            return count;
+        },
+        getNonPairCount: function (codes){
+            if(!codes || codes.length == 0){
+                return 0;
+            }
+            return codes.length - this.getPairCount(codes);
         }
     }
 });
