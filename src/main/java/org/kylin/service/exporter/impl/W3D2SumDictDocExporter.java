@@ -53,32 +53,32 @@ public class W3D2SumDictDocExporter extends AbstractDocumentExporter{
 //            return ;
 //        }
 
+        // 0315 取消分类导出
+        // List<WCode> pairCodesNew = WCodeUtils.filterPairCodes(wCodes);
+        // String title = String.format("对子( %d 注 )：", pairCodesNew.size());
+        // writeWCodesRefactor(docHolder.getDocument().createParagraph(), pairCodesNew, title);
 
-        List<WCode> pairCodesNew = WCodeUtils.filterPairCodes(wCodes);
-        String title = String.format("对子( %d 注 )：", pairCodesNew.size());
-        writeWCodesRefactor(docHolder.getDocument().createParagraph(), pairCodesNew, title);
-
-        List<WCode> nonPairCodesNew = WCodeUtils.filterNonPairCodes(wCodes);
-        title = String.format("非对子( %d 注 )：", nonPairCodesNew.size());
-        writeWCodesRefactor(docHolder.getDocument().createParagraph(), nonPairCodesNew, title);
+        // List<WCode> nonPairCodesNew = WCodeUtils.filterNonPairCodes(wCodes);
+        // title = String.format("非对子( %d 注 )：", nonPairCodesNew.size());
+        // writeWCodesRefactor(docHolder.getDocument().createParagraph(), nonPairCodesNew, title);
 
 
-        if(StringUtils.isNotBlank(titleLocal.get())) {
-            XWPFParagraph headerParagraph = docHolder.getDocument().createHeader(HeaderFooterType.DEFAULT).createParagraph();
-            XWPFRun run = headerParagraph.createRun();
-            run.setFontSize(8);
-            run.setText(titleLocal.get());
-        }
+        // if(StringUtils.isNotBlank(titleLocal.get())) {
+        //     XWPFParagraph headerParagraph = docHolder.getDocument().createHeader(HeaderFooterType.DEFAULT).createParagraph();
+        //     XWPFRun run = headerParagraph.createRun();
+        //     run.setFontSize(8);
+        //     run.setText(titleLocal.get());
+        // }
 
         // 新增去重结果导出
         List<WCode> distinctCodes = WCodeUtils.mergeCodes(wCodes, false);
         List<WCode> distinctPairCodesNew = WCodeUtils.filterPairCodes(distinctCodes);
         XWPFParagraph paragraph = docHolder.getDocument().createParagraph();
         paragraph.setPageBreak(true);
-        title = String.format("对子( %d 注 , 已去重)：", distinctPairCodesNew.size());
+        title = String.format("对子( %d 注 )：", distinctPairCodesNew.size());
         writeWCodesRefactorWithoutBinCode(paragraph, distinctPairCodesNew, title);
         List<WCode> distinctNonPairCodesNew = WCodeUtils.filterNonPairCodes(distinctCodes);
-        title = String.format("非对子( %d 注 , 已去重)：", distinctNonPairCodesNew.size());
+        title = String.format("非对子( %d 注 )：", distinctNonPairCodesNew.size());
         writeWCodesRefactorWithoutBinCode(docHolder.getDocument().createParagraph(), distinctNonPairCodesNew, title);
     }
 
