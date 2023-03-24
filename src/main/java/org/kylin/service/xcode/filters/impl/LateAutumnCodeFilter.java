@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
  * v1:晚秋选码是将输入的四组数与1390先后对比，如四组数中任意一组含有1390的2个数或2个数以上则留下1390，否则去掉1390
  * v2:(当前) 将四码组选码mnop与输入的几组数如abcde比对，若mnop含有abcde中的3个或4个相同数字，则将mnop这组四码组去掉
  * v2.1(已取消，并回退到v2): 复式组选法中进行晚秋选玛时如出现有重码的情况，如0155，则请定义为5只算一个，即如往框中输入025，则0155要保留，而不是去掉。原定义中含3，4个则去掉，这里有重复者只算含了一个
+ * v3: 晚秋杀码后需要保留被杀码，用于最后导出。在输出中增加一个杀四码（即通过晚秋选码去掉的四码也单独输出），同时增加一个余四码，即初四码减去杀四码后的结果
+ *
  */
 public class LateAutumnCodeFilter implements SimpleFilter{
 
@@ -34,11 +36,18 @@ public class LateAutumnCodeFilter implements SimpleFilter{
             return target;
         }
 
-        List<WCode> ret = target.stream().filter(
-                wCode -> meetFishManCondition(lateAutumnCodeSets, wCode)
-        ).collect(Collectors.toList());
+//        List<WCode> ret =
+//                target.stream().filter(
+//                wCode -> meetFishManCondition(lateAutumnCodeSets, wCode)
+//        ).collect(Collectors.toList());
 
-        return ret;
+        target.forEach(wCode -> {
+            if(!meetFishManCondition(lateAutumnCodeSets, wCode)){
+                wCode.setDeleted(true);
+            }
+        });
+
+        return target;
     }
 
 

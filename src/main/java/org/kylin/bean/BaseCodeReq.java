@@ -1,6 +1,7 @@
 package org.kylin.bean;
 
 import lombok.*;
+import org.apache.commons.collections4.CollectionUtils;
 import org.kylin.bean.p3.BitUnitDTO;
 import org.kylin.bean.p5.WCode;
 import org.kylin.bean.p5.WCodeReq;

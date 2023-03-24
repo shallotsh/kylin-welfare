@@ -25,6 +25,7 @@ var app = new Vue({
         config:global_config,
         cacheQueue: new Array(),
 
+
         drawNoticeOverview: '',
         fourToThree: false
     },
@@ -121,7 +122,8 @@ var app = new Vue({
                 "boldCodeSeq": this.boldCodeSeq,
                 "sumTailValues": this.sumValue,
                 "lateAutumnCode": this.lateAutumn,
-                "fourToThreeCmd": this.fourToThree
+                "fourToThreeCmd": this.fourToThree,
+                "deletedCodes": this.deletedCodesPair
             };
             this.killCode(args);
         },

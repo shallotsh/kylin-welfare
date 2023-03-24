@@ -33,14 +33,32 @@ public class W4DDocExporter extends AbstractDocumentExporter{
         List<WCode> wCodes = data.getWCodes();
         Collections.sort(wCodes);
         List<WCode> all = new ArrayList<>();
+
+        List<WCode> deletedCodes = new ArrayList<>();
+
         all.addAll(wCodes);
         // 兼容逻辑
         if(CollectionUtils.isNotEmpty(data.getDeletedCodes())) {
+            deletedCodes.addAll(data.getDeletedCodes().stream().flatMap(x -> x.getData().stream()).collect(Collectors.toList()));
             all.addAll(data.getDeletedCodes().stream().flatMap(x -> x.getData().stream()).collect(Collectors.toList()));
         }
 
-        // 导出对子
-        String title = String.format("%d 组:",wCodes.size());
+        Collections.sort(all);
+
+
+        String title = "";
+        if(CollectionUtils.isNotEmpty(deletedCodes)) {
+
+            title = String.format("初四码( %d 组):", all.size());
+            saveCodesWithFreq(docHolder.getDocument().createParagraph(), all, title);
+
+            //
+            title = String.format("杀四码( %d 组):", deletedCodes.size());
+            saveCodesWithFreq(docHolder.getDocument().createParagraph(), deletedCodes, title);
+
+        }
+
+        title = String.format("余四码( %d 组):",wCodes.size());
         saveCodesWithFreq(docHolder.getDocument().createParagraph(), wCodes, title);
 
     }

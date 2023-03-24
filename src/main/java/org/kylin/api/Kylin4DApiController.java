@@ -71,7 +71,12 @@ public class Kylin4DApiController {
         }
 
         List<WCode> ret = allRet.stream().filter(wCode -> !wCode.isBeDeleted()).collect(Collectors.toList());
-        List<LabelValue<List<WCode>>> deletedCodes = Arrays.asList(new LabelValue<>("", allRet.stream().filter(wCode -> wCode.isBeDeleted()).collect(Collectors.toList())));
+        List<WCode> currentDeletedCodes = allRet.stream().filter(wCode -> wCode.isBeDeleted()).collect(Collectors.toList());
+        if(CollectionUtils.isNotEmpty(req.getDeletedCodes())) {
+            currentDeletedCodes.addAll(req.getDeletedCodes().stream().flatMap(x -> x.getData().stream()).collect(Collectors.toList()));
+        }
+
+        List<LabelValue<List<WCode>>> deletedCodes = Arrays.asList(new LabelValue<>("DeletedBy4D", currentDeletedCodes));
         log.info("4d kill code ret: {}", ret);
 
         Integer pairCount = WCodeUtils.getPairCodeCount(ret);

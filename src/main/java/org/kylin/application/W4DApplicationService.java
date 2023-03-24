@@ -78,9 +78,12 @@ public class W4DApplicationService {
         }
 
 
+        /**
+         * 临时方案：需要每次放最后杀码，确保晚秋选码后不会丢失软删除码
+         */
         if(CollectionUtils.isNotEmpty(target) && StringUtils.isNotBlank(req.getLateAutumnCode())){
             target = new LateAutumnCodeFilter().filter(target, req.getLateAutumnCode());
-            log.info("晚秋选码 {} 住3D", (count - CollectionUtils.size(target)));
+            log.info("晚秋选码杀 {} 住3D", target.stream().filter(w -> w.isDeleted()).count());
             count = CollectionUtils.size(target);
         }
 
