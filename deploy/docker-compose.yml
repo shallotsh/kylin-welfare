@@ -11,6 +11,8 @@ services:
     environment:
       WELFARE_VAR: echo
       TZ: Asia/Shanghai
+    networks:
+      - wyf
     ports:
       - "8081:8080"
       # -XX:SurvivorRatio=8 -XX:NewRatio=4 -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=64m -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime -Xloggc:/var/attachment/logs/welfare-1.gc.log
@@ -25,9 +27,16 @@ services:
     environment:
       WELFARE_VAR: echo
       TZ: Asia/Shanghai
+
+    networks:
+      - wyf
     ports:
       - "8082:8080"
     entrypoint: java -server -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:-OmitStackTraceInFastThrow -Xlog:gc*=info:file=${LOG_PATH_ZGC}/gc%t.log:utctime,level,tags:filecount=10,filesize=50M -Xlog:jit+compilation=info:file=${LOG_PATH_ZGC}/jit_compile%t.log:utctime,level,tags:filecount=10,filesize=10M -Xlog:safepoint=debug:file=${LOG_PATH_ZGC}/safepoint%t.log:utctime,level,tags:filecount=10,filesize=10M -Dfile.encoding=UTF-8 -Djava.security.egd=file:/dev/./urandom -Dnetworkaddress.cache.ttl=10 -Xms${ZGC_Xms} -Xmx${ZGC_Xmx} -Xmn${ZGC_Xmn} -Xss${ZGC_Xss} -XX:MaxDirectMemorySize=${ZGC_DirectMemSize} -XX:MetaspaceSize=${ZGC_MetaSpace} -XX:ReservedCodeCacheSize=${ZGC_ReservedCodeCacheSize} -XX:+DisableExplicitGC -XX:+UseZGC -XX:-UseBiasedLocking -XX:GuaranteedSafepointInterval=0 -XX:+UseCountedLoopSafepoints -XX:StartFlightRecording=disk=true,maxsize=4096m,maxage=3d -XX:FlightRecorderOptions=maxchunksize=128m --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.math=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.security=ALL-UNNAMED --add-opens java.base/java.text=ALL-UNNAMED --add-opens java.base/java.time=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/jdk.internal.access=ALL-UNNAMED --add-opens java.base/jdk.internal.misc=ALL-UNNAMED -jar /app/kylin-welfare.jar
     # -XX:SurvivorRatio=8 -XX:NewRatio=4 -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime -Xloggc:/var/attachment/logs/welfare-2.gc.log
 volumes:
   wyf_attachment: {}
+
+networks:
+  wyf:
+    driver: bridge
