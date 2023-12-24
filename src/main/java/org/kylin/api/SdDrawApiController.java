@@ -56,6 +56,7 @@ public class SdDrawApiController {
             // 记录结果
             SdDrawResult res = SdDrawResult.from(result.getResult().get(0));
             if(!esWrapper.exists(ESIndexEnum.WELFARE_RESULT.getIndex(), res.getCode())) {
+                log.info("add draw-result");
                 esWrapper.index(ESIndexEnum.WELFARE_RESULT.getIndex(), res.getCode(), res);
             }
 
