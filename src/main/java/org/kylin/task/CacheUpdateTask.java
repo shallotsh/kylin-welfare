@@ -28,7 +28,7 @@ public class CacheUpdateTask {
     @Resource
     private ESWrapper esWrapper;
 
-    @Scheduled(cron = "0 15,16,20,30 21 * * ?")
+    @Scheduled(cron = "0 15,16,20,30 21,22,23 * * ?")
     public void updateTask(){
 
         LocalDate drawDate = MyDateUtil.getLatestDrawDate();
