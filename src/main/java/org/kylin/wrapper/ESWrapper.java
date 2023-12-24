@@ -64,6 +64,7 @@ public class ESWrapper {
 
     public void index(String index, String id, Object data){
         try {
+            log.info("索引数据 index:{}, id:{}, data:{}", index, id, JSON.toJSONString(data));
             IndexResponse resp = client.index(i -> i
                     .index(index)
                     .id(id)
