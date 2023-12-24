@@ -1,6 +1,7 @@
 package org.kylin.api;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.kylin.bean.WyfDataResponse;
 import org.kylin.bean.WyfErrorResponse;
@@ -54,10 +55,12 @@ public class SdDrawApiController {
             result = cacheWrapper.get(key, () -> OkHttpUtils.getSdDrawNoticeResult(drawDate, drawDate).orElse(null));
 
             // 记录结果
-            SdDrawResult res = SdDrawResult.from(result.getResult().get(0));
-            if(!esWrapper.exists(ESIndexEnum.WELFARE_RESULT.getIndex(), res.getCode())) {
-                log.info("add draw-result");
-                esWrapper.index(ESIndexEnum.WELFARE_RESULT.getIndex(), res.getCode(), res);
+            if(result != null && CollectionUtils.size(result.getResult()) > 0) {
+                SdDrawResult res = SdDrawResult.from(result.getResult().get(0));
+                if (!esWrapper.exists(ESIndexEnum.WELFARE_RESULT.getIndex(), res.getCode())) {
+                    log.info("add draw-result");
+                    esWrapper.index(ESIndexEnum.WELFARE_RESULT.getIndex(), res.getCode(), res);
+                }
             }
 
             return Optional.ofNullable(result)
