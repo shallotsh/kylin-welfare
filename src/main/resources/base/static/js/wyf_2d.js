@@ -21,6 +21,13 @@ var app = new Vue({
         kdSeq: null,
         wCodes: null,
         freqLowLimit: 0,
+
+        ///   位选
+        hundredBit: null,
+        decadeBit: null,
+        isTemporarySave: false,
+        temporaryCodeSet: null,
+
         wyfMessage:global_config.statisticsAreaTip,
         config: global_config,
         cacheQueue: new Array(),
@@ -93,6 +100,10 @@ var app = new Vue({
             this.boldCodeSeq = null,
                 this.kdSeq = null,
                 this.freqLowLimit = 0,
+                this.hundredBit = null,
+                this.decadeBit = null,
+                this.isTemporarySave = false,
+                this.temporaryCodeSet = null,
             // this.gossipCodeSeq = null,
             // this.inverseCodeSeq = null,
             this.wyfMessage = global_config.statisticsAreaTip,
@@ -222,6 +233,46 @@ var app = new Vue({
 
         },
 
+        saveAsM: function () {
+            if(!this.config.isPredict){
+                this.handleException("请至少先完成一次预测");
+                return;
+            }
+            if(!this.wCodes == null || app.wCodes.length === 0 ){
+                this.handleException("组码结果为空，不允许暂存");
+                return;
+            }
+
+            this.isTemporarySave = true;
+            this.temporaryCodeSet = deepCopy(this.wCodes);
+            app.wyfMessage = "已暂存，" + app.wCodes.length + "注。";
+            console.log("temporarySet:" + JSON.stringify(this.temporaryCodeSet, null, 2));
+        },
+
+        bitSelect: function () {
+
+            if(!this.isTemporarySave){
+                this.handleException("先执行\"暂存为M集\"");
+                return;
+            }
+            if(this.wCodes.length === 0) {
+                console.log("预测码为空，一键选码集为空");
+                return;
+            }
+            console.log("hundred:" + this.hundredBit + ", decadeBit:" + this.decadeBit)
+
+            let codeSetA = bitKill(this.temporaryCodeSet, this.hundredBit, 0);
+            console.log("bitSetA:" + JSON.stringify(codeSetA, null, 2));
+            let codeSetB = bitKill(this.temporaryCodeSet, this.decadeBit, 1);
+            console.log("bitSetB:" + JSON.stringify(codeSetB, null, 2));
+
+            this.wCodes = mergeSet(codeSetA, codeSetB);
+            console.log("merge Result:" + JSON.stringify(this.wCodes, null, 2));
+
+            app.wyfMessage = "总计 " + this.wCodes.length + " 注, 其中百位选 " + codeSetA.length + "注, 十位选 "+ codeSetB.length
+                + "注，重复码 " + (codeSetA.length + codeSetB.length - this.wCodes.length) +"注";
+        },
+
         exportCodes: function(){
             if(!this.config.isPredict){
                 this.handleException("请至少先完成一次预测");
@@ -314,3 +365,50 @@ function deepCopy(source) {
 
     return result;
 }
+
+function stringToNumberSet(str) {
+    // 使用正则表达式匹配字符串中的所有数字
+    if(!str){
+        return;
+    }
+    return new Set(str.split('').map(Number));
+}
+
+function bitKill(codeSet, bitSequence, bitIndex){
+
+    let bitSet = stringToNumberSet(bitSequence);
+    console.log("bitIndex:" + bitIndex + ", codeSet: " + JSON.stringify(codeSet, null, 2));
+
+    if(!codeSet || !bitSet || bitSet.size === 0){
+        return []
+    }
+    let ret = []
+    for(let code of codeSet) {
+        console.log("code in codeSet:" + JSON.stringify(code, null, 2));
+        if(bitSet.has( code.codes[bitIndex])){
+            ret.push(deepCopy(code));
+        }
+    }
+    return ret;
+}
+
+function mergeSet(codeSetA, codeSetB) {
+    if(!codeSetA){
+        return codeSetB;
+    }
+    if(!codeSetB){
+        return codeSetA;
+    }
+
+    const seenReferences = new Set();
+    const result = codeSetA.concat(codeSetB);
+
+    return result.filter((item) => {
+        const isDuplicate = seenReferences.has(item.stringWithTailSum);
+        seenReferences.add(item.stringWithTailSum);
+        return !isDuplicate;
+    });
+}
+
+
+

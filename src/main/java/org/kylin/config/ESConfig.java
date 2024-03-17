@@ -17,7 +17,12 @@ public class ESConfig {
     public ElasticsearchClient esClient() {
 
         RestClient restClient = RestClient
-                .builder(new HttpHost("es-server", 9200, "http"))
+                .builder(new HttpHost("es-server", 9200, "http")
+                ).setRequestConfigCallback( builder -> {
+                    builder.setConnectTimeout(1000);
+                    builder.setSocketTimeout(3000);
+                    return builder;
+                })
                 .build();
 
         ElasticsearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());

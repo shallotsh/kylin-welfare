@@ -1,7 +1,6 @@
 package org.kylin.wrapper;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch.core.ExistsRequest;
 import co.elastic.clients.elasticsearch.core.GetRequest;
 import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.IndexResponse;
@@ -16,6 +15,8 @@ import java.io.IOException;
 @Service
 @Slf4j
 public class ESWrapper {
+
+    private static final Boolean ES_SWITCH = true;
 
     private String ES_DEFAULT_INDEX_NAME = "shop";
 
@@ -48,6 +49,10 @@ public class ESWrapper {
 
     public boolean exists(String index, String id) {
         try {
+            if(!ES_SWITCH) {
+                return true;
+            }
+
             BooleanResponse response = client.exists(e -> e
                     .index(index)
                     .id(id)
@@ -64,6 +69,9 @@ public class ESWrapper {
 
     public void index(String index, String id, Object data){
         try {
+            if(!ES_SWITCH) {
+                return;
+            }
             log.info("索引数据 index:{}, id:{}, data:{}", index, id, JSON.toJSONString(data));
             IndexResponse resp = client.index(i -> i
                     .index(index)
