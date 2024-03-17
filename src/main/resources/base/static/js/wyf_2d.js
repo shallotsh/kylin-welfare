@@ -246,7 +246,6 @@ var app = new Vue({
             this.isTemporarySave = true;
             this.temporaryCodeSet = deepCopy(this.wCodes);
             app.wyfMessage = "已暂存，" + app.wCodes.length + "注。";
-            console.log("temporarySet:" + JSON.stringify(this.temporaryCodeSet, null, 2));
         },
 
         bitSelect: function () {
@@ -259,12 +258,8 @@ var app = new Vue({
                 console.log("预测码为空，一键选码集为空");
                 return;
             }
-            console.log("hundred:" + this.hundredBit + ", decadeBit:" + this.decadeBit)
-
             let codeSetA = bitKill(this.temporaryCodeSet, this.hundredBit, 0);
-            console.log("bitSetA:" + JSON.stringify(codeSetA, null, 2));
             let codeSetB = bitKill(this.temporaryCodeSet, this.decadeBit, 1);
-            console.log("bitSetB:" + JSON.stringify(codeSetB, null, 2));
 
             this.wCodes = mergeSet(codeSetA, codeSetB);
             console.log("merge Result:" + JSON.stringify(this.wCodes, null, 2));
@@ -377,14 +372,12 @@ function stringToNumberSet(str) {
 function bitKill(codeSet, bitSequence, bitIndex){
 
     let bitSet = stringToNumberSet(bitSequence);
-    console.log("bitIndex:" + bitIndex + ", codeSet: " + JSON.stringify(codeSet, null, 2));
 
     if(!codeSet || !bitSet || bitSet.size === 0){
         return []
     }
     let ret = []
     for(let code of codeSet) {
-        console.log("code in codeSet:" + JSON.stringify(code, null, 2));
         if(bitSet.has( code.codes[bitIndex])){
             ret.push(deepCopy(code));
         }
