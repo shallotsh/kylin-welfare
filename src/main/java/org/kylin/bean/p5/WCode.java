@@ -8,6 +8,7 @@ import org.kylin.algorithm.RandomKill;
 import org.kylin.util.WCodeUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author shallotsh
@@ -157,6 +158,15 @@ public class WCode implements Cloneable,Comparable,RandomKill{
     public void setBinSumValue(int binSumValue) {
         this.binSumValue = binSumValue;
     }
+
+
+    public int codeSum(){
+        if(CollectionUtils.isEmpty(codes)){
+            return 0;
+        }
+        return codes.stream().filter(Objects::nonNull).mapToInt(Integer::intValue).sum();
+    }
+
 
     public String getString(Boolean withFreq, Boolean withSeqNo){
 

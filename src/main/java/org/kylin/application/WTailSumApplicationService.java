@@ -22,10 +22,10 @@ public class WTailSumApplicationService {
         }
         List<Integer> distinctRiddle = riddleSet.stream().distinct().collect(Collectors.toList());
         List<WCode> w2dCodes = iwCodeEncodeService.combine4Code(distinctRiddle, 2);
-        List<Integer> w2dTailSumValues = w2dCodes.stream().map(WCode::getSumTail).distinct().sorted().collect(Collectors.toList());
+        List<Integer> w2dTailSumValues = w2dCodes.stream().map(WCode::codeSum).distinct().sorted().collect(Collectors.toList());
 
         List<WCode> w3dCodes = iwCodeEncodeService.combine4Code(distinctRiddle, 3);
-        List<Integer> w3dTailSumValues = w3dCodes.stream().map(WCode::getSumTail).distinct().sorted().collect(Collectors.toList());
+        List<Integer> w3dTailSumValues = w3dCodes.stream().map(WCode::codeSum).distinct().sorted().collect(Collectors.toList());
 
         return new TailSumValue(w2dTailSumValues, w3dTailSumValues);
     }
