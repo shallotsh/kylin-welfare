@@ -71,7 +71,7 @@ var app = new Vue({
               data: args
             }).then(function(response) {
                     app.freqSeted = false;
-                    app.handleResponse(response.data.data, "和尾计算");
+                    app.handleResponse(response.data.data, "和数计算");
                     app.config.isPredict = true;
                     app.isGroup = true;
                 })
