@@ -104,14 +104,14 @@ var app = new Vue({
     computed: {
         w3dTailValue: function (){
             if(this.w3dTailValues != null){
-                return this.w3dTailValues.join(" ");
+                return this.w3dTailValues.join("，");
             }else{
                 return "";
             }
         },
         w2dTailValue: function (){
             if(this.w2dTailValues != null){
-                return this.w2dTailValues.join(" ");
+                return this.w2dTailValues.join("，");
             }else{
                 return "";
             }
@@ -121,7 +121,7 @@ var app = new Vue({
                 return "";
             }
             var intersect = this.w2dTailValues.filter(function (v){ return app.w3dTailValues.indexOf(v) > -1});
-            return intersect.sort().join(" ");
+            return intersect.sort().join("，");
         },
         complementValue: function (){
             if(this.w2dTailValues == null){
@@ -133,7 +133,7 @@ var app = new Vue({
             var complement = this.w2dTailValues.filter(function (v){ return !(app.w3dTailValues.indexOf(v) > -1) }).concat(
                 this.w3dTailValues.filter(function (v){ return !(app.w2dTailValues.indexOf(v) > -1) })
             );
-            return complement.sort().join(" ");
+            return complement.sort().join("，");
         }
 
     }
