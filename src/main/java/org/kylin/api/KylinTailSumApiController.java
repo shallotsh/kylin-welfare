@@ -32,7 +32,7 @@ public class KylinTailSumApiController {
             return WyfErrorResponse.buildErrorResponse();
         }
 
-        List<Integer> riddleSet = TransferUtil.toIntegerList(req.getSequences().get(0));
+        List<Integer> riddleSet = TransferUtil.parseList(req.getSequences().get(0));
         TailSumValue tailSumValue = applicationService.computeTailSumValueByComposition(riddleSet);
         log.info("tail sum ret: {}", tailSumValue);
 

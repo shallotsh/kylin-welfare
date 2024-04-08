@@ -37,6 +37,25 @@ public class TransferUtil {
         return sets;
     }
 
+    public static List<Integer> parseList(String seq){
+        if(StringUtils.isBlank(seq)){
+            return Collections.emptyList();
+        }
+
+        String[] strArray = seq.split("#|$|@|,|/| ");
+        List<Integer> sets = new ArrayList<>();
+        for(String e : strArray){
+            if(StringUtils.isNumeric(e)){
+                Integer sum = NumberUtils.toInt(e, 0);
+                if("0".equals(e) || sum != 0){
+                    sets.add(sum);
+                }
+            }
+        }
+
+        return sets;
+    }
+
     public static List<Set<Integer>> parseGossipList(String seq){
         if(StringUtils.isBlank(seq) || seq.length() < 2){
             return Collections.emptyList();
