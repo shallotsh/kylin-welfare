@@ -70,14 +70,34 @@ public class WCodeEncodeServiceImpl implements IWCodeEncodeService {
         }
         boolean[] flag = new boolean[riddle.size()];
         List<List<Integer>> res = new ArrayList<>();
-        combineRefactor(riddle, 0, dimVal, flag, res);
-
+//        combineRefactor(riddle, 0, dimVal, flag, res);
+        combineRefactorV2(riddle, new ArrayList<>(), flag, res, dimVal, 0);
         List<WCode> wCodes = new ArrayList<>();
         for(List<Integer> code : res){
             wCodes.add(new WCode(dimVal, code));
         }
         return WCodeUtils.convertToGroup(wCodes);
     }
+
+    private void combineRefactorV2(List<Integer> riddle, List<Integer> current, boolean[] flag, List<List<Integer>> res, int m, int depth){
+
+        if(depth == m){
+            res.add(new ArrayList<>(current));
+            return;
+        }
+
+        for(int i=0; i<riddle.size(); i++){
+            if(flag[i] || ( i > 0 && Objects.equals(riddle.get(i), riddle.get(i-1))) && !flag[i-1]) {
+                continue;
+            }
+            current.add(riddle.get(i));
+            flag[i] = true;
+            combineRefactorV2(riddle, current, flag, res, m, depth + 1  );
+            flag[i] = false;
+            current.remove(current.size() - 1);
+        }
+    }
+
 
     private void combineRefactor(List<Integer> riddle, int start, int count, boolean[] flag, List<List<Integer>> res){
 

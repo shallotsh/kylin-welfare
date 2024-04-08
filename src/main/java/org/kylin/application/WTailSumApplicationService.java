@@ -20,7 +20,8 @@ public class WTailSumApplicationService {
         if(CollectionUtils.isEmpty(riddleSet)){
             return new TailSumValue();
         }
-        List<Integer> distinctRiddle = riddleSet.stream().distinct().collect(Collectors.toList());
+//        List<Integer> distinctRiddle = riddleSet.stream().distinct().collect(Collectors.toList());
+        List<Integer> distinctRiddle = riddleSet.stream().sorted().collect(Collectors.toList());
         List<WCode> w2dCodes = iwCodeEncodeService.combine4Code(distinctRiddle, 2);
         List<Integer> w2dTailSumValues = w2dCodes.stream().map(WCode::codeSum).distinct().sorted().collect(Collectors.toList());
 
