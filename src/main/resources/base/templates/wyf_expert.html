@@ -156,12 +156,22 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-7">
+                <div class="col-sm-4">
                     <input type="text" class="form-control" v-model="seqKill" placeholder="顺序数组,支持逗号、空格、#号等分隔输入多组数据" />
                 </div>
-                <div class="col-sm-2 col-sm-push-1">
+                <div class="col-sm-2">
                     <button type="button" class="btn btn-primary fill_parent" @click="filterBySeq"> 顺序杀 </button>
                 </div>
+
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" v-model="twoCodeSum" placeholder="二码和" />
+                </div>
+                <div class="col-sm-2 ">
+                    <button type="button" class="btn btn-primary fill_parent" @click="filterByTwoCodeSum"> 二码和选 </button>
+                </div>
+
+
+
             </div>
 
             <div class="row border-dashed-vertical">
@@ -287,7 +297,7 @@
 
 <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
 
-<script src="js/wyf_expert.js?v=6"></script>
+<script src="js/wyf_expert.js?v=1"></script>
 
 
 </body>

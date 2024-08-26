@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * 2023-02-12 修改： 二和尾杀后，频度为2，1的要去掉，在此基础上再进行胆频选
  *
  */
-public class BinSumFilter implements SimpleFilter {
+public class BinSumTailFilter implements SimpleFilter {
 
     @Override
     public List<WCode> filter(List<WCode> target, String filterStr) {
@@ -32,13 +32,13 @@ public class BinSumFilter implements SimpleFilter {
         List<Set<Integer>> dicts = TransferUtil.toMultiSet(filterStr);
         List<List<WCode>> wCodesArray = new ArrayList<>();
         for(Set<Integer> binSumValues: dicts){
-            wCodesArray.add(filterByBinSum(target, binSumValues));
+            wCodesArray.add(filterByBinSumTail(target, binSumValues));
         }
         return mergeWCodesAndFilterFreq(wCodesArray, 3);
     }
 
 
-    private List<WCode> filterByBinSum(List<WCode> source, Set<Integer> binSumValues){
+    private List<WCode> filterByBinSumTail(List<WCode> source, Set<Integer> binSumValues){
         // 单个二和码进行过滤
         List<WCode> copyCodes =  new ArrayList<>(source);
         Iterator<WCode> iterator = copyCodes.iterator();

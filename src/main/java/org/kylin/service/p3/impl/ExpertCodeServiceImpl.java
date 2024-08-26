@@ -143,6 +143,14 @@ public class ExpertCodeServiceImpl implements ExpertCodeService {
             count = CollectionUtils.size(target);
         }
 
+        if(CollectionUtils.isNotEmpty(target) && StringUtils.isNotBlank(req.getTwoCodeSumSeq())){
+
+            target = new TwoCodeSumFilter().filter(target, req.getTwoCodeSumSeq());
+            log.info("二码和 {} 注3D", (count - CollectionUtils.size(target)));
+            count = CollectionUtils.size(target);
+
+        }
+
 
         log.info("杀码后 {} 注3D", count);
         return target;

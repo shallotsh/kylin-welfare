@@ -17,6 +17,8 @@ public class ExpertCodeReq extends BaseCodeReq {
 
     private List<LabelValue<List<WCode>>> deletedCodes;
 
+    private String twoCodeSumSeq;
+
     @Override
     public WCodeReq adaptToWCodeReq() {
         WCodeReq req = super.adaptToWCodeReq();

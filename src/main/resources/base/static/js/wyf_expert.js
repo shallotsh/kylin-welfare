@@ -16,6 +16,7 @@ var app = new Vue({
         sumValue:null,
         kdSeq: null,
         seqKill: null,
+        twoCodeSum: null,
         wCodes: null,
         deletedCodesPair: null,
         wyfMessage:'这一行是统计数据展示区域',
@@ -182,6 +183,7 @@ var app = new Vue({
             this.inverseCodeSeq = null,
                 this.kdSeq = null,
                 this.seqKill = null,
+                this.twoCodeSum = null,
                 this.hundred = null,
                 this.decade = null,
                 this.unit = null,
@@ -316,6 +318,15 @@ var app = new Vue({
             var args = {
                 "wCodes": this.wCodes,
                 "seqKill": this.seqKill
+            };
+            this.killCode(args);
+        },
+
+        filterByTwoCodeSum: function (){
+
+            var args = {
+                "wCodes": this.wCodes,
+                "twoCodeSumSeq": this.twoCodeSum
             };
             this.killCode(args);
         },

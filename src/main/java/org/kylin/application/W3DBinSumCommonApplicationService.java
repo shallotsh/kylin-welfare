@@ -8,7 +8,6 @@ import org.kylin.bean.p5.WCode;
 import org.kylin.constant.ExportPatternEnum;
 import org.kylin.service.common.IWCodeEncodeService;
 import org.kylin.service.exporter.DocHolder;
-import org.kylin.service.exporter.ExportProperties;
 import org.kylin.service.exporter.ExportToolSelector;
 import org.kylin.service.exporter.IDocExportTool;
 import org.kylin.service.xcode.filters.impl.*;
@@ -92,7 +91,7 @@ public class W3DBinSumCommonApplicationService {
 
         if(CollectionUtils.isNotEmpty(target)
                 && StringUtils.isNotBlank(req.getBinSumValues())){
-            target = new BinSumFilter().filter(target, req.getBinSumValues());
+            target = new BinSumTailFilter().filter(target, req.getBinSumValues());
             log.info("二和杀 {} 注3D", (count - CollectionUtils.size(target)));
             count = CollectionUtils.size(target);
         }
