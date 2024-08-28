@@ -41,13 +41,12 @@ public class TransferUtil {
         if(StringUtils.isBlank(seq)){
             return Collections.emptyList();
         }
-
-        String[] strArray = seq.split("#|$|@|,|/| ");
         List<Integer> sets = new ArrayList<>();
-        for(String e : strArray){
-            if(StringUtils.isNumeric(e)){
-                Integer sum = NumberUtils.toInt(e, 0);
-                if("0".equals(e) || sum != 0){
+        for(int i=0; i<seq.length(); i++){
+            String tmp = seq.charAt(i)+"";
+            if(StringUtils.isNumeric(tmp)){
+                Integer sum = NumberUtils.toInt(tmp, 0);
+                if("0".equals(tmp) || sum != 0){
                     sets.add(sum);
                 }
             }
