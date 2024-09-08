@@ -25,6 +25,12 @@ public class Home {
         return "wyf";
     }
 
+    @RequestMapping("/wyf")
+    public String wyf(){
+        return "wyf";
+    }
+
+
     @RequestMapping("/origin")
     public String origin(){
         return "3d_origin_vs";

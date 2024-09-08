@@ -4,8 +4,8 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <link rel="stylesheet" href="/css/reset.css"/>
-    <link rel="stylesheet" href="/css/login.css"/>
+    <link rel="stylesheet" href="css/reset.css"/>
+    <link rel="stylesheet" href="css/login.css"/>
     <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
     <script type="text/javascript" src="/js/login.js"></script>
 </head>
@@ -14,7 +14,7 @@
     <div class="loginwarrp">
         <div class="logo">登 录</div>
         <div class="login_form">
-            <form action="/login/auth" method="post">
+            <form action="login/auth" method="post">
                 <li class="login-item">
                     <span>用户名：</span>
                     <input type="text" id="username" name="userName" v-model="user.userName" class="login_input"/>
@@ -59,6 +59,6 @@
         CanvasParticle(config);
     }
 </script>
-<script type="text/javascript" src="/js/canvas-particle.js"></script>
+<script type="text/javascript" src="js/canvas-particle.js"></script>
 </body>
 </html>
