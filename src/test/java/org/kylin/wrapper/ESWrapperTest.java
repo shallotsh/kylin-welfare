@@ -26,9 +26,9 @@ public class ESWrapperTest {
 
     @Test
     public void testGetDocById(){
-        Shop shop = esWrapper.getDocById("shop", "2000", Shop.class);
-        log.info("查询ES返回resp:{}", shop);
-        Assert.isTrue(shop != null, "查询结果为空");
+        SdDrawNoticeResult ret = esWrapper.getDocById("welfare_result", "2024110", SdDrawNoticeResult.class);
+        log.info("查询ES返回resp:{}", ret);
+        Assert.isTrue(ret != null, "查询结果为空");
     }
 
     @Test

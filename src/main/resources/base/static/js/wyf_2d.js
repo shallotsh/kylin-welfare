@@ -39,7 +39,7 @@ var app = new Vue({
         this.export_format = 0;
     },
     mounted: function(){
-        axios.get("/api/3d/draw/notice?", {
+        axios.get("api/3d/draw/notice?", {
             params: {
                 name: '3d',
                 issueCount: 1
@@ -70,7 +70,7 @@ var app = new Vue({
             this.wyfMessage = "正在计算...";
             axios({
               method: 'post',
-              url: '/api/2d/shuffle',
+              url: 'api/2d/shuffle',
               data: args
             }).then(function(response) {
                     app.handle2DCodeResponse(response.data.data, '定位2D组码');
@@ -175,7 +175,7 @@ var app = new Vue({
             this.wyfMessage = "正在计算...";
             axios({
                 method: 'post',
-                url: '/api/2d/comp/select',
+                url: 'api/2d/comp/select',
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
@@ -194,7 +194,7 @@ var app = new Vue({
                 console.log("request error.");
                 return;
             }
-            window.location = "/api/welfare/download?fileName=" + data;
+            window.location = "api/welfare/download?fileName=" + data;
         },
 
         killCode: function () {
@@ -218,7 +218,7 @@ var app = new Vue({
 
             axios({
                 method:"POST",
-                url:"/api/2d/kill/code",
+                url:"api/2d/kill/code",
                 data: args,
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
@@ -285,7 +285,7 @@ var app = new Vue({
             // console.log('canshu:' + JSON.stringify(args, null, 2));
             axios({
                 method:"POST",
-                url:"/api/2d/codes/export",
+                url:"api/2d/codes/export",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
