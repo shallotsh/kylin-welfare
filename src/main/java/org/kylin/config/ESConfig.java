@@ -36,7 +36,7 @@ public class ESConfig {
 
         String hostInner = System.getenv("ES_HOST");
         String portInner = System.getenv("ES_PORT");
-        String userInner = System.getenv("ES_USR");
+        String userInner = System.getenv("ES_USER");
         String credentialsKeyInner = System.getenv("ES_PWD");
 
         log.info("from env, host: {}, port:{}, user:{}, key:{}", hostInner, portInner, userInner, credentialsKeyInner);
