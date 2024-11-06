@@ -12,3 +12,8 @@ spring:
     name: Welfare
   profiles:
     active: prod
+
+es:
+  host: 10.7.97.73
+  port: 9200
+  pwd: zCPY7OlZEJ5224dMqtho

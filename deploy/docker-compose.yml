@@ -9,8 +9,12 @@ services:
       - /etc/timezone:/etc/timezone:ro
     restart: always
     environment:
-      WELFARE_VAR: echo
-      TZ: Asia/Shanghai
+      - WELFARE_VAR: echo
+      - ES_PWD: ${ES_PWD}
+      - ES_HOST: "10.7.97.73"
+      - ES_PORT: "7200"
+      - ES_USER: "elastic"
+      - TZ: Asia/Shanghai
     networks:
       - wyf
     ports:
