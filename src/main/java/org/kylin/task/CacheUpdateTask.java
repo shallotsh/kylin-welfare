@@ -1,6 +1,8 @@
 package org.kylin.task;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.kylin.bean.sd.SdDrawNoticeResult;
 import org.kylin.constant.ESIndexEnum;
 import org.kylin.util.MyDateUtil;
@@ -37,6 +39,10 @@ public class CacheUpdateTask {
         Optional<SdDrawNoticeResult> retOpt = OkHttpUtils.getSdDrawNoticeResult(drawDate, drawDate);
 
         retOpt.ifPresent(ret -> {
+            if(CollectionUtils.isEmpty(ret.getResult())) {
+                log.info("查询结果为空");
+                return ;
+            }
             cacheWrapper.invalidate(key);
             cacheWrapper.put(key, retOpt.get());
             log.info("更新缓存完成");
