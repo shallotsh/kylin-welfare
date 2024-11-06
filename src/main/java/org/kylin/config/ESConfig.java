@@ -4,6 +4,7 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.http.HttpHost;
@@ -19,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@Slf4j
 public class ESConfig {
 
     @Value("${es.host}")
@@ -36,6 +38,8 @@ public class ESConfig {
         String portInner = System.getenv("ES_PORT");
         String userInner = System.getenv("ES_USR");
         String credentialsKeyInner = System.getenv("ES_PWD");
+
+        log.info("from env, host: {}, port:{}, user:{}, key:{}", hostInner, portInner, userInner, credentialsKeyInner);
 
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
