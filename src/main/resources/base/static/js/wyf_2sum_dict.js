@@ -144,7 +144,7 @@ var app = new Vue({
 
             axios({
                 method:"POST",
-                url:"/api/2sum-dict/kill/code",
+                url:"api/2sum-dict/kill/code",
                 data: JSON.stringify(args),
 
                 headers:{
@@ -193,7 +193,7 @@ var app = new Vue({
             // console.log('canshu:' + JSON.stringify(args, null, 2));
             axios({
                 method:"POST",
-                url:"/api/2sum-dict/codes/export",
+                url:"api/2sum-dict/codes/export",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"

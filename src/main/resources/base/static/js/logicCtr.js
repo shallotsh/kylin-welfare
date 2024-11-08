@@ -27,7 +27,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
 
         $http({
             method:"POST",
-            url:"/api/welfare/codes/predict",
+            url:"api/welfare/codes/predict",
             data: JSON.stringify(args),
             headers:{
                 "Content-Type": "application/json; charset=UTF-8"
@@ -49,7 +49,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
 
         $http({
             method:"POST",
-            url:"/api/welfare/codes/transfer",
+            url:"api/welfare/codes/transfer",
             data: JSON.stringify($rootScope.welfareCode),
             headers:{
                 "Content-Type": "application/json; charset=UTF-8"
@@ -72,7 +72,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
 
         $http({
             method:"POST",
-            url:"/api/welfare/codes/transfer",
+            url:"api/welfare/codes/transfer",
             data: JSON.stringify($rootScope.welfareCode),
             headers:{
                 "Content-Type": "application/json; charset=UTF-8"
@@ -130,7 +130,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
 
         $http({
             method:"POST",
-            url:"/api/welfare/codes/filter",
+            url:"api/welfare/codes/filter",
             data: JSON.stringify(args),
             headers:{
                 "Content-Type": "application/json; charset=UTF-8"
@@ -161,7 +161,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
 
         $http({
             method:"POST",
-            url:"/api/welfare/codes/export",
+            url:"api/welfare/codes/export",
             data: JSON.stringify(data),
             headers:{
                 "Content-Type": "application/json; charset=UTF-8"
@@ -257,7 +257,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
         var queueCount = $rootScope.cacheQueue.length;
         $http({
             method:"POST",
-            url:"/api/welfare/codes/select",
+            url:"api/welfare/codes/select",
             data:JSON.stringify(args),
             headers:{
                 "Content-Type":"application/json; charset=UTF-8"
@@ -284,7 +284,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
 
         $http({
             method:"POST",
-            url:"/api/welfare/codes/minus",
+            url:"api/welfare/codes/minus",
             data:JSON.stringify(args),
             headers:{
                 "Content-Type":"application/json; charset=UTF-8"
@@ -310,7 +310,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
 
         $http({
             method:"POST",
-            url:"/api/welfare/codes/high/freq",
+            url:"api/welfare/codes/high/freq",
             data: JSON.stringify(data),
             headers:{
                 "Content-Type": "application/json; charset=UTF-8"
@@ -337,7 +337,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
 
         $http({
             method:"POST",
-            url:"/api/welfare/codes/sum/tail/freq",
+            url:"api/welfare/codes/sum/tail/freq",
             data: JSON.stringify(data),
             headers:{
                 "Content-Type": "application/json; charset=UTF-8"
@@ -370,7 +370,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
 
         $http({
             method:"POST",
-            url:"/api/welfare/codes/extend",
+            url:"api/welfare/codes/extend",
             data: JSON.stringify(data),
             headers:{
                 "Content-Type": "application/json; charset=UTF-8"
@@ -405,7 +405,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
 
         $http({
             method:"POST",
-            url:"/api/welfare/codes/extendSelect",
+            url:"api/welfare/codes/extendSelect",
             data: JSON.stringify(data),
             headers:{
                 "Content-Type": "application/json; charset=UTF-8"
@@ -437,7 +437,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
         // console.log("param:" + JSON.stringify(data), null, 2);
         $http({
             method:"POST",
-            url:"/api/welfare/codes/bit/seq/filter",
+            url:"api/welfare/codes/bit/seq/filter",
             data: JSON.stringify(data),
             headers:{
                 "Content-Type": "application/json; charset=UTF-8"
@@ -464,7 +464,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
 
         $http({
             method:"POST",
-            url:"/api/welfare/codes/bold/freq",
+            url:"api/welfare/codes/bold/freq",
             data: JSON.stringify(data),
             headers:{
                 "Content-Type": "application/json; charset=UTF-8"
@@ -514,7 +514,7 @@ app.controller('logicCtr', function ($scope, $rootScope, $http) {
 
         $http({
             method:"POST",
-            url:"/api/strategy/key",
+            url:"api/strategy/key",
             data: JSON.stringify(args),
             headers:{
                 "Content-Type": "application/json; charset=UTF-8"

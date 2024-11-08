@@ -229,7 +229,7 @@ var app = new Vue({
 
             axios({
                 method:"POST",
-                url:"/api/welfare/codes/transfer",
+                url:"api/welfare/codes/transfer",
                 data: app.welfareCode,
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
@@ -264,7 +264,7 @@ var app = new Vue({
 
             axios({
                 method:"POST",
-                url:"/api/welfare/codes/filter",
+                url:"api/welfare/codes/filter",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
@@ -333,7 +333,7 @@ var app = new Vue({
 
             axios({
                 method:"POST",
-                url:"/api/p5/sequence/process",
+                url:"api/p5/sequence/process",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
@@ -398,7 +398,7 @@ var app = new Vue({
             this.wyfMessage = "正在计算...";
             axios({
                 method:"POST",
-                url:"/api/p5/sequence/process",
+                url:"api/p5/sequence/process",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
@@ -462,7 +462,7 @@ var app = new Vue({
 
             axios({
                 method:"POST",
-                url:"/api/p5/bits/process",
+                url:"api/p5/bits/process",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
@@ -497,7 +497,7 @@ var app = new Vue({
             // console.log('canshu:' + JSON.stringify(args, null, 2));
             axios({
                 method:"POST",
-                url:"/api/p5/codes/export",
+                url:"api/p5/codes/export",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
@@ -523,7 +523,7 @@ var app = new Vue({
             // console.log(JSON.stringify($rootScope.welfareCode, null, 2));
             axios({
                 method:"POST",
-                url:"/api/p5/codes/export/half",
+                url:"api/p5/codes/export/half",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"

@@ -139,7 +139,7 @@ var app = new Vue({
 
             axios({
                 method:"POST",
-                url:"/api/4d/kill/code",
+                url:"api/4d/kill/code",
                 data: JSON.stringify(args),
 
                 headers:{
@@ -176,7 +176,7 @@ var app = new Vue({
             // console.log('请求参数:' + JSON.stringify(args));
             axios({
                 method:"POST",
-                url:"/api/4d/codes/transferCode",
+                url:"api/4d/codes/transferCode",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
@@ -218,7 +218,7 @@ var app = new Vue({
             // console.log('canshu:' + JSON.stringify(args, null, 2));
             axios({
                 method:"POST",
-                url:"/api/4d/codes/export",
+                url:"api/4d/codes/export",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"

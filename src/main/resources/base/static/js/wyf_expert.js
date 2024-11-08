@@ -108,7 +108,7 @@ var app = new Vue({
             var count = this.wCodes.length;
             axios({
                 method:"POST",
-                url:"/api/expert/3d/convert/2d",
+                url:"api/expert/3d/convert/2d",
                 data: JSON.stringify(args),
 
                 headers:{
@@ -147,7 +147,7 @@ var app = new Vue({
             var count = this.wCodes.length;
             axios({
                 method:"POST",
-                url:"/api/expert/3d/convert/group",
+                url:"api/expert/3d/convert/group",
                 data: JSON.stringify(args),
 
                 headers:{
@@ -297,7 +297,7 @@ var app = new Vue({
 
             axios({
                 method:"POST",
-                url:"/api/expert/3d/kill/code",
+                url:"api/expert/3d/kill/code",
                 data: JSON.stringify(args),
 
                 headers:{
@@ -385,7 +385,7 @@ var app = new Vue({
             console.log('canshu:' + JSON.stringify(args, null, 2));
             axios({
                 method:"POST",
-                url:"/api/expert/3d/codes/export",
+                url:"api/expert/3d/codes/export",
                 data: JSON.stringify(args),
                 headers:{
                     "Content-Type": "application/json; charset=UTF-8"
