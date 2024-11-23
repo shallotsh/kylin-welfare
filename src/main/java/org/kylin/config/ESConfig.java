@@ -6,8 +6,6 @@ import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -27,14 +25,6 @@ import java.util.Optional;
 @Configuration
 @Slf4j
 public class ESConfig {
-
-    @Value("${es.host}")
-    private String hostDefault;
-    @Value("${es.port}")
-    private Integer portDefault;
-    @Value("${es.pwd}")
-    private String pwdDefault;
-
     @Value("${config.es-config-url}")
     private String configurationUrl ;
 
@@ -55,11 +45,10 @@ public class ESConfig {
 
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
-                new UsernamePasswordCredentials(userInner != null ? userInner:"elastic",
-                     credentialsKeyInner != null ? credentialsKeyInner: pwdDefault));
+                new UsernamePasswordCredentials(userInner != null ? userInner:"elastic", credentialsKeyInner));
 
         RestClient restClient = RestClient
-                .builder(new HttpHost(hostInner != null ? hostInner : hostDefault,  portInner != null ? portInner : portDefault, "http")
+                .builder(new HttpHost(hostInner,  portInner, "http")
                 ).setHttpClientConfigCallback(new HttpClientConfigCallback() {
                     @Override
                     public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
