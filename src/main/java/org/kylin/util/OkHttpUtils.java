@@ -3,10 +3,12 @@ package org.kylin.util;
 import com.alibaba.fastjson.JSON;
 import com.github.rholder.retry.RetryException;
 import com.github.rholder.retry.Retryer;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.poi.ss.formula.functions.T;
 import org.kylin.bean.sd.SdDrawNoticeResult;
 import org.kylin.exception.NeedRetryExcetpion;
 
@@ -20,7 +22,8 @@ import java.util.concurrent.ExecutionException;
 public class OkHttpUtils {
 
     private static final String DRAW_NOTICE_URL_TPL = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=3d&issueCount=&issueStart=&issueEnd=&dayStart={0}&dayEnd={1}";
-
+    private static String DEFAULT_CONTENT_TYPE = "application/json";
+    private static String DEFAULT_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36";
 
 
 
@@ -74,6 +77,62 @@ public class OkHttpUtils {
         }
 
         return Optional.ofNullable(retOpt.map(ret -> JSON.parseObject(ret, SdDrawNoticeResult.class)).orElseGet(null));
+    }
+
+
+
+    public static <T> Optional<T> doGet(String url, Class<T> resultClass, HttpRequestOptions options) throws NeedRetryExcetpion{
+        OkHttpClient client = new OkHttpClient();
+        Request.Builder builder = new Request.Builder();
+        builder.url(url);
+        fillHeaders(builder, options);
+        Request request = builder.build();
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                String body = response.body().string();
+                log.info("doGet response :{}, body:{}", JSON.toJSONString(response), body);
+                return Optional.of(JSON.parseObject(body, resultClass));
+            } else {
+                throw new NeedRetryExcetpion("query lottery code error, retry.");
+            }
+        } catch (IOException e) {
+            log.info("doGet error", e);
+        }
+        return Optional.empty();
+
+    }
+
+    private static void fillHeaders(Request.Builder builder, HttpRequestOptions options){
+        HttpRequestOptions opt = Optional.ofNullable(options).orElse(new HttpRequestOptions());
+        if(opt.getReferer()!= null){
+            builder.addHeader("referer", opt.getReferer());
+        }
+        if(opt.getUserAgent()!= null){
+            builder.addHeader("user-agent", opt.getUserAgent());
+        }else{
+            builder.addHeader("user-agent", DEFAULT_USER_AGENT);
+        }
+        if(opt.getCookie()!= null){
+            builder.addHeader("cookie", opt.getCookie());
+        }
+        if(opt.getHost()!= null){
+            builder.addHeader("host", opt.getHost());
+        }
+        if(opt.getContentType()!= null){
+            builder.addHeader("content-type", opt.getContentType());
+        }else{
+            builder.addHeader("content-type", DEFAULT_CONTENT_TYPE);
+        }
+    }
+
+
+    @Data
+    public static class HttpRequestOptions{
+        private String referer;
+        private String userAgent;
+        private String cookie;
+        private String host;
+        private String contentType;
     }
 
 }
