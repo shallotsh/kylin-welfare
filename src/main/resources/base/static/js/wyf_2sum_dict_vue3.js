@@ -16,6 +16,7 @@ const app = {
            sumValue:null,
            boldCodeSeq: null,
            kdSeq:null,
+           tripleCodeSeq: null,
 
            freqSeted: false,
            wCodes: null,
@@ -92,8 +93,9 @@ const app = {
         },
 
         resetInput() {
-            this.config.isPredict = false;
-            this.sequence ='',
+                this.config.isPredict = false;
+                this.sequence ='',
+                this.tripleCodeSeq = null,
                 this.sumValue = null,
                 this.boldCodeSeq = null,
                 this.gossipCodeSeq = null,
@@ -131,6 +133,18 @@ const app = {
             var args = {
                 "wCodes": this.wCodes,
                 "killAllOddAndEven": true
+            };
+            this.killCode(args);
+        },
+
+        tripleKill() {
+            if(!this.config.isPredict){
+                this.handleException("请先完成组码");
+                return;
+            }
+            var args = {
+                "wCodes": this.wCodes,
+                "tripleCodeKill": this.tripleCodeSeq
             };
             this.killCode(args);
         },

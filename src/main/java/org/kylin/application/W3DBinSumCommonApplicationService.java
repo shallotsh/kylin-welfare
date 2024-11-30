@@ -110,6 +110,13 @@ public class W3DBinSumCommonApplicationService {
             count = CollectionUtils.size(target);
         }
 
+        if(CollectionUtils.isNotEmpty(target)
+            && StringUtils.isNotBlank(req.getTripleCodeKill())){
+            target = new TripleCodeKillFilter().filter(target, req.getTripleCodeKill());
+            log.info("三码杀 {} 注3D", (count - CollectionUtils.size(target)));
+            count = CollectionUtils.size(target);
+        }
+
         log.info("杀码后 {} 注3D", count);
         return target;
     }

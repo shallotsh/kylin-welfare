@@ -23,6 +23,11 @@ public class W3D2SumCodeReq extends BaseCodeReq {
      */
     private Boolean killAllOddAndEven;
 
+    /**
+     * 三码杀
+     */
+    private String tripleCodeKill;
+
     @Override
     public String toString() {
         return JSON.toJSONString(this);

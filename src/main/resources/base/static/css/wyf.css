@@ -41,6 +41,15 @@
 .fill_parent_50 {
     width: 50%;
 }
+.fill_parent_40 {
+    width: 40%;
+}
+.align_left {
+    margin-left: auto;
+}
+.align_right {
+    margin-right: auto;
+}
 
 .fill_parent_80 {
     width: 80%;
@@ -110,6 +119,12 @@
 .border-dashed-bottom {
     border-style: dashed;
     border-width: 0px 0px 1px 0px;
+    padding: 15px ;
+}
+
+.border-dashed-top {
+    border-style: dashed;
+    border-width: 1px 0 0px 0;
     padding: 15px ;
 }
 
