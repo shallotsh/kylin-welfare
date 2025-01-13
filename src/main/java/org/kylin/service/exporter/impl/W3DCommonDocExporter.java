@@ -178,13 +178,13 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
                 List<WCode> tmp = entry.getValue();
                 Collections.sort(tmp,  WCode::compareByTailNo);
                 for(WCode wCode: tmp){
-                    content.setText(wCode.getStringWithTailSum() + "        ");
+                    content.setText(wCode.getStringWithFreqAndTailSum() + "        ");
                 }
                 content.addBreak();
             }else{
                 // 3D二和频度法 输出
                 for(WCode wCode: entry.getValue()){
-                    content.setText(wCode.getStringWithTailSum() + "        ");
+                    content.setText(wCode.getStringWithFreqAndTailSum() + "        ");
                 }
             }
 

@@ -58,7 +58,7 @@ public class BoldFreqFilter implements SimpleFilter {
     private List<WCode> mergeAndFilterWCodesByMinFreq(List<List<WCode>> wCodesArray, int minFreqInclude){
         // 合并 & 设置频次 & 过滤频次
         List<WCode> ret = WCodeUtils.mergeCodes(wCodesArray.stream()
-                .flatMap(x -> x.stream())
+                .flatMap(Collection::stream)
                 .collect(Collectors.toList()), true);
 
         return ret.stream().filter(x -> x.getFreq() >= minFreqInclude).collect(Collectors.toList());

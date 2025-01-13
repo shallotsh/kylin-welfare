@@ -210,6 +210,10 @@ public class WCode implements Cloneable,Comparable,RandomKill{
         return Joiner.on("").join(getCodes()) + "-" + getSumTail();
     }
 
+    public String getStringWithFreqAndTailSum(){
+        return "(" + getFreq() + ")" + Joiner.on("").join(getCodes()) + "-" + getSumTail();
+    }
+
     @Override
     public String toString() {
         if(CollectionUtils.isEmpty(codes)){
