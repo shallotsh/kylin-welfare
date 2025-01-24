@@ -15,6 +15,7 @@ import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder.HttpClientConfigCallback;
 import org.kylin.util.OkHttpUtils;
+import org.kylin.wrapper.ESWrapper;
 import org.kylin.wrapper.bo.ESClusterConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

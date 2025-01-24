@@ -16,7 +16,7 @@ import java.io.IOException;
 @Slf4j
 public class ESWrapper {
 
-    private static final Boolean ES_SWITCH = true;
+    public static final Boolean ES_SWITCH = true;
 
     private String ES_DEFAULT_INDEX_NAME = "shop";
 

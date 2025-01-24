@@ -28,6 +28,11 @@ public class W3D2SumCodeReq extends BaseCodeReq {
      */
     private String tripleCodeKill;
 
+    /**
+     * 重叠码
+     */
+    private String overlapCodeArray;
+
     @Override
     public String toString() {
         return JSON.toJSONString(this);

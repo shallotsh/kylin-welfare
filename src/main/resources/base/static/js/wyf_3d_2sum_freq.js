@@ -21,6 +21,7 @@ var app = new Vue({
         binSumValues:null,
         kdSeq:null,
         boldFreqValues:null,
+        overlapCodeArray: null,
 
         freqSeted: false,
         wCodes: null,
@@ -115,7 +116,8 @@ var app = new Vue({
                 this.wCodes = null,
                 this.deletedCodesPair= null,
                 this.pairCount = null,
-                this.nonPairCount = null
+                this.nonPairCount = null,
+                overlapCodeArray = null
 
         },
         doKillCode: function () {
@@ -130,7 +132,8 @@ var app = new Vue({
                 "sumTailValues": this.sumValue,
                 "kdSeq": this.kdSeq,
                 "binSumValues": this.binSumValues,
-                "boldFreqValues": this.boldFreqValues
+                "boldFreqValues": this.boldFreqValues,
+                "overlapCodeArray": this.overlapCodeArray
             };
             this.killCode(args);
         },
