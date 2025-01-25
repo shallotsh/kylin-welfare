@@ -36,7 +36,8 @@ const app = {
             params: {
                 name: '3d',
                 issueCount: 1
-            }
+            },
+            timeout: 2000
         }).then(resp => {
             this.drawNotice = resp.data.data;
             let latestDrawRet = this.drawNotice.result[0];

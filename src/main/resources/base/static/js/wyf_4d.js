@@ -37,7 +37,8 @@ var app = new Vue({
             params: {
                 name: '3d',
                 issueCount: 1
-            }
+            },
+            timeout: 2000
         }).then(function (resp) {
             this.drawNotice = resp.data.data;
             var latestDrawRet = this.drawNotice.result[0];
