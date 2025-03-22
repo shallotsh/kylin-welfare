@@ -20,14 +20,14 @@ public class SumTailCodeFilter implements SimpleFilter{
             return Collections.emptyList();
         }
 
-        Set<Integer> boldSet = TransferUtil.toIntegerSet(filterStr);
+        Set<Integer> sumTailSet = TransferUtil.toIntegerSet(filterStr);
 
-        if(CollectionUtils.isEmpty(boldSet)){
+        if(CollectionUtils.isEmpty(sumTailSet)){
             return target;
         }
 
         List<WCode> ret = target.stream().filter(
-                wCode -> boldSet.contains(wCode.getSumTail())
+                wCode -> sumTailSet.contains(wCode.getSumTail())
         ).collect(Collectors.toList());
 
         return ret;

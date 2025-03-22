@@ -22,7 +22,7 @@ public class Home {
 
     @RequestMapping("/")
     public String index(){
-        return "wyf";
+        return "wyf_two_derive_three";
     }
 
     @RequestMapping("/wyf")
@@ -72,6 +72,10 @@ public class Home {
         return "wyf_tail_sum";
     }
 
+    @RequestMapping("/two-derive-three")
+    public String twoDerivationThree(){
+        return "wyf_two_derive_three";
+    }
 
     @RequestMapping("/expert_inner")
     public String expertInner(){

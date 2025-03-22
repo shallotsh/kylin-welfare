@@ -34,6 +34,8 @@ public enum ExportPatternEnum {
 
     WCODE_4D_TO_3D(208, "复式组选·转三码", null),
 
+    TWO_DERIVE_THREE_CODE(209, "我要发·二组三码法", null),
+
     ;
 
     private int id;

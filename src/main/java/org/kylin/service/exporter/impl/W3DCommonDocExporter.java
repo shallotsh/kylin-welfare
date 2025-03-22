@@ -193,6 +193,6 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
 
     @Override
     public List<ExportPatternEnum> getSupportedExportPatterns() {
-        return Arrays.asList(ExportPatternEnum.EXPERT_3D, ExportPatternEnum.BIN_SUM_FREQ_3D);
+        return Arrays.asList(ExportPatternEnum.EXPERT_3D, ExportPatternEnum.BIN_SUM_FREQ_3D, ExportPatternEnum.TWO_DERIVE_THREE_CODE);
     }
 }

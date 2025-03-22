@@ -638,4 +638,65 @@ public class WCodeUtils {
         // abcd中有一对重复的也留下，即aabc型留下，其余aabb型（a不等于b），aaab，aaaa型都去除
         return wCode.getCodes().size() - set.size() <= 1;
     }
+
+
+    /**
+     * 转直选码
+     *
+     * @param wCodes
+     * @return
+     */
+    public static List<WCode> combine3DCode(List<WCode> wCodes) {
+        if (CollectionUtils.isEmpty(wCodes)) {
+            return Collections.emptyList();
+        }
+        List<WCode> ret = new ArrayList<>();
+        for (WCode wCode : wCodes) {
+            ret.addAll(combineNCode(wCode.getCodes(), 3));
+        }
+        return ret;
+    }
+
+
+    /**
+     *  排列组码
+     *
+     * @param riddle
+     * @param nDimVal
+     * @return
+     */
+    public static List<WCode> combineNCode(List<Integer> riddle, int nDimVal) {
+        if(nDimVal <= 0 || CollectionUtils.size(riddle) < nDimVal){
+            return Collections.emptyList();
+        }
+        boolean[] flag = new boolean[riddle.size()];
+        List<List<Integer>> res = new ArrayList<>();
+        combine(riddle, new ArrayList<>(), flag, res, nDimVal, 0);
+        List<WCode> wCodes = new ArrayList<>();
+        for(List<Integer> code : res){
+            wCodes.add(new WCode(nDimVal, code));
+        }
+        return wCodes;
+    }
+
+    private static void combine(List<Integer> riddle, List<Integer> current, boolean[] flag, List<List<Integer>> res, int m, int depth){
+
+        if(depth == m){
+            res.add(new ArrayList<>(current));
+            return;
+        }
+
+        for(int i=0; i<riddle.size(); i++){
+            if(flag[i] || ( i > 0 && Objects.equals(riddle.get(i), riddle.get(i-1))) && !flag[i-1]) {
+                continue;
+            }
+            current.add(riddle.get(i));
+            flag[i] = true;
+            combine(riddle, current, flag, res, m, depth + 1  );
+            flag[i] = false;
+            current.remove(current.size() - 1);
+        }
+    }
+
+
 }
