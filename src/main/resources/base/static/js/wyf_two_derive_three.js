@@ -65,8 +65,6 @@ var app = new Vue({
               url: '/api/two-derive-three/shuffle',
               data: args
             }).then(function(response) {
-                    // 前置赋值
-                    app.freqSeted = false;
                     // 处理结果
                     app.handle3DCodeResponse(response.data.data, '二组三码法组码');
                     app.config.isPredict = true;
@@ -115,9 +113,6 @@ var app = new Vue({
             this.pairCount = data.pairCodes;
             this.nonPairCount = data.nonPairCodes;
             this.deletedCodesPair = data.deletedCodes;
-            if(data.freqSeted) {
-                this.freqSeted = data.freqSeted;
-            }
             app.wyfMessage =  msg + " : "  + this.wCodes.length + " 注(对子:" + app.pairCount + " 注,非对子:" + app.nonPairCount + " 注)" ; ;
         },
 
@@ -208,9 +203,7 @@ var app = new Vue({
 
 
             var args = {
-                wCodes: exportCodes,
-                deletedCodes: this.deletedCodesPair,
-                freqSeted: this.freqSeted
+                wCodes: exportCodes
             };
 
             console.log('canshu:' + JSON.stringify(args, null, 2));
@@ -245,31 +238,10 @@ var app = new Vue({
                 }
                 // code.codes.reverse();
                 var codeString = code.codes.join("");
-                if(this.freqSeted){
-                    codeString = '[' + code.freq + ']' + codeString;
-                }
                 printCodes.push(codeString);
             }
             return printCodes;
         }
-        // ,
-        // drawNoticeDesc: function(){
-        //
-        //     if(this.drawNotice == null
-        //         || this.drawNotice.state != 0
-        //         || this.drawNotice.result.length <= 0) {
-        //         console.log("参数问题");
-        //         return "";
-        //     }
-        //
-        //     var latestDrawRet = this.drawNotice.result[0];
-        //     var desc = "开奖期数: 【" + latestDrawRet.code
-        //         + " 】（" + latestDrawRet.date + "），中奖号码: 【"
-        //         + latestDrawRet.red + "】";
-        //
-        //     console.log("desc : " + desc);
-        //     return desc;
-        // }
     }
 });
 
