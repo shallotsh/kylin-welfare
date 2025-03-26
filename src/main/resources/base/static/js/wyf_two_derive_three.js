@@ -24,7 +24,8 @@ var app = new Vue({
         drawNotice: null,
         drawNoticeOverview: '',
         pairCount:null,
-        nonPairCount:null
+        nonPairCount:null,
+        hundred: null
     },
     created: function(){
         this.export_format = 0;
@@ -128,8 +129,8 @@ var app = new Vue({
             this.wCodes = null,
                 this.deletedCodesPair= null,
                 this.pairCount = null,
-                this.nonPairCount = null
-
+                this.nonPairCount = null,
+                this.hundred = null
         },
         handleDownload: function(data) {
             console.log("downloads:"+data);
@@ -183,6 +184,25 @@ var app = new Vue({
                 "sumTailValues": this.sumValue,
                 "kdSeq": this.kdSeq
             };
+            this.killCode(args);
+        },
+
+        filterByBit: function (){
+
+            if(!this.isDirect){
+                this.handleException("未转直选，不支持按位杀码");
+                return;
+            }
+
+            let bitUnitDTO = {
+                "hundredSeq": this.hundred,
+                "needDeletedCodes": false
+            }
+            let args = {
+                "wCodes": this.wCodes,
+                "bitUnitDTO": bitUnitDTO
+            }
+            console.log('bitSelect' + JSON.stringify(args))
             this.killCode(args);
         },
 

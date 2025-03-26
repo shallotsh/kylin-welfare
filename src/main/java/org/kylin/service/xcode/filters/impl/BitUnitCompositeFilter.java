@@ -2,6 +2,7 @@ package org.kylin.service.xcode.filters.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.kylin.bean.p3.BitUnitDTO;
 import org.kylin.bean.p5.WCode;
 import org.kylin.service.xcode.filters.CompositeFilter;
@@ -41,21 +42,26 @@ public class BitUnitCompositeFilter implements CompositeFilter {
         List<WCode> ret = WCodeUtils.mergeCodes(Arrays.asList(hundredFilterRet, decadeFilterRet, unitFilterRet).stream()
         .flatMap(x -> x.stream()).collect(Collectors.toList()), true);
 
-        List<WCode> deletedCodes = WCodeUtils.minus(target, ret);
-        if(CollectionUtils.isNotEmpty(deletedCodes)){
-            deletedCodes.forEach(code -> {
-                code.setFreq(0);
-                code.setDeleted(true);
-            });
-        }
+        if(bitUnitDTO.isNeedDeletedCodes()) {
 
-        ret.addAll(deletedCodes);
+            List<WCode> deletedCodes = WCodeUtils.minus(target, ret);
+            if (CollectionUtils.isNotEmpty(deletedCodes)) {
+                deletedCodes.forEach(code -> {
+                    code.setFreq(0);
+                    code.setDeleted(true);
+                });
+            }
+            ret.addAll(deletedCodes);
+        }
 
         return ret;
     }
 
 
     private List<WCode> killByBit(List<WCode> target, int bitIndex, String bitSeq){
+        if(StringUtils.isBlank(bitSeq)){
+            return Collections.emptyList();
+        }
         List<WCode> copyCodes = new ArrayList<>(target);
         Set<Integer> bitSet = TransferUtil.toIntegerSet(bitSeq);
         Iterator<WCode> iterator = copyCodes.iterator();

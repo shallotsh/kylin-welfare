@@ -81,7 +81,7 @@ public class Kylin2DDerivate3DApiController {
     @RequestMapping(value = "/kill/code", method = RequestMethod.POST)
     public WyfResponse killCode(@RequestBody TwoDeriveThreeReq req, HttpServletRequest request){
 
-        log.info("expert kill req:{}", req);
+        log.info("2d derive 3d kill req:{}", JSON.toJSONString(req));
 
         if(Objects.isNull(req)){
             log.warn(" 参数错误");
@@ -90,7 +90,7 @@ public class Kylin2DDerivate3DApiController {
 
         List<WCode> allRet = twoDeriveThreeCodeService.killCode(req);
         List<WCode> ret = allRet.stream().filter(wCode -> !wCode.isBeDeleted()).collect(Collectors.toList());
-        log.info("expert kill code ret: {}", ret);
+        log.info("2d derive 3d kill code ret: {}", ret);
 
         Integer pairCount = WCodeUtils.getPairCodeCount(ret);
         WCodeSummarise summarise = new WCodeSummarise();

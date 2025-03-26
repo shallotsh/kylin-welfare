@@ -138,6 +138,7 @@ public class ExpertCodeServiceImpl implements ExpertCodeService {
         }
 
         if(CollectionUtils.isNotEmpty(target) && req.getBitUnitDTO() != null && req.getBitUnitDTO().isValid()){
+            req.getBitUnitDTO().setNeedDeletedCodes(true);
             target = new BitUnitCompositeFilter().filter(target, req.getBitUnitDTO());
             log.info("位选 {} 注3D", (count - CollectionUtils.size(target)));
             count = CollectionUtils.size(target);

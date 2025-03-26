@@ -10,10 +10,12 @@ public class BitUnitDTO implements CompositeFilterDTO {
     private String decadeSeq;
     private String unitSeq;
 
+    private boolean needDeletedCodes;
+
     public boolean isValid(){
         if( StringUtils.isBlank(hundredSeq)
-                || StringUtils.isBlank(decadeSeq)
-                || StringUtils.isBlank(unitSeq)){
+                && StringUtils.isBlank(decadeSeq)
+                && StringUtils.isBlank(unitSeq)){
             return false;
         }
         // todo 其他校验

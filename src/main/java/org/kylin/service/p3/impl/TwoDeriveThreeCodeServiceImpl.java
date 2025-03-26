@@ -176,6 +176,13 @@ public class TwoDeriveThreeCodeServiceImpl implements TwoDeriveThreeCodeService 
             count = CollectionUtils.size(target);
         }
 
+        if(CollectionUtils.isNotEmpty(target) && req.getBitUnitDTO() != null && req.getBitUnitDTO().isValid()){
+            req.getBitUnitDTO().setNeedDeletedCodes(false);
+            target = new BitUnitCompositeFilter().filter(target, req.getBitUnitDTO());
+            log.info("位选 {} 注3D", (count - CollectionUtils.size(target)));
+            count = CollectionUtils.size(target);
+        }
+
         log.info("杀码后 {} 注3D", count);
         return target;
     }
