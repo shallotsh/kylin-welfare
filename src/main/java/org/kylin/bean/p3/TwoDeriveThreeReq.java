@@ -12,4 +12,9 @@ public class TwoDeriveThreeReq extends BaseCodeReq {
      * 顺序杀序列
      */
     private String seqKill;
+
+    /**
+     * 二码和杀
+     */
+    private String twoCodeSumSeq;
 }

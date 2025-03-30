@@ -25,7 +25,8 @@ var app = new Vue({
         drawNoticeOverview: '',
         pairCount:null,
         nonPairCount:null,
-        hundred: null
+        hundred: null,
+        twoCodeSum: null
     },
     created: function(){
         this.export_format = 0;
@@ -130,7 +131,8 @@ var app = new Vue({
                 this.deletedCodesPair= null,
                 this.pairCount = null,
                 this.nonPairCount = null,
-                this.hundred = null
+                this.hundred = null,
+                this.twoCodeSum = null
         },
         handleDownload: function(data) {
             console.log("downloads:"+data);
@@ -183,6 +185,15 @@ var app = new Vue({
                 "boldCodeSeq": this.boldCodeSeq,
                 "sumTailValues": this.sumValue,
                 "kdSeq": this.kdSeq
+            };
+            this.killCode(args);
+        },
+
+        filterByTwoCodeSum: function (){
+
+            var args = {
+                "wCodes": this.wCodes,
+                "twoCodeSumSeq": this.twoCodeSum
             };
             this.killCode(args);
         },
