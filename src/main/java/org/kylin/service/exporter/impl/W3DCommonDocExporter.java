@@ -115,16 +115,18 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
         content.setFontSize(14);
         paragraph.setAlignment(ParagraphAlignment.LEFT);
 
-        boolean printFreq = wCodes.stream().anyMatch(w3DCode -> w3DCode.getFreq()!=0);
-
         Map<WCode, Integer> stat = getW3DCodeIntStatRefactor(wCodes);
 
         List<WCode> temp = new ArrayList<>(stat.keySet());
         Collections.sort(temp, WCode::compareByTailNo);
         for(WCode wCode : temp) {
+            // 20250816 修改专家组码法输出，仅输出2注以上的码，且取消（2）附加输出
+            if(stat.get(wCode) < 2){
+                continue;
+            }
             // 修改专家组码法输出
             String ct = wCode.getStringWithTailSum();
-            if(stat.get(wCode) > 1){
+            if(stat.get(wCode) > 2){
                 ct += "("+ stat.get(wCode) +")    ";
             }else {
                 ct += "        ";
