@@ -54,12 +54,12 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
 
 
         List<WCode> pairCodesNew = WCodeUtils.filterPairCodes(wCodes);
-        String title = String.format("对子 %d 注", pairCodesNew.size());
-        writeWCodesRefactor(docHolder.getDocument().createParagraph(), pairCodesNew, title);
+        String titleTpl = "对子 %d 注";
+        writeWCodesRefactor(docHolder.getDocument().createParagraph(), pairCodesNew, titleTpl, docHolder.getFreqLowLimit());
 
         List<WCode> nonPairCodesNew = WCodeUtils.filterNonPairCodes(wCodes);
-        title = String.format("非对子 %d 注", nonPairCodesNew.size());
-        writeWCodesRefactor(docHolder.getDocument().createParagraph(), nonPairCodesNew, title);
+        titleTpl = "非对子 %d 注";
+        writeWCodesRefactor(docHolder.getDocument().createParagraph(), nonPairCodesNew, titleTpl, docHolder.getFreqLowLimit());
 
     }
 
@@ -103,30 +103,32 @@ public class W3DCommonDocExporter extends AbstractDocumentExporter{
 
 
 
-    public void writeWCodesRefactor( XWPFParagraph paragraph, List<WCode> wCodes, String title){
+    public void writeWCodesRefactor( XWPFParagraph paragraph, List<WCode> wCodes, String title, int freqLowLimit){
         if(CollectionUtils.isEmpty(wCodes)){
             return;
         }
         paragraph.setSpacingBetween(1.2, LineSpacingRule.AUTO);
 
-        writeSubTitle(paragraph, title);
+        Map<WCode, Integer> stat = getW3DCodeIntStatRefactor(wCodes);
+        List<WCode> temp = new ArrayList<>(stat.keySet());
+        List<WCode> target = temp.stream().filter(wCode -> stat.get(wCode) >= freqLowLimit).collect(Collectors.toList());
+        Collections.sort(target, WCode::compareByTailNo);
+
+        writeSubTitle(paragraph, String.format(title, target.size()));
 
         XWPFRun content = paragraph.createRun();
         content.setFontSize(14);
         paragraph.setAlignment(ParagraphAlignment.LEFT);
 
-        Map<WCode, Integer> stat = getW3DCodeIntStatRefactor(wCodes);
 
-        List<WCode> temp = new ArrayList<>(stat.keySet());
-        Collections.sort(temp, WCode::compareByTailNo);
-        for(WCode wCode : temp) {
+        for(WCode wCode : target) {
             // 20250816 修改专家组码法输出，仅输出2注以上的码，且取消（2）附加输出
-            if(stat.get(wCode) < 2){
+            if(stat.get(wCode) < freqLowLimit){
                 continue;
             }
             // 修改专家组码法输出
             String ct = wCode.getStringWithTailSum();
-            if(stat.get(wCode) > 2){
+            if(stat.get(wCode) > freqLowLimit){
                 ct += "("+ stat.get(wCode) +")    ";
             }else {
                 ct += "        ";

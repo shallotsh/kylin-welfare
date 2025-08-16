@@ -19,6 +19,8 @@ public class ExpertCodeReq extends BaseCodeReq {
 
     private String twoCodeSumSeq;
 
+    private Integer freqLowLimit;
+
     @Override
     public WCodeReq adaptToWCodeReq() {
         WCodeReq req = super.adaptToWCodeReq();

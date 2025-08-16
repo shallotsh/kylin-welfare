@@ -18,4 +18,21 @@ public class DocHolder {
         this.document = new XWPFDocument();
         this.exportProperties = exportProperties;
     }
+
+    public void assignFreqLowLimit(Integer freqLowLimit){
+        if(freqLowLimit == null){
+            return;
+        }
+        if(exportProperties == null) {
+            exportProperties = new ExportProperties();
+        }
+        exportProperties.setFreqLowLimit(freqLowLimit);
+    }
+
+    public int getFreqLowLimit(){
+        if(exportProperties == null) {
+            return 1;
+        }
+        return exportProperties.getFreqLowLimit();
+    }
 }

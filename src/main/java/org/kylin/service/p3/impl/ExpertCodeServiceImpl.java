@@ -161,6 +161,7 @@ public class ExpertCodeServiceImpl implements ExpertCodeService {
     public Optional<String> exportCodeToFile(ExpertCodeReq req) throws IOException {
         // 策略导出
         DocHolder docHolder = new DocHolder();
+        docHolder.assignFreqLowLimit(req.getFreqLowLimit());
         Optional<IDocExportTool> iDocExportTool = exportToolSelector.getByExportPattern(ExportPatternEnum.EXPERT_3D);
 
         if(iDocExportTool.isPresent()) {

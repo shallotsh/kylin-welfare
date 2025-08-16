@@ -31,7 +31,8 @@ var app = new Vue({
         nonPairCount:null,
         hundred: null,
         decade: null,
-        unit: null
+        unit: null,
+        freqLowLimit: 2
     },
     created: function(){
         this.export_format = 0;
@@ -194,7 +195,8 @@ var app = new Vue({
             this.wCodes = null,
                 this.deletedCodesPair= null,
                 this.pairCount = null,
-                this.nonPairCount = null
+                this.nonPairCount = null,
+                this.freqLowLimit = 2
 
         },
 
@@ -380,7 +382,8 @@ var app = new Vue({
             var args = {
                 wCodes: exportCodes,
                 deletedCodes: this.deletedCodesPair,
-                freqSeted: this.freqSeted
+                freqSeted: this.freqSeted,
+                freqLowLimit: this.freqLowLimit
             };
 
             console.log('canshu:' + JSON.stringify(args, null, 2));
