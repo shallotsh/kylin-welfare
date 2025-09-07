@@ -110,7 +110,7 @@ public class NormalExporter extends AbstractDocumentExporter {
         List<WCode> nonPairCodes = WCodeUtils.filterNonPairCodes(wCodeReq.getwCodes());
 
         Optional<ExportPatternEnum> ep = ExportPatternEnum.getById(wCodeReq.getExportFormat());
-        boolean isNormalSeqNo =  ep.map( e -> e ==ExportPatternEnum.NORMAL_SEQ_NO ?true:false).orElse(Boolean.FALSE);
+        boolean isNormalSeqNo =  Boolean.FALSE;
 
         int customRandomCount = 200;
         if(StringUtils.isNumeric(wCodeReq.getRandomCount()) && NumberUtils.toInt(wCodeReq.getRandomCount()) > 0
@@ -165,6 +165,6 @@ public class NormalExporter extends AbstractDocumentExporter {
 
     @Override
     public List<ExportPatternEnum> getSupportedExportPatterns() {
-        return Arrays.asList(ExportPatternEnum.NORMAL, ExportPatternEnum.NORMAL_SEQ_NO);
+        return Arrays.asList(ExportPatternEnum.NORMAL);
     }
 }

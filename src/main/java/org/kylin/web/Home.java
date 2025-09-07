@@ -25,12 +25,6 @@ public class Home {
         return "wyf_two_derive_three";
     }
 
-    @RequestMapping("/wyf")
-    public String wyf(){
-        return "wyf";
-    }
-
-
     @RequestMapping("/origin")
     public String origin(){
         return "3d_origin_vs";

@@ -56,14 +56,6 @@ public class WCodeSummarise {
         return this;
     }
 
-    public Map<String, List<WCode>> getDeletedCodesPair() {
-        return deletedCodesPair;
-    }
-
-    public WCodeSummarise setDeletedCodesPair(Map<String, List<WCode>> deletedCodesPair) {
-        this.deletedCodesPair = deletedCodesPair;
-        return this;
-    }
 
     public Integer getNonPairCodes() {
         return nonPairCodes;

@@ -44,59 +44,6 @@ public class WCodeUtils {
         return CollectionUtils.isEmpty(wCodes1);
     }
 
-    public static WCode fromW3DCode(W3DCode w3DCode){
-        if(w3DCode == null){
-            return null;
-        }
-
-        WCode wCode;
-        if(w3DCode.getCodes()[BitConstant.HUNDRED] == null){
-            wCode = new WCode(2, w3DCode.getCodes()[BitConstant.DECADE],w3DCode.getCodes()[BitConstant.UNIT]);
-        }else{
-            wCode = new WCode(3, w3DCode.getCodes()[BitConstant.HUNDRED], w3DCode.getCodes()[BitConstant.DECADE],w3DCode.getCodes()[BitConstant.UNIT]);
-        }
-        return wCode;
-    }
-
-    public static List<WCode> fromW3DCodes(List<W3DCode> w3DCodes){
-        if(CollectionUtils.isEmpty(w3DCodes)){
-            return Collections.emptyList();
-        }
-
-        List<WCode> wCodes = new ArrayList<>();
-        w3DCodes.forEach(w3DCode -> {
-            WCode wCode = fromW3DCode(w3DCode);
-            if(w3DCode != null){
-                wCodes.add(wCode);
-            }
-        });
-
-        return wCodes;
-    }
-
-
-    public static List<WCode> transferToPermutationFiveCodes(List<WCode> wCodes){
-        if(CollectionUtils.isEmpty(wCodes) || !validateCodes(wCodes) || wCodes.get(0).getDim() != 3){
-            return Collections.emptyList();
-        }
-
-        List<WCode> permutationFiveCodes = new ArrayList<>();
-        for(WCode wCode: wCodes){
-            for(int i=0; i<100; i++){
-                int lastFirst = i%10;
-                int lastSecond = (int)(i/10);
-                if(lastFirst == lastSecond){
-                    continue;
-                }
-                WCode pCode = new WCode(5, wCode.getCodes().get(BitConstant.HUNDRED),
-                    wCode.getCodes().get(BitConstant.DECADE), wCode.getCodes().get(BitConstant.UNIT), lastSecond, lastFirst);
-                permutationFiveCodes.add(pCode);
-            }
-        }
-        Collections.sort(permutationFiveCodes);
-        return permutationFiveCodes;
-    }
-
     public static List<WCode> transferToPermutationThreeCodes(List<WCode> wCodes) {
         if(CollectionUtils.isEmpty(wCodes) || !validateCodes(wCodes) || wCodes.get(0).getDim() != 5){
             return Collections.emptyList();
@@ -109,18 +56,6 @@ public class WCodeUtils {
         List<WCode> ret = new ArrayList<>(retSets);
         Collections.sort(ret);
         return ret;
-    }
-
-
-    public static List<WCode> filterLowSumCodes(List<WCode> wCodes){
-        if(CollectionUtils.isEmpty(wCodes) || !validateCodes(wCodes)){
-            return Collections.emptyList();
-        }
-
-        List<WCode> ret = wCodes.stream().filter(wCode -> wCode.sum() > 10).collect(Collectors.toList());
-
-        return ret;
-
     }
 
     public static boolean isAllEvenOrOdd(WCode wCode){
@@ -318,118 +253,6 @@ public class WCodeUtils {
         return (int)wCodes.stream().filter(wCode -> !isPair(wCode)).count();
     }
 
-    public static Integer getPairCodeCountRemained(List<WCode> wCodes){
-        List<WCode> pairCodes = filterPairCodes(wCodes);
-        if(CollectionUtils.isEmpty(pairCodes)){
-            return 0;
-        }
-        List<WCode> remainedCodes = pairCodes.stream().filter(wCode -> !wCode.isDeleted()).collect(Collectors.toList());
-        return CollectionUtils.size(remainedCodes);
-    }
-
-    public static Integer getNonPairCodeCountRemained(List<WCode> wCodes){
-        List<WCode> nonPairCodes = filterNonPairCodes(wCodes);
-        if(CollectionUtils.isEmpty(nonPairCodes)){
-            return 0;
-        }
-
-        List<WCode> remainedCodes = nonPairCodes.stream().filter(wCode -> !wCode.isDeleted()).collect(Collectors.toList());
-        return CollectionUtils.size(remainedCodes);
-    }
-
-
-    public static WCodeSummarise construct(List<WCode> wCodes, String key, List<WCode> deletedCodes, WCodeReq wCodeReq){
-        WCodeSummarise wCodeSummarise =  new WCodeSummarise()
-                .setwCodes(wCodes);
-
-        if(Objects.isNull(wCodeReq)){
-            return wCodeSummarise;
-        }
-
-        // process deleted codes
-        Map<String, List<WCode>> delMaps = wCodeReq.getDeletedCodesPair();
-        if(delMaps == null){
-            delMaps = new HashMap<>();
-        }
-
-        if(StringUtils.isNotEmpty(key) && !CollectionUtils.isEmpty(deletedCodes)){
-            List<WCode> codes = delMaps.getOrDefault(key, new ArrayList<>());
-            codes.addAll(deletedCodes);
-            delMaps.put(key, codes);
-        }
-
-        wCodeSummarise.setDeletedCodesPair(delMaps);
-
-        // process random kill
-        if(wCodeReq != null) {
-            FilterStrategyEnum filterStrategyEnum = FilterStrategyEnum.getById(wCodeReq.getFilterType());
-
-            Boolean isRandomKill = wCodeReq.getFilterType() != null && filterStrategyEnum == FilterStrategyEnum.RANDOM_FILTER;
-
-            if (isRandomKill != null && isRandomKill) {
-                wCodeSummarise.setPairCodes(WCodeUtils.getPairCodeCountRemained(wCodes))
-                        .setNonPairCodes(WCodeUtils.getNonPairCodeCountRemained(wCodes))
-                        .setRemainedCodesCount(WCodeUtils.getRemainedCodes(wCodes))
-                        .setRandomKill(isRandomKill);
-            } else if(filterStrategyEnum == FilterStrategyEnum.EXTEND_CODE) {
-                wCodeSummarise.setExtendCount(wCodes.size());
-                wCodeSummarise.setwCodes(Collections.emptyList());
-            } else {
-                wCodeSummarise.setPairCodes(WCodeUtils.getPairCodeCount(wCodes))
-                        .setNonPairCodes(WCodeUtils.getNonPairCodeCount(wCodes));
-            }
-
-            Boolean isFreqSeted = wCodeReq.getFilterType() != null &&
-                    (FilterStrategyEnum.BOLD_INCREASE_FREQ.getId().equals(wCodeReq.getFilterType())
-                            || FilterStrategyEnum.SUM_INCREASE_FREQ.getId().equals(wCodeReq.getFilterType()));
-            wCodeSummarise.setFreqSeted(isFreqSeted);
-        }
-        return wCodeSummarise;
-    }
-
-
-
-    public static<T> List<T> getFirstNRowsAndLastRowsInEveryPage(List<T> codes, Integer colNumInPage, Integer rowNumInPage, Integer count){
-        if(CollectionUtils.isEmpty(codes) || count < 1){
-            return Collections.emptyList();
-        }
-
-        if(count > codes.size()){
-            return codes;
-        }
-
-        List<List<T>> codesArray = Lists.partition(codes, colNumInPage);
-        List<List<List<T>>> codesPage = Lists.partition(codesArray, rowNumInPage);
-
-        List<T> ret = new ArrayList<>();
-        for(List<List<T>> codeArray: codesPage){
-            if(CollectionUtils.size(codeArray) < count * 2 && CollectionUtils.size(codeArray) > 0){
-                codeArray.forEach(list -> ret.addAll(ret));
-                continue;
-            }
-
-            for(int i=0; i<count; i++){
-                ret.addAll(codeArray.get(i));
-                ret.addAll(codeArray.get(codeArray.size()-1 - i));
-            }
-        }
-
-        return ret;
-    }
-
-
-    public static void plusFreq(List<WCode> baseWCodes){
-        if(CollectionUtils.isEmpty(baseWCodes)){
-            return;
-        }
-
-        for(WCode baseWCode : baseWCodes){
-            if(!baseWCode.isDeleted()){
-                baseWCode.increaseFreq();
-            }
-        }
-    }
-
     public static int getHighestFreq(List<WCode> wCodes){
         if(CollectionUtils.isEmpty(wCodes)){
             return 0;
@@ -446,16 +269,6 @@ public class WCodeUtils {
 
     }
 
-
-    public static int getRemainedCodes(List<WCode> wCodes){
-        if(CollectionUtils.isEmpty(wCodes)){
-            return 0;
-        }
-
-        List<WCode> remainedCodes = wCodes.stream().filter(wCode -> !wCode.isDeleted()).collect(Collectors.toList());
-
-        return CollectionUtils.size(remainedCodes);
-    }
 
 
     /**
@@ -521,18 +334,6 @@ public class WCodeUtils {
         }
 
         return new ArrayList<>(Sets.difference(Sets.newHashSet(wCodes), Sets.newHashSet(subtractor)));
-    }
-
-    public static int hashCode(WCode wCode, Integer bitNum){
-        Objects.requireNonNull(wCode);
-        int prime = 31;
-        int result = 1;
-
-        for(int i=0; i<bitNum && i<wCode.getCodes().size(); i++){
-            result = prime * result + wCode.getCodes().get(i);
-        }
-
-        return result;
     }
 
     public static List<WCode> convert3DTo2D(List<WCode> wCodes){
