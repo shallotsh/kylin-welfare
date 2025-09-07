@@ -262,23 +262,20 @@ public class Origin3DApiCodePredictor {
                         i = bis.read(buffer);
                     }
                 } catch (Exception e) {
-                    // TODO: handle exception
-                    e.printStackTrace();
+                    LOGGER.error("下载文件时发生异常", e);
                 } finally {
                     if (bis != null) {
                         try {
                             bis.close();
                         } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
+                            LOGGER.error("关闭bis时发生异常", e);
                         }
                     }
                     if (fis != null) {
                         try {
                             fis.close();
                         } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
+                            LOGGER.error("关闭fis时发生异常", e);
                         }
                     }
                 }

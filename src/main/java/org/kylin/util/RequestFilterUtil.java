@@ -35,7 +35,7 @@ public class RequestFilterUtil {
         if(isStaticResourceRequest(serverPath)){
             return true;
         }
-        for(String prefix : staticResourcePrefixPath){
+        for(String prefix : noAuthPrefixPath){
             if(serverPath.startsWith(prefix)){
                 return true;
             }
