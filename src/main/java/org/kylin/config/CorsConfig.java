@@ -11,7 +11,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
 //                .allowedOrigins("http://localhost:8080")
-                .allowedOriginPatterns("http://localhost:*", "https://ai.sense.ink:*", "https://ai.sense.ink:*")
+                .allowedOriginPatterns("http://localhost:*", "*sense.ink")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true)
                 .maxAge(3600);
