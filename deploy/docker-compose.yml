@@ -4,7 +4,8 @@ services:
   welfare_1:
     image: kylin/welfare:latest
     volumes:
-      - wyf_attachment:/var/attachment
+      - /var/attachment:/var/attachment
+#      - wyf_attachment:/var/attachment
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
     restart: always
